@@ -17,6 +17,8 @@ struct Recipe
 Recipe recipes[100]; // Array of Recipe struct to store multiple recipes
 int opt = 0, count = 0;
 
+void saveRecipes();
+
 int main()
 {
     cout << ",------.              ,--.              ,------.         ,--. \n"
@@ -56,4 +58,25 @@ int main()
             default: cout << "Invalid Input" << endl; break;
         }
     }
+}
+
+void saveRecipes()
+{
+    ofstream write("recipes.txt");
+    write << count << endl;
+    for (int i = 0; i < count; i++)
+    {
+        write << recipes[i].name << "," << recipes[i].ingredients.size() << ",";
+        for (size_t j = 0; j < recipes[i].ingredients.size(); j++)
+        {
+            write << recipes[i].ingredients[j] << ",";
+        }
+        write << recipes[i].procedure.size() << ",";
+        for (size_t j = 0; j < recipes[i].procedure.size(); j++)
+        {
+            write << recipes[i].procedure[j] << ",";
+        }
+        write << recipes[i].cooking_time << "," << recipes[i].difficulty_level << "," << recipes[i].category << endl;
+    }
+    write.close();
 }
