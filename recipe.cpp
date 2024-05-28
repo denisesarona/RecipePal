@@ -19,6 +19,7 @@ int opt = 0, count = 0;
 
 void saveRecipes();
 void loadRecipes();
+void clearScreen();
 
 int main()
 {
@@ -115,4 +116,8 @@ void loadRecipes()
         }
         read.close();
     }
+}
+
+void clearScreen(){
+    cout << "\033[2J\033[1;1H";
 }
