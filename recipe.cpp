@@ -18,6 +18,7 @@ Recipe recipes[100]; // Array of Recipe struct to store multiple recipes
 int opt = 0, count = 0;
 
 void saveRecipes();
+void loadRecipes();
 
 int main()
 {
@@ -79,4 +80,39 @@ void saveRecipes()
         write << recipes[i].cooking_time << "," << recipes[i].difficulty_level << "," << recipes[i].category << endl;
     }
     write.close();
+}
+
+
+void loadRecipes()
+{
+    ifstream read("recipes.txt");
+    if (read.is_open())
+    {
+        read >> count;
+        read.ignore();
+        for (int i = 0; i < count; i++)
+        {
+            getline(read, recipes[i].name, ',');
+            int ingredients_qty;
+            read >> ingredients_qty;
+            read.ignore();
+            recipes[i].ingredients.resize(ingredients_qty);
+            for (int j = 0; j < ingredients_qty; j++)
+            {
+                getline(read, recipes[i].ingredients[j], ',');
+            }
+            int procedure_qty;
+            read >> procedure_qty;
+            read.ignore();
+            recipes[i].procedure.resize(procedure_qty);
+            for (int j = 0; j < procedure_qty; j++)
+            {
+                getline(read, recipes[i].procedure[j], ',');
+            }
+            getline(read, recipes[i].cooking_time, ',');
+            getline(read, recipes[i].difficulty_level, ',');
+            getline(read, recipes[i].category, ',');
+        }
+        read.close();
+    }
 }
