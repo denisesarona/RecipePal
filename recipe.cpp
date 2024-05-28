@@ -20,6 +20,7 @@ int opt = 0, count = 0;
 void saveRecipes();
 void loadRecipes();
 void clearScreen();
+void viewRecipes();
 
 int main()
 {
@@ -120,4 +121,45 @@ void loadRecipes()
 
 void clearScreen(){
     cout << "\033[2J\033[1;1H";
+}
+
+void viewRecipes()
+{
+    loadRecipes();
+    clearScreen();
+
+    for (int i = 0; i < count; i++)
+    {
+        cout << "+---------------------------------------------------------+" << endl;
+        cout << "|                       View Recipe                       |" << endl;
+        cout << "+---------------------------------------------------------+" << endl;
+        cout << "| Recipe Name: " << recipes[i].name;
+        cout << string(49 - recipes[i].name.length(), ' ') << "|" << endl;
+        cout << "|---------------------------------------------------------|" << endl;
+        cout << "| Ingredients:                                            |" << endl;
+        for (size_t j = 0; j < recipes[i].ingredients.size(); j++)
+        {
+            cout << "| • " << recipes[i].ingredients[j];
+            cout << string(55 - recipes[i].ingredients[j].length(), ' ') << "|" << endl;
+        }
+        cout << "|---------------------------------------------------------|" << endl;
+        cout << "| Instructions:                                           |" << endl;
+        for (size_t j = 0; j < recipes[i].procedure.size(); j++)
+        {
+            cout << "| • " << recipes[i].procedure[j];
+            cout << string(55 - recipes[i].procedure[j].length(), ' ') << "|" << endl;
+        }
+        cout << "|---------------------------------------------------------|" << endl;
+        cout << "| Cooking Time: " << recipes[i].cooking_time;
+        cout << string(49 - recipes[i].cooking_time.length(), ' ') << "|" << endl;
+        cout << "| Difficulty Level: " << recipes[i].difficulty_level;
+        cout << string(41 - recipes[i].difficulty_level.length(), ' ') << "|" << endl;
+        cout << "| Category: " << recipes[i].category;
+        cout << string(49 - recipes[i].category.length(), ' ') << "|" << endl;
+        cout << "+---------------------------------------------------------+" << endl;
+        cout << endl;
+    }
+    
+    cin.ignore();
+    cin.get(); // Wait for user input
 }
