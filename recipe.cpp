@@ -63,24 +63,33 @@ int main()
     }
 }
 
-void saveRecipes()
-{
+// SAVE RECIPES TO FILE
+void saveRecipe() {
+    // OPEN FILE STREAM FOR WRITING
     ofstream write("recipes.txt");
+
+    // WRITE THE TOTAL COUNT OF RECIPE
     write << count << endl;
-    for (int i = 0; i < count; i++)
-    {
-        write << recipes[i].name << "," << recipes[i].ingredients.size() << ",";
-        for (size_t j = 0; j < recipes[i].ingredients.size(); j++)
-        {
-            write << recipes[i].ingredients[j] << ",";
+
+    // LOOP THROUGH EACH RECIPE
+    for (int i = 0; i < count; i++) {
+        // WRITE RECIPE NAME, NUMBER OF INGREDIENTS, AND INGREDIENTS 
+        write << recipes[i].name << "|" << recipes[i].ingredients.size() << "|"; // .size RETURNS NUMBER OF ELEMENTS STORED IN VECTOR 
+        for (size_t j = 0; j < recipes[i].ingredients.size(); j++) {
+            write << recipes[i].ingredients[j] << "|";
         }
-        write << recipes[i].procedure.size() << ",";
-        for (size_t j = 0; j < recipes[i].procedure.size(); j++)
-        {
-            write << recipes[i].procedure[j] << ",";
+
+        // WRITE NUMBER OF PROCEDURE STEPS AND PROCEDURE 
+        write << recipes[i].procedure.size() << "|";
+        for (size_t j = 0; j < recipes[i].procedure.size(); j++) {
+            write << recipes[i].procedure[j] << "|";
         }
-        write << recipes[i].cooking_time << "," << recipes[i].difficulty_level << "," << recipes[i].category << endl;
+
+        // WRITE COOKING TIME, DIFFICULTY LEVEL, AND CATEGORY 
+        write << recipes[i].cooking_time << "|" << recipes[i].difficulty_level << "|" << recipes[i].category << endl;
     }
+
+    // CLOSE THE FILE STREAM
     write.close();
 }
 
