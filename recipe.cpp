@@ -25,8 +25,7 @@ void searchRecipe();
 void checkExistingRecipe();
 void clearScreen();
 void updateRecipe();
-void viewRecipe();
-
+void viewRecipe(int recipeNumber);
 int main()
 {
     cout << ",------.              ,--.              ,------.         ,--. \n"
@@ -206,7 +205,7 @@ void viewRecipe(int recipeNumber)
 {
     clearScreen();
     cout << "+---------------------------------------------------------+" << endl;
-    cout << "|                   View Recipe                           |" << endl;
+    cout << "|                      View Recipe                        |" << endl;
     cout << "+---------------------------------------------------------+" << endl;
 
     // Check if the recipe number is valid
