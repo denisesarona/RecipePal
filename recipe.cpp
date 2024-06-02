@@ -21,10 +21,11 @@ int opt = 0, count = 0;
 void addRecipe();
 void loadRecipe();
 void saveRecipe();
-void viewRecipe();
 void searchRecipe();
 void checkExistingRecipe();
 void clearScreen();
+void updateRecipe();
+void viewRecipe();
 
 int main()
 {
@@ -45,8 +46,9 @@ int main()
         cout << "+---------------------------------------------------------+" << endl;
         cout << "| [1] Add a Recipe                                        |" << endl;
         cout << "| [2] Search for a Recipe                                 |" << endl;
-        cout << "| [3] Check Existing Recipe                               |" << endl;
-        cout << "| [4] Exit                                                |" << endl;
+        cout << "| [3] Update a Recipe                                     |" << endl;
+        cout << "| [4] Check Existing Recipe                               |" << endl;
+        cout << "| [5] Exit    s                                            |" << endl;
         cout << "+---------------------------------------------------------+" << endl;
         cout << endl;
         cout << "  Enter Option: ";
@@ -56,8 +58,9 @@ int main()
         {
             case 1: addRecipe(); break;
             case 2: searchRecipe(); break;
-            case 3: checkExistingRecipe(); break;
-            case 4: exit(0); break;
+            case 3: updateRecipe(); break;
+            case 4: checkExistingRecipe(); break;
+            case 5: exit(0); break;
             default: cout << "Invalid Input" << endl; break;
         }
     }
@@ -192,30 +195,50 @@ void addRecipe()
     cout << "\nRecipe Added Successfully!\n" << endl;
     saveRecipe();
 
-    // Display the recently added recipe only
-    cout << "+---------------------------------------------------------+" << endl;
-    cout << "|                   View Recipe                           |" << endl;
-    cout << "+---------------------------------------------------------+" << endl;
-    cout << "Recipe Name: " << recipes[count - 1].name << endl; // Access the most recently added recipe
-    cout << "Ingredients:" << endl;
-    for (size_t j = 0; j < recipes[count - 1].ingredients.size(); j++)
-    {
-        cout << "  • " << recipes[count - 1].ingredients[j] << endl;
-    }
-    cout << "Instructions:" << endl;
-    for (size_t j = 0; j < recipes[count - 1].procedure.size(); j++)
-    {
-        cout << "  • " << recipes[count - 1].procedure[j] << endl;
-    }
-    cout << "Cooking Time: " << recipes[count - 1].cooking_time << endl;
-    cout << "Difficulty Level: " << recipes[count - 1].difficulty_level << endl;
-    cout << "Category: " << recipes[count - 1].category << endl;
-    cout << endl;
+    viewRecipe(count);
 
     cin.ignore();
     cin.get(); // Wait for user input
 }
 
+
+void viewRecipe(int recipeNumber)
+{
+    clearScreen();
+    cout << "+---------------------------------------------------------+" << endl;
+    cout << "|                   View Recipe                           |" << endl;
+    cout << "+---------------------------------------------------------+" << endl;
+
+    // Check if the recipe number is valid
+    if (recipeNumber >= 1 && recipeNumber <= count)
+    {
+        int index = recipeNumber - 1;
+
+        // Display the details of the selected recipe
+        cout << "  Recipe Name: " << recipes[index].name << endl;
+        cout << "  Ingredients:" << endl;
+        for (size_t j = 0; j < recipes[index].ingredients.size(); j++)
+        {
+            cout << "    • " << recipes[index].ingredients[j] << endl;
+        }
+        cout << "  Instructions:" << endl;
+        for (size_t j = 0; j < recipes[index].procedure.size(); j++)
+        {
+            cout << "    • " << recipes[index].procedure[j] << endl;
+        }
+        cout << "  Cooking Time: " << recipes[index].cooking_time << endl;
+        cout << "  Difficulty Level: " << recipes[index].difficulty_level << endl;
+        cout << "  Category: " << recipes[index].category << endl;
+        cout << "+---------------------------------------------------------+" << endl;
+    }
+    else
+    {
+        cout << "Invalid recipe number!" << endl;
+    }
+
+    cin.ignore();
+    cin.get(); // Wait for user input
+}
 
 
 void checkExistingRecipe()
@@ -315,4 +338,80 @@ void searchRecipe()
 void clearScreen()
 {
     cout << "\033[2J\033[1;1H";
+}
+
+
+void updateRecipe()
+{
+    clearScreen();
+    cout << "+---------------------------------------------------------+" << endl;
+    cout << "|                   Update Recipe                         |" << endl;
+    cout << "+---------------------------------------------------------+" << endl;
+    cout << endl;
+
+    // Display existing recipes with their numbers
+    cout << "  Existing Recipes:" << endl;
+    for (int i = 0; i < count; i++)
+    {
+        cout << "  " << i + 1 << ". " << recipes[i].name << endl;
+    }
+    
+    int num = 0;
+    cout << "\n  Enter Recipe Number to Update: ";
+    cin >> num;
+    int index = num - 1;
+
+    if (index >= 0 && index < count)
+    {
+        cin.ignore();
+        cout<<endl;
+        cout<<"  Recipe Found Succssfully!"<<endl;
+        cout<<endl;
+        cout<<"------------- Starting Update of Recipe No. "<<num<<"-------------- "<<endl;
+        cout << "  Enter Recipe Name: ";
+        getline(cin, recipes[index].name);
+
+        int ingredients_qty;
+        cout << "  Enter Quantity of Ingredients: ";
+        cin >> ingredients_qty;
+        cin.ignore();
+        recipes[index].ingredients.resize(ingredients_qty);
+        for (int i = 0; i < ingredients_qty; i++)
+        {
+            cout << "  Enter Ingredient " << i + 1 << ": ";
+            getline(cin, recipes[index].ingredients[i]);
+        }
+
+        int procedure_qty;
+        cout << "  Enter Number of Steps in Procedure: ";
+        cin >> procedure_qty;
+        cin.ignore();
+        recipes[index].procedure.resize(procedure_qty);
+        for (int i = 0; i < procedure_qty; i++)
+        {
+            cout << "  Enter Procedure Step " << i + 1 << ": ";
+            getline(cin, recipes[index].procedure[i]);
+        }
+
+        cout << "  Enter Cooking Time: ";
+        getline(cin, recipes[index].cooking_time);
+        cout << "  Enter Difficulty Level: ";
+        getline(cin, recipes[index].difficulty_level);
+        cout << "  Enter Category: ";
+        getline(cin, recipes[index].category);
+
+        cout << "\n  Recipe Updated Successfully!\n" << endl;
+        cout << "-----------------------------------------------------------" << endl;
+        saveRecipe(); // Corrected function call
+
+        cout<<endl;
+        viewRecipe(num);
+    }
+    else
+    {
+        cout << "Invalid Recipe Number!\n" << endl;
+    }
+
+    cin.ignore();
+    cin.get(); // Wait for user input
 }
