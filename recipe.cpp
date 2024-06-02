@@ -232,7 +232,7 @@ void checkExistingRecipe()
     
     for (int i = 0; i < count; i++)
     {
-    	cout << "---------- " << "Recipe No. " << i +1 << " ----------" <<endl;
+    	cout << "---------------------- " << "Recipe No. " << i +1 << " -----------------------" <<endl;
         cout << "  Recipe Name: " << recipes[i].name << endl;
         cout << "  Ingredients:" << endl;
         for (size_t j = 0; j < recipes[i].ingredients.size(); j++)
@@ -247,6 +247,7 @@ void checkExistingRecipe()
         cout << "  Cooking Time: " << recipes[i].cooking_time << endl;
         cout << "  Difficulty Level: " << recipes[i].difficulty_level << endl;
         cout << "  Category: " << recipes[i].category << endl;
+        cout << "-----------------------------------------------------------" << endl;
         cout << endl;
     }
 
@@ -264,7 +265,7 @@ void searchRecipe()
     cout << "|                      Search Recipe                      |" << endl;
     cout << "+---------------------------------------------------------+" << endl;
     cout << endl;
-    cout << "Enter Recipe Name to Search: ";
+    cout << "  Enter Recipe Name to Search: ";
     string searchName;
     getline(cin, searchName);
     
@@ -273,25 +274,28 @@ void searchRecipe()
     // LOOP THROUGH EACH RECIPE
     for (int i = 0; i < count; i++)
     {
-    	// IF RECIPE NAME MATCHES THE SEARCH NAME
+        // IF RECIPE NAME MATCHES THE SEARCH NAME
         if (recipes[i].name == searchName)
         {
-        	// DISPLAY RECIPE DETAILS
-            cout << "Recipe Found:\n";
-            cout << "Name: " << recipes[i].name << endl;
-            cout << "Ingredients: ";
+            cout<<endl;
+            cout << "+---------------------------------------------------------+" << endl;
+            cout << "|                   Recipe Found                          |" << endl;
+            cout << "+---------------------------------------------------------+" << endl;
+            cout << "  Recipe Name: " << recipes[i].name << endl;
+            cout << "  Ingredients:" << endl;
             for (size_t j = 0; j < recipes[i].ingredients.size(); j++)
             {
-                cout << recipes[i].ingredients[j] << (j < recipes[i].ingredients.size() - 1 ? ", " : "\n");
+                cout << "    • " << recipes[i].ingredients[j] << endl;
             }
-            cout << "Procedure: ";
+            cout << "  Instructions:" << endl;
             for (size_t j = 0; j < recipes[i].procedure.size(); j++)
             {
-                cout << recipes[i].procedure[j] << (j < recipes[i].procedure.size() - 1 ? ", " : "\n");
+                cout << "    • " << recipes[i].procedure[j] << endl;
             }
-            cout << "Cooking Time: " << recipes[i].cooking_time << endl;
-            cout << "Difficulty Level: " << recipes[i].difficulty_level << endl;
-            cout << "Category: " << recipes[i].category << endl;
+            cout << "  Cooking Time: " << recipes[i].cooking_time << endl;
+            cout << "  Difficulty Level: " << recipes[i].difficulty_level << endl;
+            cout << "  Category: " << recipes[i].category << endl;
+            cout << "+---------------------------------------------------------+" << endl;
             found = true;
             // EXIT LOOP SINCE RECIPE IS FOUND
             break;
@@ -305,6 +309,7 @@ void searchRecipe()
 
     cin.get(); // Wait for user input
 }
+
 
 // Clear the console screen
 void clearScreen()
