@@ -145,6 +145,78 @@ void clearScreen(){
     cout << "\033[2J\033[1;1H";
 }
 
+void addRecipe()
+{
+    // IGNORE ANY PREVIOUS INPUT
+    cin.ignore();
+    clearScreen();
+    cout << "+---------------------------------------------------------+" << endl;
+    cout << "|                       Add Recipe                        |" << endl;
+    cout << "+---------------------------------------------------------+" << endl;
+    cout << endl;
+    cout << "Enter Recipe Name: ";
+    getline(cin, recipes[count].name);
+
+    int ingredients_qty;
+    cout << "Enter Quantity of Ingredients: ";
+    cin >> ingredients_qty;
+    cin.ignore();
+    // RESIZE THE INGREDIENTS VECTOR
+    recipes[count].ingredients.resize(ingredients_qty); // .resize changes size of the vector
+    // PROMPT USER TO ENTER EACH INGREDIENT
+    for (int i = 0; i < ingredients_qty; i++)
+    {
+        cout << "Enter Ingredient " << i + 1 << ": ";
+        getline(cin, recipes[count].ingredients[i]);
+    }
+
+    int procedure_qty;
+    cout << "Enter Number of Steps in Procedure: ";
+    cin >> procedure_qty;
+    cin.ignore();
+    // RESIZE THE PROCEDURE VECTOR
+    recipes[count].procedure.resize(procedure_qty);
+    // PROMPT USER TO ENTER EACH PROCEDURE STEP
+    for (int i = 0; i < procedure_qty; i++)
+    {
+        cout << "Enter Procedure Step " << i + 1 << ": ";
+        getline(cin, recipes[count].procedure[i]);
+    }
+
+    cout << "Enter Cooking Time: ";
+    getline(cin, recipes[count].cooking_time);
+    cout << "Enter Difficulty Level: ";
+    getline(cin, recipes[count].difficulty_level);
+    cout << "Enter Category: ";
+    getline(cin, recipes[count].category);
+
+    cout << "\nRecipe Added Successfully!\n" << endl;
+    saveRecipe();
+
+    // Display the recently added recipe only
+    cout << "+---------------------------------------------------------+" << endl;
+    cout << "|                   View Recipe                           |" << endl;
+    cout << "+---------------------------------------------------------+" << endl;
+    cout << "Recipe Name: " << recipes[count].name << endl;
+    cout << "Ingredients:" << endl;
+    for (size_t j = 0; j < recipes[count].ingredients.size(); j++)
+    {
+        cout << "  • " << recipes[count].ingredients[j] << endl;
+    }
+    cout << "Instructions:" << endl;
+    for (size_t j = 0; j < recipes[count].procedure.size(); j++)
+    {
+        cout << "  • " << recipes[count].procedure[j] << endl;
+    }
+    cout << "Cooking Time: " << recipes[count].cooking_time << endl;
+    cout << "Difficulty Level: " << recipes[count].difficulty_level << endl;
+    cout << "Category: " << recipes[count].category << endl;
+    cout << endl;
+    
+    cin.ignore();
+    cin.get(); // Wait for user input
+}
+
 void viewRecipes()
 {
     loadRecipes();
