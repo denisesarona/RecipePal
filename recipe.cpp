@@ -19,6 +19,7 @@ int opt = 0, count = 0;
 
 void saveRecipe();
 void loadRecipe();
+void addRecipe();
 void clearScreen();
 void viewRecipe();
 
@@ -40,7 +41,7 @@ int main()
         cout << "|        Organize your Recipes in an Instant              |" << endl;
         cout << "+---------------------------------------------------------+" << endl;
         cout << "| [1] Add a Recipe                                        |" << endl;
-        cout << "| [2] Update a Recipe                                     |" << endl;
+        cout << "| [2] Updatecheckd a Recipe                                     |" << endl;
         cout << "| [3] Search for a Recipe                                 |" << endl;
         cout << "| [4] Delete a Recipe                                     |" << endl;
         cout << "| [5] Check the Existing Recipes                          |" << endl;
@@ -53,11 +54,9 @@ int main()
         switch (opt)
         {
             case 1: addRecipe(); break;
-            case 2: updateRecipe(); break;
+            case 2: checkExistingRecipe(); break;
             case 3: searchRecipe(); break;
-            case 4: deleteRecipe(); break;
-            case 5: checkExistingRecipe(); break;
-            case 6: exit(0); break;
+            case 4: exit(0); break;
             default: cout << "Invalid Input" << endl; break;
         }
     }
@@ -216,6 +215,60 @@ void addRecipe()
     cin.ignore();
     cin.get(); // Wait for user input
 }
+
+
+
+// Search for a recipe by name
+void searchRecipe()
+{
+    cin.ignore();
+    clearScreen();
+    cout << "+---------------------------------------------------------+" << endl;
+    cout << "|                      Search Recipe                      |" << endl;
+    cout << "+---------------------------------------------------------+" << endl;
+    cout << endl;
+    cout << "Enter Recipe Name to Search: ";
+    string searchName;
+    getline(cin, searchName);
+    
+    // VARIABLE TO TRACK IF THE RECIPE IS FOUND
+    bool found = false;
+    // LOOP THROUGH EACH RECIPE
+    for (int i = 0; i < count; i++)
+    {
+    	// IF RECIPE NAME MATCHES THE SEARCH NAME
+        if (recipes[i].name == searchName)
+        {
+        	// DISPLAY RECIPE DETAILS
+            cout << "Recipe Found:\n";
+            cout << "Name: " << recipes[i].name << endl;
+            cout << "Ingredients: ";
+            for (size_t j = 0; j < recipes[i].ingredients.size(); j++)
+            {
+                cout << recipes[i].ingredients[j] << (j < recipes[i].ingredients.size() - 1 ? ", " : "\n");
+            }
+            cout << "Procedure: ";
+            for (size_t j = 0; j < recipes[i].procedure.size(); j++)
+            {
+                cout << recipes[i].procedure[j] << (j < recipes[i].procedure.size() - 1 ? ", " : "\n");
+            }
+            cout << "Cooking Time: " << recipes[i].cooking_time << endl;
+            cout << "Difficulty Level: " << recipes[i].difficulty_level << endl;
+            cout << "Category: " << recipes[i].category << endl;
+            found = true;
+            // EXIT LOOP SINCE RECIPE IS FOUND
+            break;
+        }
+    }
+    // IF RECIPE NOT FOUND
+    if (!found)
+    {
+        cout << "Recipe not found!\n";
+    }
+
+    cin.get(); // Wait for user input
+}
+
 
 void checkExistingRecipe()
 {
