@@ -84,37 +84,50 @@ void saveRecipes()
     write.close();
 }
 
-
-void loadRecipes()
-{
+// LOAD RECIPES FROM FILE
+void loadRecipe() {
+    // OPEN FILE STREAM FOR READING
     ifstream read("recipes.txt");
-    if (read.is_open())
-    {
+
+    // CHECK IF FILE IS OPEN 
+    if (read.is_open()) {
+        // READ THE TOTAL COUNT OF RECIPES 
         read >> count;
         read.ignore();
-        for (int i = 0; i < count; i++)
-        {
-            getline(read, recipes[i].name, ',');
+
+        // LOOP THROUGH EACH RECIPES
+        for (int i = 0; i < count; i++) {
+            // READ RECIPE NAME
+            getline(read, recipes[i].name, '|');
+
             int ingredients_qty;
             read >> ingredients_qty;
             read.ignore();
+            // RESIZE INGREDIENTS QTY VECTOR
             recipes[i].ingredients.resize(ingredients_qty);
-            for (int j = 0; j < ingredients_qty; j++)
-            {
-                getline(read, recipes[i].ingredients[j], ',');
+
+            // READ INGREDIENTS
+            for (int j = 0; j < ingredients_qty; j++) {
+                getline(read, recipes[i].ingredients[j], '|');
             }
+
             int procedure_qty;
             read >> procedure_qty;
-            read.ignore();
+            read.ignore(); // IGNORE ANY REMAINING CHARACTERS 
+            // RESIZE PROCEDURE QTY VECTOR
             recipes[i].procedure.resize(procedure_qty);
-            for (int j = 0; j < procedure_qty; j++)
-            {
-                getline(read, recipes[i].procedure[j], ',');
+
+            for (int j = 0; j < procedure_qty; j++) { // READ PROCEDURE
+                getline(read, recipes[i].procedure[j], '|');
             }
-            getline(read, recipes[i].cooking_time, ',');
-            getline(read, recipes[i].difficulty_level, ',');
-            getline(read, recipes[i].category, ',');
+
+            // READ COOKING TIME, DIFFICULTY LEVEL AND CATEGORY
+            getline(read, recipes[i].cooking_time, '|');
+            getline(read, recipes[i].difficulty_level, '|');
+            getline(read, recipes[i].category);
         }
+
+        // CLOSE THE FILE STREAM
         read.close();
     }
 }
@@ -161,5 +174,5 @@ void viewRecipes()
     }
     
     cin.ignore();
-    cin.get(); // Wait for user input
+    cin.get(); // Wait for user  input
 }
