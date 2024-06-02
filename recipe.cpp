@@ -17,10 +17,10 @@ struct Recipe
 Recipe recipes[100]; // Array of Recipe struct to store multiple recipes
 int opt = 0, count = 0;
 
-void saveRecipes();
-void loadRecipes();
+void saveRecipe();
+void loadRecipe();
 void clearScreen();
-void viewRecipes();
+void viewRecipe();
 
 int main()
 {
@@ -31,7 +31,7 @@ int main()
             "`--' '--' `----' `---'`--'|  |-'  `----'`--'      `--`--'`--' \n"
             "                          `--'                                 \n";
 
-    loadRecipes();
+    loadRecipe();
     while (true)
     {
         clearScreen();
@@ -56,7 +56,7 @@ int main()
             case 2: updateRecipe(); break;
             case 3: searchRecipe(); break;
             case 4: deleteRecipe(); break;
-            case 5: viewRecipes(); break;
+            case 5: checkExistingRecipe(); break;
             case 6: exit(0); break;
             default: cout << "Invalid Input" << endl; break;
         }
@@ -216,6 +216,7 @@ void addRecipe()
     cin.ignore();
     cin.get(); // Wait for user input
 }
+
 void checkExistingRecipe()
 {
     loadRecipe();
