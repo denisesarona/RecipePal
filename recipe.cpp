@@ -47,7 +47,7 @@ int main()
         cout << "| [2] Search for a Recipe                                 |" << endl;
         cout << "| [3] Update a Recipe                                     |" << endl;
         cout << "| [4] Check Existing Recipe                               |" << endl;
-        cout << "| [5] Exit    s                                            |" << endl;
+        cout << "| [5] Exit                                                |" << endl;
         cout << "+---------------------------------------------------------+" << endl;
         cout << endl;
         cout << "  Enter Option: ";
@@ -236,7 +236,6 @@ void viewRecipe(int recipeNumber)
     }
 
     cin.ignore();
-    cin.get(); // Wait for user input
 }
 
 
@@ -405,12 +404,33 @@ void updateRecipe()
 
         cout<<endl;
         viewRecipe(num);
+
+        cout << "+---------------------------------------------------------+" << endl;
+        cout << "| [1] Update another Recipe                               |" << endl;
+        cout << "| [2] Back to Homepage                                    |" << endl;
+        cout << "| [3] Exit the Program                                    |" << endl;
+        cout << "+---------------------------------------------------------+" << endl;
+        cout << endl;
+        cout << "  Enter Option: ";
+        int opt;
+        cin >> opt;
+        switch (opt)
+        {
+        case 1:
+            updateRecipe();
+            break;
+        case 2:
+            return; // Return to the main loop
+        case 3:
+            exit(0); // Exit the program
+        default:
+            cout << "Invalid choice. Exiting the program." << endl;
+            exit(1);
+        }
     }
     else
     {
         cout << "Invalid Recipe Number!\n" << endl;
     }
 
-    cin.ignore();
-    cin.get(); // Wait for user input
 }
