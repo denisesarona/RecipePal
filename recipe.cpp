@@ -195,7 +195,9 @@ void addRecipe()
     // Increment count after successfully adding a recipe
     count++;
 
-    cout << "\nRecipe Added Successfully!\n" << endl;
+    cout<<endl;
+    cout << "--------------- Recipe Added Successfully! ----------------" << endl;
+    cout<<endl;
     saveRecipe();
 
     // Reload the recipes from the file to update count
@@ -204,8 +206,29 @@ void addRecipe()
     // View the recipe you just added
     viewRecipe(count);
 
-    cin.ignore();
-    cin.get(); // Wait for user input
+    cout << "+---------------------------------------------------------+" << endl;
+    cout << "| [1] Add another Recipe                                  |" << endl;
+    cout << "| [2] Back to Homepage                                    |" << endl;
+    cout << "| [3] Exit the Program                                    |" << endl;
+    cout << "+---------------------------------------------------------+" << endl;
+    cout << endl;
+    cout << "  Enter Option: ";
+    int option;
+    cin >> option;
+
+    switch (option)
+    {
+        case 1:
+            addRecipe();
+            break;
+        case 2:
+            return; // Return to the main loop
+        case 3:
+            exit(0); // Exit the program
+        default:
+            cout << "Invalid choice. Exiting the program." << endl;
+            exit(1);
+    }
 }
 void viewRecipe(int recipeNumber)
 {
@@ -378,7 +401,9 @@ void searchRecipe()
     // IF RECIPE NOT FOUND
     if (!found)
     {
-        cout << "Recipe not found!\n";
+        cout<<endl;
+        cout << "-------------------- Recipe Not Found! --------------------" << endl;
+        cout<<endl;
     }
 
     cin.get(); // Wait for user input
