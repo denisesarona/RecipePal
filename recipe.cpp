@@ -25,7 +25,7 @@ void searchRecipe();
 void checkExistingRecipe();
 void clearScreen();
 void updateRecipe();
-void viewRecipe();
+void viewRecipe(int recipeNumber);
 void deleteRecipe();
 
 int main()
@@ -202,36 +202,37 @@ void addRecipe()
     loadRecipe();
 
     // View the recipe you just added
-    viewRecipe();
+    viewRecipe(count);
 
     cin.ignore();
     cin.get(); // Wait for user input
 }
-
-
-void viewRecipe()
+void viewRecipe(int recipeNumber)
 {
     clearScreen();
-    cout<<endl;
-    ifstream read("recipes.txt");
     cout << "+---------------------------------------------------------+" << endl;
     cout << "|                      View Recipe                        |" << endl;
     cout << "+---------------------------------------------------------+" << endl;
 
+    // Open the file for reading
+    ifstream read("recipes.txt");
+
     // Check if the file is open
-    if (read.is_open()) {
+    if (read.is_open())
+    {
         // Read the total count of recipes
         int totalRecipes;
         read >> totalRecipes;
         read.ignore();
 
-        // Loop through each recipe
-        for (int recipeNumber = 1; recipeNumber <= totalRecipes; ++recipeNumber)
+        // Check if the recipe number is valid
+        if (recipeNumber >= 1 && recipeNumber <= totalRecipes)
         {
             int index = recipeNumber - 1;
-            
+
             // Skip to the selected recipe
-            for (int i = 0; i < index; i++) {
+            for (int i = 0; i < index; i++)
+            {
                 string line;
                 // Skip recipe name
                 getline(read, line, '|');
@@ -240,7 +241,8 @@ void viewRecipe()
                 read >> ingredients_qty;
                 read.ignore();
                 // Skip ingredients
-                for (int j = 0; j < ingredients_qty; j++) {
+                for (int j = 0; j < ingredients_qty; j++)
+                {
                     getline(read, line, '|');
                 }
                 // Read number of procedure steps
@@ -248,7 +250,8 @@ void viewRecipe()
                 read >> procedure_qty;
                 read.ignore();
                 // Skip procedure
-                for (int j = 0; j < procedure_qty; j++) {
+                for (int j = 0; j < procedure_qty; j++)
+                {
                     getline(read, line, '|');
                 }
                 // Skip cooking time, difficulty level, and category
@@ -256,7 +259,6 @@ void viewRecipe()
             }
 
             // Display the details of the selected recipe
-            cout << "  Recipe " << recipeNumber << ":" << endl;
             cout << "  Recipe Name: " << recipes[index].name << endl;
             cout << "  Ingredients:" << endl;
             for (size_t j = 0; j < recipes[index].ingredients.size(); j++)
@@ -273,17 +275,21 @@ void viewRecipe()
             cout << "  Category: " << recipes[index].category << endl;
             cout << "+---------------------------------------------------------+" << endl;
         }
+        else
+        {
+            cout << "Invalid recipe number!" << endl;
+        }
 
         // Close the file stream
         read.close();
     }
-    else {
+    else
+    {
         cout << "Unable to open file." << endl;
     }
 
     cin.ignore();
 }
-
 
 
 void checkExistingRecipe()
@@ -449,8 +455,10 @@ void updateRecipe()
         cout << "-----------------------------------------------------------" << endl;
         saveRecipe(); // Corrected function call
 
+        loadRecipe();
+
         cout<<endl;
-        viewRecipe();
+        viewRecipe(num);
 
         cout << "+---------------------------------------------------------+" << endl;
         cout << "| [1] Update another Recipe                               |" << endl;
@@ -487,7 +495,7 @@ void updateRecipe()
 void deleteRecipe()
 {
     int num = 0;
-    viewRecipe();
+    viewRecipe(num);
     cout << "Enter Recipe ID to Delete: ";
     cin >> num;
     int index = num - 1;
