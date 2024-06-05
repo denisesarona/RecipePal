@@ -26,6 +26,8 @@ void checkExistingRecipe();
 void clearScreen();
 void updateRecipe();
 void viewRecipe(int recipeNumber);
+void deleteRecipes();
+
 int main()
 {
     cout << ",------.              ,--.              ,------.         ,--. \n"
@@ -47,7 +49,8 @@ int main()
         cout << "| [2] Search for a Recipe                                 |" << endl;
         cout << "| [3] Update a Recipe                                     |" << endl;
         cout << "| [4] Check Existing Recipe                               |" << endl;
-        cout << "| [5] Exit                                                |" << endl;
+        cout << "| [5] Delete Recipe                                       |" << endl;
+        cout << "| [6] Exit                                                |" << endl;
         cout << "+---------------------------------------------------------+" << endl;
         cout << endl;
         cout << "  Enter Option: ";
@@ -59,7 +62,8 @@ int main()
             case 2: searchRecipe(); break;
             case 3: updateRecipe(); break;
             case 4: checkExistingRecipe(); break;
-            case 5: exit(0); break;
+            case 5: deleteRecipe(); break;
+            case 6: exit(0); break;
             default: cout << "Invalid Input" << endl; break;
         }
     }
@@ -103,7 +107,7 @@ void loadRecipe() {
     // CHECK IF FILE IS OPEN 
     if (read.is_open()) {
         // READ THE TOTAL COUNT OF RECIPES 
-        read >> count;
+        read >> count; // 4
         read.ignore();
 
         // LOOP THROUGH EACH RECIPES
@@ -212,7 +216,7 @@ void viewRecipe(int recipeNumber)
     if (recipeNumber >= 1 && recipeNumber <= count)
     {
         int index = recipeNumber - 1;
-
+        
         // Display the details of the selected recipe
         cout << "  Recipe Name: " << recipes[index].name << endl;
         cout << "  Ingredients:" << endl;
@@ -412,9 +416,10 @@ void updateRecipe()
         cout << "+---------------------------------------------------------+" << endl;
         cout << endl;
         cout << "  Enter Option: ";
-        int opt;
-        cin >> opt;
-        switch (opt)
+        int option;
+        cin >> option;
+
+        switch (option)
         {
         case 1:
             updateRecipe();
@@ -433,4 +438,29 @@ void updateRecipe()
         cout << "Invalid Recipe Number!\n" << endl;
     }
 
+}
+
+// Delete a recipe
+void deleteRecipe()
+{
+    int num = 0;
+    viewRecipe();
+    cout << "Enter Recipe ID to Delete: ";
+    cin >> num;
+    int index = num - 1;
+
+    if (index >= 0 && index < count)
+    {
+        for (int i = index; i < count - 1; i++)
+        {
+            recipes[i] = recipes[i + 1];    
+        }
+        count--;
+        cout << "\nRecipe Deleted Successfully!\n" << endl;
+        saveRecipe();
+    }
+    else
+    {
+        cout << "Invalid Recipe ID!\n" << endl;
+    }
 }
