@@ -490,28 +490,92 @@ void updateRecipe()
     }
 
 }
-
-// Delete a recipe
 void deleteRecipe()
 {
+    clearScreen();
+    cout << "+---------------------------------------------------------+" << endl;
+    cout << "|                   Delete Recipe                         |" << endl;
+    cout << "+---------------------------------------------------------+" << endl;
+    cout << endl;
+
+    cout << "  Existing Recipes:" << endl;
+    for (int i = 0; i < count; i++)
+    {
+        cout << "  " << i + 1 << ". " << recipes[i].name << endl;
+    }
+
     int num = 0;
-    viewRecipe(num);
-    cout << "Enter Recipe ID to Delete: ";
+    string choice;
+    cout << endl;    
+    cout << "  Enter Recipe ID to Delete: ";
     cin >> num;
+    cin.ignore(); // Clear the input buffer
     int index = num - 1;
 
     if (index >= 0 && index < count)
     {
-        for (int i = index; i < count - 1; i++)
+        cout << endl;
+        cout << "  Recipe Found Successfully!" << endl;
+        cout << endl;
+        cout << "  Confirm to Delete Recipe No. " << num << "? [Y/N]: ";
+        getline(cin, choice);
+
+        if(choice == "Y" || choice == "y")
         {
-            recipes[i] = recipes[i + 1];    
+            for (int i = index; i < count - 1; i++) // Shift recipes up to fill the gap
+            {
+                recipes[i] = recipes[i + 1];    
+            }
+            count--;
+
+            // Save the updated recipes to the file
+            ofstream write("recipes.txt");
+
+            if (write.is_open())
+            {
+                // Write the total count of recipes
+                write << count << endl;
+
+                // Write each recipe to the file
+                for (int i = 0; i < count; i++)
+                {
+                    // Write recipe data here
+                    write << recipes[i].name << "|" << recipes[i].ingredients.size() << "|";
+                    for (size_t j = 0; j < recipes[i].ingredients.size(); j++)
+                    {
+                        write << recipes[i].ingredients[j] << "|";
+                    }
+                    write << recipes[i].procedure.size() << "|";
+                    for (size_t j = 0; j < recipes[i].procedure.size(); j++)
+                    {
+                        write << recipes[i].procedure[j] << "|";
+                    }
+                    write << recipes[i].cooking_time << "|" << recipes[i].difficulty_level << "|" << recipes[i].category << endl;
+                }
+
+                // Close the file stream
+                write.close();
+            }
+            else
+            {
+                cout << "  Unable to open file for writing." << endl;
+            }
+
+            // Display the message indicating the deleted recipe
+            cout << "\n  Recipe ID " << num << " Deleted Successfully!\n" << endl;
         }
-        count--;
-        cout << "\nRecipe Deleted Successfully!\n" << endl;
-        saveRecipe();
+        else
+        {
+            cout << "  Deletion Cancelled." << endl;
+        }
     }
     else
     {
-        cout << "Invalid Recipe ID!\n" << endl;
+        cout << "  Invalid Recipe ID!\n" << endl;
     }
+    
+    // Wait for user input
+    cout << "Press Enter to continue...";
+    cin.ignore(); // Ignore Enter key press
+    cin.get(); // Wait for user input
 }

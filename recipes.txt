@@ -1,10 +1,3 @@
-9
-Adobo|2|dwsd|sd|2|fsf|fs|fs|fs|fs
-GGAGGAG|1|fdfdf|1|fdfd|dfd|df|df
-Carn|2|fe|fe|2|fd|fd|2 mins|Easy|Ulam
-Egg|2|sdf|df|3|dfs|sdf|sdf|2 mins|Easy|Breakfast
-Jaja|2|sds|sd|3|dsfsd|sdf|sdf|2 mins|Easy|HAsrd
-HATDO|2|dfdf|dfd|3|dfgfgf|fgfg|fgf|fgf|fg|fg
-HAAA|3|dfdf|dfdf|dfdf|2|dfdff|dfd|df|df|df
-comp|1|dfedf|2|fdf|df|3|fdf|df
-Bulls|2|sdsd|sdsd|3|fdff|dfdf|df|1|dvd|df
+2
+Menudo|2|sds|sfs|2|sdfsd|sdf|sdf|sdf|sdf
+Tinola|2|edfswe|sdf|3|sdgs|sdf|sdf|sdf|sdf|sdf
