@@ -25,8 +25,8 @@ void searchRecipe();
 void checkExistingRecipe();
 void clearScreen();
 void updateRecipe();
-void viewRecipe(int recipeNumber);
-void deleteRecipes();
+void viewRecipe();
+void deleteRecipe();
 
 int main()
 {
@@ -198,49 +198,92 @@ void addRecipe()
     cout << "\nRecipe Added Successfully!\n" << endl;
     saveRecipe();
 
-    viewRecipe(count);
+    // Reload the recipes from the file to update count
+    loadRecipe();
+
+    // View the recipe you just added
+    viewRecipe();
 
     cin.ignore();
     cin.get(); // Wait for user input
 }
 
 
-void viewRecipe(int recipeNumber)
+void viewRecipe()
 {
     clearScreen();
+    cout<<endl;
+    ifstream read("recipes.txt");
     cout << "+---------------------------------------------------------+" << endl;
     cout << "|                      View Recipe                        |" << endl;
     cout << "+---------------------------------------------------------+" << endl;
 
-    // Check if the recipe number is valid
-    if (recipeNumber >= 1 && recipeNumber <= count)
-    {
-        int index = recipeNumber - 1;
-        
-        // Display the details of the selected recipe
-        cout << "  Recipe Name: " << recipes[index].name << endl;
-        cout << "  Ingredients:" << endl;
-        for (size_t j = 0; j < recipes[index].ingredients.size(); j++)
+    // Check if the file is open
+    if (read.is_open()) {
+        // Read the total count of recipes
+        int totalRecipes;
+        read >> totalRecipes;
+        read.ignore();
+
+        // Loop through each recipe
+        for (int recipeNumber = 1; recipeNumber <= totalRecipes; ++recipeNumber)
         {
-            cout << "    • " << recipes[index].ingredients[j] << endl;
+            int index = recipeNumber - 1;
+            
+            // Skip to the selected recipe
+            for (int i = 0; i < index; i++) {
+                string line;
+                // Skip recipe name
+                getline(read, line, '|');
+                // Read number of ingredients
+                int ingredients_qty;
+                read >> ingredients_qty;
+                read.ignore();
+                // Skip ingredients
+                for (int j = 0; j < ingredients_qty; j++) {
+                    getline(read, line, '|');
+                }
+                // Read number of procedure steps
+                int procedure_qty;
+                read >> procedure_qty;
+                read.ignore();
+                // Skip procedure
+                for (int j = 0; j < procedure_qty; j++) {
+                    getline(read, line, '|');
+                }
+                // Skip cooking time, difficulty level, and category
+                getline(read, line); // Read until the end of the line
+            }
+
+            // Display the details of the selected recipe
+            cout << "  Recipe " << recipeNumber << ":" << endl;
+            cout << "  Recipe Name: " << recipes[index].name << endl;
+            cout << "  Ingredients:" << endl;
+            for (size_t j = 0; j < recipes[index].ingredients.size(); j++)
+            {
+                cout << "    • " << recipes[index].ingredients[j] << endl;
+            }
+            cout << "  Instructions:" << endl;
+            for (size_t j = 0; j < recipes[index].procedure.size(); j++)
+            {
+                cout << "    • " << recipes[index].procedure[j] << endl;
+            }
+            cout << "  Cooking Time: " << recipes[index].cooking_time << endl;
+            cout << "  Difficulty Level: " << recipes[index].difficulty_level << endl;
+            cout << "  Category: " << recipes[index].category << endl;
+            cout << "+---------------------------------------------------------+" << endl;
         }
-        cout << "  Instructions:" << endl;
-        for (size_t j = 0; j < recipes[index].procedure.size(); j++)
-        {
-            cout << "    • " << recipes[index].procedure[j] << endl;
-        }
-        cout << "  Cooking Time: " << recipes[index].cooking_time << endl;
-        cout << "  Difficulty Level: " << recipes[index].difficulty_level << endl;
-        cout << "  Category: " << recipes[index].category << endl;
-        cout << "+---------------------------------------------------------+" << endl;
+
+        // Close the file stream
+        read.close();
     }
-    else
-    {
-        cout << "Invalid recipe number!" << endl;
+    else {
+        cout << "Unable to open file." << endl;
     }
 
     cin.ignore();
 }
+
 
 
 void checkExistingRecipe()
@@ -407,7 +450,7 @@ void updateRecipe()
         saveRecipe(); // Corrected function call
 
         cout<<endl;
-        viewRecipe(num);
+        viewRecipe();
 
         cout << "+---------------------------------------------------------+" << endl;
         cout << "| [1] Update another Recipe                               |" << endl;
