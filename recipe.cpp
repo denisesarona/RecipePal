@@ -224,12 +224,15 @@ void addRecipe()
         case 2:
             return; // Return to the main loop
         case 3:
+            cout<<"  Exiting the program..."<<endl;
             exit(0); // Exit the program
         default:
-            cout << "Invalid choice. Exiting the program." << endl;
+            cout << "-------------------- Invalid choice! ----------------------" << endl;
+            cout<<"  Exiting the program..."<<endl;
             exit(1);
     }
 }
+
 void viewRecipe(int recipeNumber)
 {
     clearScreen();
@@ -465,9 +468,11 @@ void searchRecipe()
         case 2:
             return; // Return to the main loop
         case 3:
+            cout<<"  Exiting the program..."<<endl;
             exit(0); // Exit the program
         default:
-            cout << "Invalid choice. Exiting the program." << endl;
+            cout << "-------------------- Invalid choice! ----------------------" << endl;
+            cout<<"  Exiting the program..."<<endl;
             exit(1);
     }
 }
@@ -497,6 +502,7 @@ void updateRecipe()
     
     int num = 0;
     cout << "\n  Enter Recipe Number to Update: ";
+    cin.ignore();
     cin >> num;
     int index = num - 1;
 
@@ -504,7 +510,7 @@ void updateRecipe()
     {
         cin.ignore();
         cout<<endl;
-        cout<<"  Recipe Found Succssfully!"<<endl;
+        cout << "---------------- Recipe Found Successfully! ---------------" << endl;
         cout<<endl;
         cout<<"------------- Starting Update of Recipe No. "<<num<<"-------------- "<<endl;
         cout << "  Enter Recipe Name: ";
@@ -539,14 +545,20 @@ void updateRecipe()
         cout << "  Enter Category: ";
         getline(cin, recipes[index].category);
 
-        cout << "\n  Recipe Updated Successfully!\n" << endl;
-        cout << "-----------------------------------------------------------" << endl;
+        cout<<endl;
+        cout << "--------------- Recipe Updated Successfully! --------------" << endl;
         saveRecipe(); // Corrected function call
 
         loadRecipe();
 
         cout<<endl;
         viewRecipe(num);
+    }
+    else
+    {
+        cout<<endl;
+        cout << "------------------- Invalid Recipe ID! --------------------" << endl;
+    }
 
         cout << "+---------------------------------------------------------+" << endl;
         cout << "| [1] Update another Recipe                               |" << endl;
@@ -566,15 +578,12 @@ void updateRecipe()
         case 2:
             return; // Return to the main loop
         case 3:
+            cout<<"  Exiting the program..."<<endl;
             exit(0); // Exit the program
         default:
-            cout << "Invalid choice. Exiting the program." << endl;
+            cout << "-------------------- Invalid choice! ----------------------" << endl;
+            cout<<"  Exiting the program..."<<endl;
             exit(1);
-        }
-    }
-    else
-    {
-        cout << "Invalid Recipe Number!\n" << endl;
     }
 
 }
@@ -647,7 +656,7 @@ void deleteRecipe()
             else
             {
                 cout<<endl;
-                cout << "  Unable to open file for writing." << endl;
+                cout << "------------ Unable to open file for writing --------------" << endl;
             }
 
             // Display the message indicating the deleted recipe
@@ -663,7 +672,7 @@ void deleteRecipe()
     else
     {
         cout<<endl;
-        cout << "  Invalid Recipe ID!\n" << endl;
+        cout << "------------------- Invalid Recipe ID! --------------------" << endl;
     }
     
     cout << "+---------------------------------------------------------+" << endl;
@@ -684,9 +693,11 @@ void deleteRecipe()
         case 2:
             return; // Return to the main loop
         case 3:
+            cout<<"  Exiting the program..."<<endl;
             exit(0); // Exit the program
         default:
-            cout << "Invalid choice. Exiting the program." << endl;
+            cout << "-------------------- Invalid choice! ----------------------" << endl;
+            cout<<"  Exiting the program..."<<endl;
             exit(1);
     }
     
