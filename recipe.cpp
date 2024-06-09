@@ -447,7 +447,29 @@ void searchRecipe()
         cout<<endl;
     }
 
-    cin.get(); // Wait for user input
+    cout << "+---------------------------------------------------------+" << endl;
+    cout << "| [1] Search another Recipe                               |" << endl;
+    cout << "| [2] Back to Homepage                                    |" << endl;
+    cout << "| [3] Exit the Program                                    |" << endl;
+    cout << "+---------------------------------------------------------+" << endl;
+    cout << endl;
+    cout << "  Enter Option: ";
+    int option;
+    cin >> option;
+
+    switch (option)
+    {
+        case 1:
+            searchRecipe();
+            break;
+        case 2:
+            return; // Return to the main loop
+        case 3:
+            exit(0); // Exit the program
+        default:
+            cout << "Invalid choice. Exiting the program." << endl;
+            exit(1);
+    }
 }
 
 
@@ -581,7 +603,7 @@ void deleteRecipe()
     if (index >= 0 && index < count)
     {
         cout << endl;
-        cout << "  Recipe Found Successfully!" << endl;
+        cout << "---------------- Recipe Found Successfully! ----------------" << endl;
         cout << endl;
         cout << "  Confirm to Delete Recipe No. " << num << "? [Y/N]: ";
         getline(cin, choice);
@@ -624,24 +646,48 @@ void deleteRecipe()
             }
             else
             {
+                cout<<endl;
                 cout << "  Unable to open file for writing." << endl;
             }
 
             // Display the message indicating the deleted recipe
-            cout << "\n  Recipe ID " << num << " Deleted Successfully!\n" << endl;
+            cout<<endl;
+            cout << "------------ Recipe ID "<<num<<" Deleted Successfully! -------------" << endl;
         }
         else
         {
-            cout << "  Deletion Cancelled." << endl;
+            cout<<endl;
+            cout << "------------------- Deletion Cancelled! -------------------" << endl;
         }
     }
     else
     {
+        cout<<endl;
         cout << "  Invalid Recipe ID!\n" << endl;
     }
     
-    // Wait for user input
-    cout << "Press Enter to continue...";
-    cin.ignore(); // Ignore Enter key press
-    cin.get(); // Wait for user input
+    cout << "+---------------------------------------------------------+" << endl;
+    cout << "| [1] Delete another Recipe                               |" << endl;
+    cout << "| [2] Back to Homepage                                    |" << endl;
+    cout << "| [3] Exit the Program                                    |" << endl;
+    cout << "+---------------------------------------------------------+" << endl;
+    cout << endl;
+    cout << "  Enter Option: ";
+    int option;
+    cin >> option;
+
+    switch (option)
+    {
+        case 1:
+            deleteRecipe();
+            break;
+        case 2:
+            return; // Return to the main loop
+        case 3:
+            exit(0); // Exit the program
+        default:
+            cout << "Invalid choice. Exiting the program." << endl;
+            exit(1);
+    }
+    
 }
