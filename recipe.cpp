@@ -368,36 +368,77 @@ void searchRecipe()
     
     // VARIABLE TO TRACK IF THE RECIPE IS FOUND
     bool found = false;
-    // LOOP THROUGH EACH RECIPE
-    for (int i = 0; i < count; i++)
-    {
-        // IF RECIPE NAME MATCHES THE SEARCH NAME
-        if (recipes[i].name == searchName)
-        {
-            cout<<endl;
-            cout << "+---------------------------------------------------------+" << endl;
-            cout << "|                   Recipe Found                          |" << endl;
-            cout << "+---------------------------------------------------------+" << endl;
-            cout << "  Recipe Name: " << recipes[i].name << endl;
-            cout << "  Ingredients:" << endl;
-            for (size_t j = 0; j < recipes[i].ingredients.size(); j++)
-            {
-                cout << "    • " << recipes[i].ingredients[j] << endl;
+    // OPEN FILE STREAM FOR READING
+    ifstream read("recipes.txt");
+    if (read.is_open()) {
+        // READ THE TOTAL COUNT OF RECIPES 
+        int totalRecipes;
+        read >> totalRecipes;
+        read.ignore();
+
+        // LOOP THROUGH EACH RECIPE
+        for (int i = 0; i < totalRecipes; i++) {
+            // READ RECIPE NAME
+            getline(read, recipes[i].name, '|');
+
+            int ingredients_qty;
+            read >> ingredients_qty;
+            read.ignore();
+            // RESIZE INGREDIENTS QTY VECTOR
+            recipes[i].ingredients.resize(ingredients_qty);
+
+            // READ INGREDIENTS
+            for (int j = 0; j < ingredients_qty; j++) {
+                getline(read, recipes[i].ingredients[j], '|');
             }
-            cout << "  Instructions:" << endl;
-            for (size_t j = 0; j < recipes[i].procedure.size(); j++)
-            {
-                cout << "    • " << recipes[i].procedure[j] << endl;
+
+            int procedure_qty;
+            read >> procedure_qty;
+            read.ignore(); // IGNORE ANY REMAINING CHARACTERS 
+            // RESIZE PROCEDURE QTY VECTOR
+            recipes[i].procedure.resize(procedure_qty);
+
+            for (int j = 0; j < procedure_qty; j++) { // READ PROCEDURE
+                getline(read, recipes[i].procedure[j], '|');
             }
-            cout << "  Cooking Time: " << recipes[i].cooking_time << endl;
-            cout << "  Difficulty Level: " << recipes[i].difficulty_level << endl;
-            cout << "  Category: " << recipes[i].category << endl;
-            cout << "+---------------------------------------------------------+" << endl;
-            found = true;
-            // EXIT LOOP SINCE RECIPE IS FOUND
-            break;
+
+            // READ COOKING TIME, DIFFICULTY LEVEL AND CATEGORY
+            getline(read, recipes[i].cooking_time, '|');
+            getline(read, recipes[i].difficulty_level, '|');
+            getline(read, recipes[i].category);
+
+            // IF RECIPE NAME MATCHES THE SEARCH NAME
+            if (recipes[i].name == searchName)
+            {
+                cout << "+---------------------------------------------------------+" << endl;
+                cout << "|                   Recipe Found                          |" << endl;
+                cout << "+---------------------------------------------------------+" << endl;
+                cout << "  Recipe Name: " << recipes[i].name << endl;
+                cout << "  Ingredients:" << endl;
+                for (size_t j = 0; j < recipes[i].ingredients.size(); j++)
+                {
+                    cout << "    • " << recipes[i].ingredients[j] << endl;
+                }
+                cout << "  Instructions:" << endl;
+                for (size_t j = 0; j < recipes[i].procedure.size(); j++)
+                {
+                    cout << "    • " << recipes[i].procedure[j] << endl;
+                }
+                cout << "  Cooking Time: " << recipes[i].cooking_time << endl;
+                cout << "  Difficulty Level: " << recipes[i].difficulty_level << endl;
+                cout << "  Category: " << recipes[i].category << endl;
+                cout << "+---------------------------------------------------------+" << endl;
+                found = true;
+                // EXIT LOOP SINCE RECIPE IS FOUND
+                break;
+            }
         }
+        // CLOSE THE FILE STREAM
+        read.close();
+    } else {
+        cout << "Unable to open file." << endl;
     }
+    
     // IF RECIPE NOT FOUND
     if (!found)
     {
