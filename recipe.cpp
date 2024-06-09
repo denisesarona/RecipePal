@@ -490,7 +490,9 @@ void clearScreen()
 void updateRecipe() {
     clearScreen();
     cout << "+---------------------------------------------------------+" << endl;
-    cout << "|                   Update Recipe                         |" << endl;
+    cout << "|                                                         |" << endl;
+    cout << "|                     Update Recipe                       |" << endl;
+    cout << "|                                                         |" << endl;
     cout << "+---------------------------------------------------------+" << endl;
     cout << endl;
 
@@ -596,7 +598,9 @@ void updateRecipeItems(int index, int num){
         getline(cin, recipes[index].category);
 
         cout << endl;
-        cout << "\033[1;32m--------------- Recipe Updated Successfully! --------------\033[0m" << endl;
+        cout << "\033[32m+---------------------------------------------------------+\033[0m" << endl;
+        cout << "\033[32m|              Recipe Updated Successfully!               |\033[0m" << endl;
+        cout << "\033[32m+---------------------------------------------------------+\033[0m" << endl;
         saveRecipe(); // Corrected function call
 
         loadRecipe();
@@ -607,7 +611,9 @@ void updateRecipeItems(int index, int num){
     else
     {
         cout << endl;
-        cout << "------------------- \033[1;31mInvalid Recipe ID!\033[0m --------------------" << endl;
+        cout << "\033[31m+---------------------------------------------------------+\033[0m" << endl;
+        cout << "\033[31m|                   Invalid Recipe ID!                    |\033[0m" << endl;
+        cout << "\033[31m+---------------------------------------------------------+\033[0m" << endl;
     }
 }
 
@@ -615,9 +621,13 @@ void updateRecipeItems(int index, int num){
 void deleteRecipe()
 {
     clearScreen();
-    cout << "+---------------------------------------------------------+" << endl;
-    cout << "|                   Delete Recipe                         |" << endl;
-    cout << "+---------------------------------------------------------+" << endl;
+    cout << "\033[46m"; // Set magenta background
+    cout << "\033[97m"; // Set text color to white
+    cout << "                                                           " << endl;
+    cout << "                    Delete Recipe                          " << endl;
+    cout << "                                                           " << endl;
+    cout << "\033[0m"; // Reset colors to default
+
     cout << endl;
 
     cout << "  Existing Recipes:" << endl;
@@ -637,7 +647,11 @@ void deleteRecipe()
     if (index >= 0 && index < count)
     {
         cout << endl;
-        cout << "---------------- Recipe Found Successfully! ----------------" << endl;
+        cout<<endl;
+        cout << "\033[97m\033[42m                                                           \033[0m" << endl;
+        cout << "\033[97m\033[42m                Recipe Found Successfully!                 \033[0m" << endl;
+        cout << "\033[97m\033[42m                                                           \033[0m" << endl;
+
         cout << endl;
         cout << "  Confirm to Delete Recipe No. " << num << "? [Y/N]: ";
         getline(cin, choice);
@@ -681,30 +695,43 @@ void deleteRecipe()
             else
             {
                 cout<<endl;
-                cout << "------------ Unable to open file for writing --------------" << endl;
+                cout << "\033[97m\033[41m                                                           \033[0m" << endl;
+                cout << "\033[97m\033[41m                    Unable to open file                    \033[0m" << endl;
+                cout << "\033[97m\033[41m                                                           \033[0m" << endl;
             }
 
             // Display the message indicating the deleted recipe
             cout<<endl;
-            cout << "------------ Recipe ID "<<num<<" Deleted Successfully! -------------" << endl;
+            cout << "\033[1;32m\033[47m                                                           \033[0m" << endl;
+            cout << "\033[1;32m\033[47m               Recipe ID "<<num<< " Deleted Successfully!           \033[0m" << endl;
+            cout << "\033[1;32m\033[47m                                                           \033[0m" << endl;
         }
         else
         {
             cout<<endl;
-            cout << "------------------- Deletion Cancelled! -------------------" << endl;
+            cout << "\033[97m\033[41m                                                           \033[0m" << endl;
+            cout << "\033[97m\033[41m                   Deletion Cancelled!                     \033[0m" << endl;
+            cout << "\033[97m\033[41m                                                           \033[0m" << endl;
+
         }
     }
     else
     {
         cout<<endl;
-        cout << "------------------- Invalid Recipe ID! --------------------" << endl;
+        cout << "\033[97m\033[41m                                                           \033[0m" << endl;
+        cout << "\033[97m\033[41m                    Invalid Recipe ID!                     \033[0m" << endl;
+        cout << "\033[97m\033[41m                                                           \033[0m" << endl;
     }
-    
-    cout << "+---------------------------------------------------------+" << endl;
-    cout << "| [1] Delete another Recipe                               |" << endl;
-    cout << "| [2] Back to Homepage                                    |" << endl;
-    cout << "| [3] Exit the Program                                    |" << endl;
-    cout << "+---------------------------------------------------------+" << endl;
+    cout<<endl;
+cout << endl;
+cout << "\033[47m"; // Set white background
+cout << "\033[30m"; // Set text color to black
+cout << "                                                           "<<endl; // Start of line with white background
+cout << "  [1] Delete another Recipe                                " << endl; // Rest of the line
+cout << "  [2] Back to Homepage                                     " << endl;
+cout << "  [3] Exit the Program                                     " << endl;
+cout << "                                                           \033[0m" <<endl; // Reset text attributes to default
+ // Set magenta background
     cout << endl;
     cout << "  Enter Option: ";
     int option;
@@ -721,7 +748,9 @@ void deleteRecipe()
             cout<<"  Exiting the program..."<<endl;
             exit(0); // Exit the program
         default:
-            cout << "-------------------- Invalid choice! ----------------------" << endl;
+            cout << "\033[31m+---------------------------------------------------------+\033[0m" << endl;
+            cout << "\033[31m|                     Invalid Choice!                     |\033[0m" << endl;
+            cout << "\033[31m+---------------------------------------------------------+\033[0m" << endl;
             cout<<"  Exiting the program..."<<endl;
             exit(1);
     }
