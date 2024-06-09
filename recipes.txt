@@ -1,6 +1,7 @@
-5
-dd|1|dsd|2|dsd|sd|sd|sd|sd
-sss|2|dsds|sd|2|dsd|sd|3|dsd|sd
+6
+sasd|1|sdf|1|sadf|sdf|sdf|sdf
+sadsd|2|||2|||adss|sd|sd
 has|2|asdf|sdf|1|sdfg|sdf|sdfg|Ulam
 sddd|1|sdf|1|sdf|sdf|sdf|sdf
 Ke|2|dsd|ds|1|sd|ds|sd|sd
+2|2|x|x|1|x|x|x|x

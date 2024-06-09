@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <limits>
 #include <vector>
 using namespace std;
 
@@ -25,6 +26,7 @@ void searchRecipe();
 void checkExistingRecipe();
 void clearScreen();
 void updateRecipe();
+void updateRecipeItems(int num, int count);
 void viewRecipe(int recipeNumber);
 void deleteRecipe();
 
@@ -485,8 +487,7 @@ void clearScreen()
 }
 
 
-void updateRecipe()
-{
+void updateRecipe() {
     clearScreen();
     cout << "+---------------------------------------------------------+" << endl;
     cout << "|                   Update Recipe                         |" << endl;
@@ -495,30 +496,67 @@ void updateRecipe()
 
     // Display existing recipes with their numbers
     cout << "  Existing Recipes:" << endl;
-    for (int i = 0; i < count; i++)
-    {
+    for (int i = 0; i < count; i++) {
         cout << "  " << i + 1 << ". " << recipes[i].name << endl;
     }
     
     int num = 0;
     cout << "\n  Enter Recipe Number to Update: ";
-    cin.ignore();
     cin >> num;
     int index = num - 1;
 
+    updateRecipeItems(index, num);
+
+    cout << "+---------------------------------------------------------+" << endl;
+    cout << "| [1] Update another Recipe                               |" << endl;
+    cout << "| [2] Back to Homepage                                    |" << endl;
+    cout << "| [3] Exit the Program                                    |" << endl;
+    cout << "+---------------------------------------------------------+" << endl;
+    cout << endl;
+    cout << "  Enter Option: ";
+    int option;
+    cin >> option;
+
+    switch (option)
+    {
+    case 1:
+        updateRecipe();
+        break;
+    case 2:
+        return; // Return to the main loop
+    case 3:
+        cout << "  Exiting the program..." << endl;
+        exit(0); // Exit the program
+    default:
+        cout << "-------------------- Invalid choice! ----------------------" << endl;
+        cout << "  Exiting the program..." << endl;
+        exit(1);
+    }
+}
+
+void updateRecipeItems(int index, int num){
     if (index >= 0 && index < count)
     {
         cin.ignore();
-        cout<<endl;
+        cout << endl;
         cout << "---------------- Recipe Found Successfully! ---------------" << endl;
-        cout<<endl;
-        cout<<"------------- Starting Update of Recipe No. "<<num<<"-------------- "<<endl;
+        cout << endl;
+        cout << "------------- Starting Update of Recipe No. " << num << "-------------- " << endl;
         cout << "  Enter Recipe Name: ";
         getline(cin, recipes[index].name);
 
         int ingredients_qty;
         cout << "  Enter Quantity of Ingredients: ";
         cin >> ingredients_qty;
+        if (cin.fail() || ingredients_qty < 0) {
+            cout<<endl;
+            cout << "\033[1;31m---------- Invalid input for Ingredients Quantity! --------\033[0m" << endl;
+            cout<<endl;
+            cout << "\033[1;31m-------------------- Update Cancelled! --------------------\033[0m" << endl;
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            return;
+        }
         cin.ignore();
         recipes[index].ingredients.resize(ingredients_qty);
         for (int i = 0; i < ingredients_qty; i++)
@@ -530,6 +568,17 @@ void updateRecipe()
         int procedure_qty;
         cout << "  Enter Number of Steps in Procedure: ";
         cin >> procedure_qty;
+
+        if (cin.fail() || procedure_qty < 0) {
+            cout<<endl;
+            cout << "---------- Invalid input for Procedure Quantity! ----------" << endl;
+            cout<<endl;
+            cout << "\033[1;31m-------------------- Update Cancelled! --------------------\033[0m" << endl;
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            return; // Return from the function instead of calling addRecipe()
+        }
+
         cin.ignore();
         recipes[index].procedure.resize(procedure_qty);
         for (int i = 0; i < procedure_qty; i++)
@@ -538,6 +587,7 @@ void updateRecipe()
             getline(cin, recipes[index].procedure[i]);
         }
 
+
         cout << "  Enter Cooking Time: ";
         getline(cin, recipes[index].cooking_time);
         cout << "  Enter Difficulty Level: ";
@@ -545,48 +595,23 @@ void updateRecipe()
         cout << "  Enter Category: ";
         getline(cin, recipes[index].category);
 
-        cout<<endl;
-        cout << "--------------- Recipe Updated Successfully! --------------" << endl;
+        cout << endl;
+        cout << "\033[1;32m--------------- Recipe Updated Successfully! --------------\033[0m" << endl;
         saveRecipe(); // Corrected function call
 
         loadRecipe();
 
-        cout<<endl;
+        cout << endl;
         viewRecipe(num);
     }
     else
     {
-        cout<<endl;
-        cout << "------------------- Invalid Recipe ID! --------------------" << endl;
-    }
-
-        cout << "+---------------------------------------------------------+" << endl;
-        cout << "| [1] Update another Recipe                               |" << endl;
-        cout << "| [2] Back to Homepage                                    |" << endl;
-        cout << "| [3] Exit the Program                                    |" << endl;
-        cout << "+---------------------------------------------------------+" << endl;
         cout << endl;
-        cout << "  Enter Option: ";
-        int option;
-        cin >> option;
-
-        switch (option)
-        {
-        case 1:
-            updateRecipe();
-            break;
-        case 2:
-            return; // Return to the main loop
-        case 3:
-            cout<<"  Exiting the program..."<<endl;
-            exit(0); // Exit the program
-        default:
-            cout << "-------------------- Invalid choice! ----------------------" << endl;
-            cout<<"  Exiting the program..."<<endl;
-            exit(1);
+        cout << "------------------- \033[1;31mInvalid Recipe ID!\033[0m --------------------" << endl;
     }
-
 }
+
+
 void deleteRecipe()
 {
     clearScreen();
