@@ -15,12 +15,12 @@ struct Recipe
     string category;
 };
 
-Recipe recipes[100]; // ARRAY OF RECIPE STUCT TO STORE MANY RECIPES 
+Recipe recipes[100]; // ARRAY OF RECIPE STRUCT TO STORE MANY RECIPES 
 int opt = 0, count = 0;
 
 // FUNCTION PROTOTYPES
 void addRecipe();
-void addIngredients();
+void addRecipeItems();
 void loadRecipe();
 void saveRecipe();
 void searchRecipe();
@@ -30,22 +30,28 @@ void updateRecipe();
 void updateRecipeItems(int num, int count);
 void viewRecipe(int recipeNumber);
 void deleteRecipe();
+void header();
+
 
 int main()
-{
-    cout << ",------.              ,--.              ,------.         ,--. \n"
+{    
+    header();
+    loadRecipe();
+    clearScreen();
+    while (true)
+    {
+        clearScreen();
+        cout << ",------.              ,--.              ,------.         ,--. \n"
             "|  .--. ' ,---.  ,---.`--' ,---.  ,---. |  .--. ' ,--,--.|  | \n"
             "|  '--'.'| .-. :| .--',--.| .-. || .-. :|  '--' |' ,-.  ||  | \n"
             "|  |\\  \\ \\   --.\\ `--.|  || '-' '\\   --.|  | --' \\ '-'  ||  | \n"
             "`--' '--' `----' `---'`--'|  |-'  `----'`--'      `--`--'`--' \n"
             "                          `--'                                 \n";
-
-    loadRecipe();
-    while (true)
-    {
-        clearScreen();
-        cout<<"\033[47m"; 
-        cout<<"\033[30m";
+        cout<<endl;
+        cout << "\033[48;2;255;255;255m";
+    
+    // Set text color to black
+        cout << "\033[30m";
         cout << "                                                           " << endl;
         cout << "                Welcome to RecipePal!                      " << endl;
         cout << "         Organize your Recipes in an Instant               " << endl;
@@ -93,6 +99,44 @@ int main()
                 exit(1);
         }
     }
+}
+
+void header()
+{
+    cout<<endl;
+    cout<<endl;
+    cout<<endl;
+    cout << "\033[32m";
+	cout << "                                                                    @@@@+     :=*%\n";
+    cout << "                  @@@@@@@@@@@@@     @@@@@@@@@@.                    @@@@#  +@@@@@@@@@@@   @@@@@@@@@@+\n";
+    cout << "                  @@@@@@@@@@@@@@    @@@@@@@@@@          @@@@@@@@          +@@@*   .@@@@  @@@@@@@@@@\n";
+    cout << "                  @@@@+:::.@@@@@@   @@@@@%            @@@@@@@@@@   @@@@   *@@@-    @@@@  @@@@@@\n";
+    cout << "                  @@@@      @@@@@   @@@@@#          +@@@@@@@@      @@@@*  *@@@=    @@@@  @@@@@@\n";
+    cout << "                  @@@@     -@@@@-   @@@@@@@@@       @@@@@@         @@@@#  +@@@@.+@@@@@   @@@@@@@@@\n";
+    cout << "                  @@@@  .@@@@@@     @@@@@@@@@#      @@@@@          @@@@%  +@@@@@@@@      @@@@@@@@@@\n";
+    cout << "                  @@@@@@@@@@@@%     %@@@@@          @@@@           @@@@#  =@@@@+         @@@@@@\n";
+    cout << "                  @@@@@@@@@@@@@     *@@@@@         =@@@@@          @@@@*  -@@@@          @@@@@@\n";
+    cout << "                  @@@@@   @@@@@@    -@@@@@          @@@@@@@@@%-    @@@@*  :@@@%          @@@@@@\n";
+    cout << "                  @@@@@     @@@@@     @@@@@@@@@@@%    +@@@@@@@@@:   @@@@*  :@@@*          @@@@@@@@@@*\n";
+    cout << "                  @@@@@      @@@@@    @@@@@@@@@@%        @@@@@@@    @@@@*  .@@@+          *@@@@@@@@@\n";
+    cout << "                             @@\n";
+    cout << "\033[0m";
+	cout<<endl;
+	cout<<endl;
+    cout << "                                      @@@@@@@@@\n";
+    cout << "                                      @@@@@@@@@@@@      @@@@@@         @@@@@:\n";
+    cout << "                                      @@@@     @@@-    +@@@@@@.        @@@@@\n";
+    cout << "                                      @@@@     @@@@    @@@@@@@@        @@@@@\n";
+    cout << "                                      @@@@    @@@@     @@@@ @@@@       @@@@@\n";
+    cout << "                                      @@@@@@@@@@      @@@@@  @@@@      %@@@@\n";
+    cout << "                                      @@@@@@@         @@@@@  @@@@@     *@@@@\n";
+    cout << "                                      @@@@+          :@@@@@@@@@@@@-    +@@@@\n";
+    cout << "                                      @@@@:          @@@@@@@@%*@@@@    +@@@@\n";
+    cout << "                                      @@@@.          @@@@       @@@@   *@@@@@@@@@@@\n";
+    cout << "                                      @@@@           @@@@       -@@@.  %@@@@@@@@@@@\n";
+    cout << "                                       *@@           -+%               =@@@@@@@@@@@\n";
+
+    cin.get();
 }
 
 void saveRecipe() 
@@ -180,10 +224,12 @@ void loadRecipe()
 
 void addRecipe()
 {
-    std::ifstream file("recipes.txt");
+    // OPEN THE FILE
+    ifstream file("recipes.txt");
+    // IF FILE DOESN'T EXIST, RETURN
     if(!file.is_open())
     {
-        // File doesn't exist, inform the user and wait for input before returning
+        // DISPLAY ERROR MESSAGE
         cout<<endl;
         cout<<"\033[97m"; 
         cout<<"\033[41m";
@@ -193,11 +239,12 @@ void addRecipe()
         cout<<"                                                           \033[0m"<<endl;
         cout<<endl;
         
-        // Wait for user input
+        // WAIT FOR USER INPUT
         cin.ignore();
         cin.get();
         
-        file.close(); // Close the file stream
+        // CLOSE THE FILE STREAM
+        file.close(); 
         return;
     }
 
@@ -212,13 +259,14 @@ void addRecipe()
     cout<<"                                                           \033[0m"<<endl;
     cout<<endl;
 
-    addIngredients();
+    // CALL FUNCTION TO ADD RECIPE ITEMS
+    addRecipeItems();
 
     cout<<endl;
     cout<<"\033[47m"; 
     cout<<"\033[30m";
-    cout<<"                                                           "<<endl; // Start of line with white background
-    cout<<"  [1] Add another Recipe                                   "<<endl; // Rest of the line
+    cout<<"                                                           "<<endl;
+    cout<<"  [1] Add another Recipe                                   "<<endl;
     cout<<"  [2] Back to Homepage                                     "<<endl;
     cout<<"  [3] Exit the Program                                     "<<endl;
     cout<<"                                                           \033[0m"<<endl;
@@ -250,7 +298,7 @@ void addRecipe()
     }
 }
 
-void addIngredients()
+void addRecipeItems()
 {
     cin.ignore();
     cout<<"  Enter Recipe Name: ";
@@ -259,21 +307,25 @@ void addIngredients()
     int ingredients_qty;
     cout<<"  Enter Quantity of Ingredients: ";
     cin>>ingredients_qty;
+    // CHECK IF INPUT IS INVALID
     if(cin.fail() || ingredients_qty < 0) 
     {
+        // DISPLAY ERROR MESSAGE
         cout<<endl;
         cout<<"\033[97m"; 
         cout<<"\033[41m";
         cout<<"                                                           "<<endl;
         cout<<"           Invalid input for Ingredients Quantity!         "<<endl;
         cout<<"                                                           \033[0m"<<endl;
+        // CLEAR ERROR FLAGS AND IGNORE THE REMAINING INPUT
         cin.clear();
+        // IGNORES CHARACTERS IN THE INPUT BUFFER UP TO AND INCLUDING THE NEXT NEWLINE CHARACTER
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
         return;
     }
     cin.ignore();
     // RESIZE THE INGREDIENTS VECTOR
-    recipes[count].ingredients.resize(ingredients_qty); // .resize changes size of the vector
+    recipes[count].ingredients.resize(ingredients_qty); // .resize CHANGE VECTOR SIZE
     // PROMPT USER TO ENTER EACH INGREDIENT
     for(int i = 0; i < ingredients_qty; i++)
     {
@@ -284,6 +336,7 @@ void addIngredients()
     int procedure_qty;
     cout<<"  Enter Number of Steps in Procedure: ";
     cin>>procedure_qty;
+    // CHECK IF INPUT IS INVALID
     if(cin.fail() || procedure_qty < 0) 
     {
         cout<<endl;
@@ -292,15 +345,16 @@ void addIngredients()
         cout<<"                                                           "<<endl;
         cout<<"            Invalid input for Procedure Quantity!          "<<endl;
         cout<<"                                                           "<<endl;
+        // CLEAR ERROR FLAGS AND IGNORE THE REMAINING INPUT
         cin.clear();
+        // IGNORES CHARACTERS IN THE INPUT BUFFER UP TO AND INCLUDING THE NEXT NEWLINE CHARACTER
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        return; // Return from the function instead of calling addRecipe()
+        return;
     }
 
     cin.ignore();
     // RESIZE THE PROCEDURE VECTOR
-    recipes[count].procedure.resize(procedure_qty);
-    // PROMPT USER TO ENTER EACH PROCEDURE STEP
+    recipes[count].procedure.resize(procedure_qty); // .resize CHANGE VECTOR SIZE
     for(int i = 0; i < procedure_qty; i++)
     {
         cout<<"  Enter Procedure Step "<<i + 1<<": ";
@@ -314,7 +368,7 @@ void addIngredients()
     cout<<"  Enter Category: ";
     getline(cin, recipes[count].category);
 
-    // Increment count after successfully adding a recipe
+    // INCREMENT COUNT AFTER RECIPE SUCCESSFULLY ADDED
     count++;
 
     cout<<endl;
@@ -323,70 +377,71 @@ void addIngredients()
     cout<<"                                                           "<<endl;
     cout<<"                Recipe Added Successfully!                 "<<endl;
     cout<<"                                                           \033[0m"<<endl;
+    // SAVE THE RECIPE TO THE FILE
     saveRecipe();
 
-    // Reload the recipes from the file to update count
+    // RELOAD THE RECIPES FROM THE FILE TO UPDATE COUNT VARIABLE
     loadRecipe();
 
-    // View the recipe you just added
+    // VIEW THE RECENT ADDED RECIPE
     viewRecipe(count);
 }
 
 void viewRecipe(int recipeNumber)
 {
     clearScreen();
-    cout<<"\033[46m"; // Set magenta background
-    cout<<"\033[97m"; // Set text color to white
+    cout<<"\033[46m"; 
+    cout<<"\033[97m"; 
     cout<<"                                                           "<<endl;
     cout<<"                       View Recipe                         "<<endl;
     cout<<"                                                           \033[0m"<<endl;
     cout<<endl;
 
-    // Open the file for reading
+    // OPEN THE FILE TO READ
     ifstream read("recipes.txt");
 
-    // Check if the file is open
+    // CHECK IF THE FILE IS OPEN
     if(read.is_open())
     {
-        // Read the total count of recipes
+        // READ THE TOTAL COUNT OF RECIPES
         int totalRecipes;
         read>>totalRecipes;
         read.ignore();
 
-        // Check if the recipe number is valid
+        // CHECK IF THE RECIPE NUMBER IS VALID
         if(recipeNumber >= 1 && recipeNumber <= totalRecipes)
         {
             int index = recipeNumber - 1;
 
-            // Skip to the selected recipe
+            // SKIP TO THE SELECTED RECIPE
             for(int i = 0; i < index; i++)
             {
                 string line;
-                // Skip recipe name
+                // SKIP RECIPE NAME
                 getline(read, line, '|');
-                // Read number of ingredients
+                 // READ NUMBER OF INGREDIENTS
                 int ingredients_qty;
                 read>>ingredients_qty;
                 read.ignore();
-                // Skip ingredients
+                // READ NUMBER OF INGREDIENTS
                 for(int j = 0; j < ingredients_qty; j++)
                 {
                     getline(read, line, '|');
                 }
-                // Read number of procedure steps
+                // READ NUMBER OF PROCEDURE STEPS
                 int procedure_qty;
                 read>>procedure_qty;
                 read.ignore();
-                // Skip procedure
+                // SKIP PROCEDURE
                 for(int j = 0; j < procedure_qty; j++)
                 {
                     getline(read, line, '|');
                 }
-                // Skip cooking time, difficulty level, and category
-                getline(read, line); // Read until the end of the line
+                // SKIP COOKING TIME, DIFFICULTY LEVEL, AND CATEGORY
+                getline(read, line); // READ UNTIL THE END OF THE LINE
             }
 
-            // Display the details of the selected recipe
+            // DISPLAY THE DETAILS OF THE SELECTED RECIPE
             cout<<"  Recipe Name: "<<recipes[index].name<<endl;
             cout<<"  Ingredients:"<<endl;
             for(size_t j = 0; j < recipes[index].ingredients.size(); j++)
@@ -403,6 +458,7 @@ void viewRecipe(int recipeNumber)
             cout<<"  Category: "<<recipes[index].category;
         } else
         {
+            // DISPLAY ERROR MESSAGE
             cout<<endl;
             cout<<"\033[97m"; 
             cout<<"\033[41m";
@@ -410,9 +466,11 @@ void viewRecipe(int recipeNumber)
             cout<<"                    Invalid Recipe ID!                     "<<endl;
             cout<<"                                                           \033[0m"<<endl;
         }
+        // CLOSE FILE
         read.close();
     } else
     {
+        // DISPLAY ERROR MESSAGE
         cout<<endl;
         cout<<"\033[97m"; 
         cout<<"\033[41m";
@@ -425,10 +483,12 @@ void viewRecipe(int recipeNumber)
 
 void checkExistingRecipe()
 {
-    std::ifstream file("recipes.txt");
+    // OPEN THE FILE TO READ
+    ifstream file("recipes.txt");
+    // CHECK IF THE FILE IS OPEN
     if(!file.is_open())
     {
-        // File doesn't exist, inform the user and wait for input before returning
+        // FILE DOESN'T EXIST, DISPLAY ERROR AND RETURN TO MAIN
         cout<<endl;
         cout<<"\033[97m"; 
         cout<<"\033[41m";
@@ -438,23 +498,26 @@ void checkExistingRecipe()
         cout<<"                                                           \033[0m"<<endl;
         cout<<endl;
         
-        // Wait for user input
+        // WAIT FOR USER INPUT
         cin.ignore();
         cin.get();
         
-        file.close(); // Close the file stream
+        // CLOSE FILE 
+        file.close(); 
         return;
     }
+    // LOAD RECIPES FROM THE FILE
     loadRecipe();
     clearScreen();
 
-    cout<<"\033[46m"; // Set magenta background
-    cout<<"\033[97m"; // Set text color to white
+    cout<<"\033[46m"; 
+    cout<<"\033[97m";
     cout<<"                                                           "<<endl;
     cout<<"                   Check Existing Recipe                   "<<endl;
     cout<<"                                                           \033[0m"<<endl;
     cout<<endl;
     
+    // DISPLAY DETAILS OF EXISTING RECIPES
     for(int i = 0; i < count; i++)
     {
         cout<<"\033[47m"; 
@@ -479,16 +542,19 @@ void checkExistingRecipe()
         cout<<"  Category: "<<recipes[i].category<<endl;
         cout<<endl;
     }
+    // WAIT FOR USER INPUT
     cin.ignore();
-    cin.get(); // Wait for user input
+    cin.get(); 
 }
 
 void searchRecipe()
 {
-    std::ifstream file("recipes.txt");
+    // OPEN THE FILE TO READ
+    ifstream file("recipes.txt");
+    // CHECK IF THE FILE IS OPEN
     if(!file.is_open())
     {
-        // File doesn't exist, inform the user and wait for input before returning
+        // FILE DOESN'T EXIST, DISPLAY ERROR AND RETURN TO MAIN
         cout<<endl;
         cout<<"\033[97m"; 
         cout<<"\033[41m";
@@ -498,18 +564,19 @@ void searchRecipe()
         cout<<"                                                           \033[0m"<<endl;
         cout<<endl;
         
-        // Wait for user input
+        // WAIT FOR USER INPUT
         cin.ignore();
         cin.get();
         
-        file.close(); // Close the file stream
+        // CLOSE THE FILE
+        file.close();
         return;
     }
 
     cin.ignore();
     clearScreen();
-    cout<<"\033[46m"; // Set magenta background
-    cout<<"\033[97m"; // Set text color to white
+    cout<<"\033[46m"; 
+    cout<<"\033[97m"; 
     cout<<"                                                           "<<endl;
     cout<<"                    Search Recipe                          "<<endl;
     cout<<"                                                           \033[0m"<<endl;
@@ -520,7 +587,7 @@ void searchRecipe()
     
     // VARIABLE TO TRACK IF THE RECIPE IS FOUND
     bool found = false;
-    // OPEN FILE STREAM FOR READING
+    // OPEN FILE STREAM TO READ
     ifstream read("recipes.txt");
     if(read.is_open()) 
     {
@@ -597,6 +664,7 @@ void searchRecipe()
         read.close();
     } else 
     {
+        // DISPLAY ERROR MESSAGE
         cout<<endl;
         cout<<"\033[97m"; 
         cout<<"\033[41m";
@@ -608,6 +676,7 @@ void searchRecipe()
     // IF RECIPE NOT FOUND
     if(!found)
     {
+        // DISPLAY ERROR MESSAGE
         cout<<endl;
         cout<<"\033[97m"; 
         cout<<"\033[41m";
@@ -619,8 +688,8 @@ void searchRecipe()
     cout<<endl;
     cout<<"\033[47m"; 
     cout<<"\033[30m";
-    cout<<"                                                           "<<endl; // Start of line with white background
-    cout<<"  [1] Search another Recipe                                "<<endl; // Rest of the line
+    cout<<"                                                           "<<endl; 
+    cout<<"  [1] Search another Recipe                                "<<endl; 
     cout<<"  [2] Back to Homepage                                     "<<endl;
     cout<<"  [3] Exit the Program                                     "<<endl;
     cout<<"                                                           \033[0m"<<endl;
@@ -659,10 +728,12 @@ void clearScreen()
 
 void updateRecipe() 
 {
-    std::ifstream file("recipes.txt");
+    // OPEN THE FILE TO READ
+    ifstream file("recipes.txt");
+    // CHECK IF THE FILE IS OPEN
     if(!file.is_open())
     {
-        // File doesn't exist, inform the user and wait for input before returning
+        // FILE DOESN'T EXIST, DISPLAY ERROR AND RETURN TO MAIN
         cout<<endl;
         cout<<"\033[97m"; 
         cout<<"\033[41m";
@@ -672,24 +743,26 @@ void updateRecipe()
         cout<<"                                                           \033[0m"<<endl;
         cout<<endl;
         
-        // Wait for user input
+        //WAIT FOR USER INPUT
         cin.ignore();
         cin.get();
         
-        file.close(); // Close the file stream
+        // CLOSE THE FILE STREAM
+        file.close(); 
         return;
     }
 
     clearScreen();
+    // LOAD RECIPES FROM FILE
     loadRecipe();
-    cout<<"\033[46m"; // Set magenta background
-    cout<<"\033[97m"; // Set text color to white
+    cout<<"\033[46m"; 
+    cout<<"\033[97m"; 
     cout<<"                                                           "<<endl;
     cout<<"                    Update Recipe                          "<<endl;
     cout<<"                                                           \033[0m"<<endl;
     cout<<endl;
 
-    // Display existing recipes with their numbers
+    // DISPLAY EXISTING RECIPES
     cout<<"  Existing Recipes:"<<endl;
     for(int i = 0; i < count; i++) 
     {
@@ -701,13 +774,14 @@ void updateRecipe()
     cin>>num;
     int index = num - 1;
 
+    // CALL FUNCTION TO UPDATE RECIPE ITEMS
     updateRecipeItems(index, num);
 
     cout<<endl;
     cout<<"\033[47m"; 
     cout<<"\033[30m";
-    cout<<"                                                           "<<endl; // Start of line with white background
-    cout<<"  [1] Update another Recipe                                "<<endl; // Rest of the line
+    cout<<"                                                           "<<endl;
+    cout<<"  [1] Update another Recipe                                "<<endl; 
     cout<<"  [2] Back to Homepage                                     "<<endl;
     cout<<"  [3] Exit the Program                                     "<<endl;
     cout<<"                                                           \033[0m"<<endl;
@@ -722,10 +796,10 @@ void updateRecipe()
         updateRecipe();
         break;
     case 2:
-        return; // Return to the main loop
+        return;
     case 3:
         cout << "  Exiting the program..." << endl;
-        exit(0); // Exit the program
+        exit(0); 
     default:
         cout<<endl;
         cout<<"\033[97m"; 
@@ -741,8 +815,10 @@ void updateRecipe()
 
 void updateRecipeItems(int index, int num)
 {
+    // CHECK IF THE INDEX IS VALID
     if(index >= 0 && index < count)
     {
+        // CLEAR BUFFER AND DISPLAY SUCCESS MESSAGE
         cin.ignore();
         cout<<endl;
         cout<<"\033[97m"; 
@@ -757,7 +833,8 @@ void updateRecipeItems(int index, int num)
 
         if(choice == "Y" || choice == "y")
         {
-            bool validInput = true; // Flag to track input validation status
+            // FLAG TO TRACK INPUT VALIDATION STATUS
+            bool validInput = true; 
 
             cout<<endl;
             cout << "\033[97m"; 
@@ -766,16 +843,19 @@ void updateRecipeItems(int index, int num)
             cout << "             Starting Update of Recipe No." <<1<< "!               " << endl;
             cout << "                                                           \033[0m" << endl;
             cout<<endl;
+            // UPDATE RECIPE NAME
             cout<<"  Enter Recipe Name: ";
             getline(cin, recipes[index].name);
 
+            // GET QUANTITY OF INGREDIENTS
             int ingredients_qty;
             cout<<"  Enter Quantity of Ingredients: ";
             cin>>ingredients_qty;
 
             if(cin.fail() || ingredients_qty < 0) 
             {
-                validInput = false; // Set flag to false if input is invalid
+                // SET FLAG TO FALSE IF INPUT IS INVALID
+                validInput = false; 
                 cout<<endl;
                 cout<<"\033[97m"; 
                 cout<<"\033[41m";
@@ -786,10 +866,13 @@ void updateRecipeItems(int index, int num)
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
             }
 
-            cin.ignore(); // Ignore newline character left in the buffer
+            // IGNORE NEWLINE CHARACTER LEFT IN THE BUFFER
+            cin.ignore(); 
 
-            if (validInput) // Proceed with further input only if all previous input is valid
+            // PROCEED WITH FURTHER INPUT ONLY IF ALL PREVIOUS INPUT IS VALID OR TRUE
+            if (validInput) 
             {
+                // RESIZE INGREDIENTS VECTOR AND PROMPT TO ENTER EACH INGREDIENTS
                 recipes[index].ingredients.resize(ingredients_qty);
                 for(int i = 0; i < ingredients_qty; i++)
                 {
@@ -803,7 +886,8 @@ void updateRecipeItems(int index, int num)
 
                 if(cin.fail() || procedure_qty < 0) 
                 {
-                    validInput = false; // Set flag to false if input is invalid
+                    // SET FLAG TO FALSE IF INPUT IS INVALID
+                    validInput = false; 
                     cout<<endl;
                     cout<<"\033[97m"; 
                     cout<<"\033[41m";
@@ -813,11 +897,13 @@ void updateRecipeItems(int index, int num)
                     cin.clear();
                     cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 }
+                // IGNORE NEWLINE CHARACTER LEFT IN THE BUFFER
+                cin.ignore(); 
 
-                cin.ignore(); // Ignore newline character left in the buffer
-
-                if (validInput) // Proceed only if all input is valid
+                // PROCEED WITH FURTHER INPUT ONLY IF ALL PREVIOUS INPUT IS VALID OR TRUE
+                if (validInput) 
                 {
+                    // RESIZE PROCEDURE VECTOR AND PROMPT TO ENTER EACH PROCEDURE STEP
                     recipes[index].procedure.resize(procedure_qty);
                     for(int i = 0; i < procedure_qty; i++)
                     {
@@ -838,8 +924,10 @@ void updateRecipeItems(int index, int num)
                     cout<<"                                                           "<<endl;
                     cout<<"               Recipe Updated Successfully!                "<<endl;
                     cout<<"                                                           \033[0m"<<endl;
-                    saveRecipe(); // Corrected function call
 
+                    // SAVE RECIPE
+                    saveRecipe(); 
+                    // LOAD RECIPE
                     loadRecipe();
 
                     cout<<endl;
@@ -847,7 +935,8 @@ void updateRecipeItems(int index, int num)
                 }
             }
         } else
-        {
+        { 
+            // DISPLAY MESSAGE IF UPDATE CANCELLED
             cout<<endl;
             cout<<"\033[97m"; 
             cout<<"\033[41m";
@@ -857,6 +946,7 @@ void updateRecipeItems(int index, int num)
         }
     } else
     {
+        // DISPLAY ERROR MESSAGE
         cout<<endl;
         cout<<"\033[97m"; 
         cout<<"\033[41m";
@@ -868,10 +958,12 @@ void updateRecipeItems(int index, int num)
 
 void deleteRecipe()
 {
-    std::ifstream file("recipes.txt");
+    // OPEN THE FILE TO READ
+    ifstream file("recipes.txt");
+    // CHECK IF THE FILE IS OPEN
     if(!file.is_open())
     {
-        // File doesn't exist, inform the user and wait for input before returning
+        // FILE DOESN'T EXIST, DISPLAY ERROR AND RETURN TO MAIN
         cout<<endl;
         cout<<"\033[97m"; 
         cout<<"\033[41m";
@@ -881,22 +973,24 @@ void deleteRecipe()
         cout<<"                                                           \033[0m"<<endl;
         cout<<endl;
         
-        // Wait for user input
+        // WAIT FOR USER INPUT
         cin.ignore();
         cin.get();
         
-        file.close(); // Close the file stream
+        // CLOSE FILE
+        file.close();
         return;
     }
 
     clearScreen();
-    cout<<"\033[46m"; // Set magenta background
-    cout<<"\033[97m"; // Set text color to white
+    cout<<"\033[46m"; 
+    cout<<"\033[97m";
     cout<<"                                                           "<<endl;
     cout<<"                    Delete Recipe                          "<<endl;
     cout<<"                                                           \033[0m"<<endl;
     cout<<endl;
 
+    // DISPLAY EXISTING RECIPE IN FILE
     cout<<"  Existing Recipes:"<<endl;
     for(int i = 0; i < count; i++)
     {
@@ -908,9 +1002,10 @@ void deleteRecipe()
     cout<<endl;    
     cout<<"  Enter Recipe ID to Delete: ";
     cin>>num;
-    cin.ignore(); // Clear the input buffer
+    cin.ignore();
     int index = num - 1;
- 
+
+    // CHECK IF INDEX IS VALID
     if(index >= 0 && index < count)
     {
         cout<<endl;
@@ -927,24 +1022,25 @@ void deleteRecipe()
 
         if(choice == "Y" || choice == "y")
         {
-            for(int i = index; i < count - 1; i++) // Shift recipes up to fill the gap
+            // SHIFT RECIPES UP TO FILL THE GAP
+            for(int i = index; i < count - 1; i++)
             {
                 recipes[i] = recipes[i + 1];    
             }
             count--;
 
-            // Save the updated recipes to the file
+            // SAVE UPDATED RECIPES TO THE FILE
             ofstream write("recipes.txt");
 
             if(write.is_open())
             {
-                // Write the total count of recipes
+                // WRITE THE TOTAL COUNT OF RECIPES
                 write<<count<<endl;
 
-                // Write each recipe to the file
+                // WRITE EACH RECIPE TO THE FILE
                 for(int i = 0; i < count; i++)
                 {
-                    // Write recipe data here
+                    // WRITE RECIPE DATA HERE
                     write<<recipes[i].name<< "|" <<recipes[i].ingredients.size()<<"|";
                     for(size_t j = 0; j < recipes[i].ingredients.size(); j++)
                     {
@@ -957,10 +1053,12 @@ void deleteRecipe()
                     }
                     write<<recipes[i].cooking_time<<"|"<<recipes[i].difficulty_level<<"|"<<recipes[i].category<<endl;
                 }
-                // Close the file stream
+
+                // CLOSE FILE STREAM
                 write.close();
             } else
             {
+                // DISPLAY ERROR MESSAGE
                 cout<<endl;
                 cout<<"\033[97m"; 
                 cout<<"\033[41m";
@@ -968,6 +1066,7 @@ void deleteRecipe()
                 cout<<"                    Unable to open file                    "<<endl;
                 cout<<"                                                           \033[0m"<<endl;
             }
+            // DISPLAY SUCCESS MESSAGE
             cout<<endl;
             cout<<"\033[97m"; 
             cout<<"\033[42m";
@@ -976,6 +1075,7 @@ void deleteRecipe()
             cout<<"                                                           \033[0m"<<endl;
         } else
         {
+            // DISPLAY IF DELETION IS CANCELLED
             cout<<endl;
             cout<<"\033[97m"; 
             cout<<"\033[42m";
@@ -985,6 +1085,7 @@ void deleteRecipe()
         }
     } else
     {
+        // DISPLAY ERROR MESSAGE
         cout<<endl;
         cout<<"\033[97m"; 
         cout<<"\033[41m";
@@ -992,11 +1093,12 @@ void deleteRecipe()
         cout<<"                    Invalid Recipe ID!                     "<<endl;
         cout<<"                                                           \033[0m"<<endl;
     }
+
     cout<<endl;
     cout<<"\033[47m"; 
     cout<<"\033[30m";
-    cout<<"                                                           "<<endl; // Start of line with white background
-    cout<<"  [1] Delete another Recipe                                "<<endl; // Rest of the line
+    cout<<"                                                           "<<endl; 
+    cout<<"  [1] Delete another Recipe                                "<<endl; 
     cout<<"  [2] Back to Homepage                                     "<<endl;
     cout<<"  [3] Exit the Program                                     "<<endl;
     cout<<"                                                           \033[0m"<<endl;
@@ -1011,10 +1113,10 @@ void deleteRecipe()
             deleteRecipe();
             break;
         case 2:
-            return; // Return to the main loop
+            return;
         case 3:
             cout<<"  Exiting the program..."<<endl;
-            exit(0); // Exit the program
+            exit(0); 
         default:
             cout<<endl;
             cout<<"\033[97m"; 
