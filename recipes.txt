@@ -1,4 +1,7 @@
-3
-sasd|1|sdf|1|sadf|sdf|sdf|sdf
-has|2|asdf|sdf|1|sdfg|sdf|sdfg|Ulam
-2|2|x|x|1|x|x|x|x
+6
+sdf|2|dfg|sdfg|2|dsg|sdg|sdg|sdg|dfgyh
+dsd|1|sdf|1|sdf|sdf|sd|sd
+Adobo|1|sd|2|sds|sd|sd|sd|sd
+camp|1|sdsd|1|sdsd|sd|sd|s
+HAttt|1|sdsd|1|sds|sd|sd|sd
+ff|1|sdf|1|sd|sd|sd|sd
