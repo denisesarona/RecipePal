@@ -44,8 +44,8 @@ int main()
     while (true)
     {
         clearScreen();
-        cout<<"\033[46m"; 
-        cout<<"\033[97m";
+        cout<<"\033[47m"; 
+        cout<<"\033[30m";
         cout << "                                                           " << endl;
         cout << "                Welcome to RecipePal!                      " << endl;
         cout << "         Organize your Recipes in an Instant               " << endl;
@@ -180,6 +180,30 @@ void loadRecipe()
 
 void addRecipe()
 {
+    std::ifstream file("recipes.txt");
+    if(!file.is_open())
+    {
+        // File doesn't exist, inform the user and wait for input before returning
+        cout<<endl;
+        cout<<"\033[97m"; 
+        cout<<"\033[41m";
+        cout<<"                                                           "<<endl;
+        cout<<"                  Unable to open file!                     "<<endl;
+        cout<<"               Please check the file path!                 "<<endl;
+        cout<<"                                                           \033[0m"<<endl;
+        cout<<endl;
+        
+        // Wait for user input
+        cin.ignore();
+        cin.get();
+        
+        file.close(); // Close the file stream
+        return;
+    }
+
+    
+    // File exists, proceed with adding recipe
+
     clearScreen();
     cout<<"\033[46m"; // Set magenta background
     cout<<"\033[97m"; // Set text color to white
@@ -225,6 +249,7 @@ void addRecipe()
             exit(1);
     }
 }
+
 
 void addIngredients()
 {
@@ -401,6 +426,26 @@ void viewRecipe(int recipeNumber)
 
 void checkExistingRecipe()
 {
+    std::ifstream file("recipes.txt");
+    if(!file.is_open())
+    {
+        // File doesn't exist, inform the user and wait for input before returning
+        cout<<endl;
+        cout<<"\033[97m"; 
+        cout<<"\033[41m";
+        cout<<"                                                           "<<endl;
+        cout<<"                  Unable to open file!                     "<<endl;
+        cout<<"               Please check the file path!                 "<<endl;
+        cout<<"                                                           \033[0m"<<endl;
+        cout<<endl;
+        
+        // Wait for user input
+        cin.ignore();
+        cin.get();
+        
+        file.close(); // Close the file stream
+        return;
+    }
     loadRecipe();
     clearScreen();
 
@@ -441,6 +486,27 @@ void checkExistingRecipe()
 
 void searchRecipe()
 {
+    std::ifstream file("recipes.txt");
+    if(!file.is_open())
+    {
+        // File doesn't exist, inform the user and wait for input before returning
+        cout<<endl;
+        cout<<"\033[97m"; 
+        cout<<"\033[41m";
+        cout<<"                                                           "<<endl;
+        cout<<"                  Unable to open file!                     "<<endl;
+        cout<<"               Please check the file path!                 "<<endl;
+        cout<<"                                                           \033[0m"<<endl;
+        cout<<endl;
+        
+        // Wait for user input
+        cin.ignore();
+        cin.get();
+        
+        file.close(); // Close the file stream
+        return;
+    }
+
     cin.ignore();
     clearScreen();
     cout<<"\033[46m"; // Set magenta background
@@ -594,6 +660,27 @@ void clearScreen()
 
 void updateRecipe() 
 {
+    std::ifstream file("recipes.txt");
+    if(!file.is_open())
+    {
+        // File doesn't exist, inform the user and wait for input before returning
+        cout<<endl;
+        cout<<"\033[97m"; 
+        cout<<"\033[41m";
+        cout<<"                                                           "<<endl;
+        cout<<"                  Unable to open file!                     "<<endl;
+        cout<<"               Please check the file path!                 "<<endl;
+        cout<<"                                                           \033[0m"<<endl;
+        cout<<endl;
+        
+        // Wait for user input
+        cin.ignore();
+        cin.get();
+        
+        file.close(); // Close the file stream
+        return;
+    }
+
     clearScreen();
     cout<<"\033[46m"; // Set magenta background
     cout<<"\033[97m"; // Set text color to white
@@ -654,6 +741,7 @@ void updateRecipe()
 
 void updateRecipeItems(int index, int num)
 {
+
     if(index >= 0 && index < count)
     {
         cin.ignore();
@@ -770,6 +858,27 @@ void updateRecipeItems(int index, int num)
 
 void deleteRecipe()
 {
+    std::ifstream file("recipes.txt");
+    if(!file.is_open())
+    {
+        // File doesn't exist, inform the user and wait for input before returning
+        cout<<endl;
+        cout<<"\033[97m"; 
+        cout<<"\033[41m";
+        cout<<"                                                           "<<endl;
+        cout<<"                  Unable to open file!                     "<<endl;
+        cout<<"               Please check the file path!                 "<<endl;
+        cout<<"                                                           \033[0m"<<endl;
+        cout<<endl;
+        
+        // Wait for user input
+        cin.ignore();
+        cin.get();
+        
+        file.close(); // Close the file stream
+        return;
+    }
+
     clearScreen();
     cout<<"\033[46m"; // Set magenta background
     cout<<"\033[97m"; // Set text color to white
