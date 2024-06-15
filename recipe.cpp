@@ -4,24 +4,8 @@
 #include <limits>
 #include <vector>
 #include <cctype>
+
 using namespace std;
-
-struct Ingredient {
-    string name;
-    string unit;
-};
-
-struct Recipe {
-    string name;
-    vector<Ingredient> ingredients;
-    vector<string> procedure;
-    string cooking_time;
-    string difficulty_level;
-    string category;
-};
-
-Recipe recipes[100]; // ARRAY OF RECIPE STRUCT TO STORE MANY RECIPES 
-int opt = 0, count = 0;
 
 // FUNCTION PROTOTYPES
 void addRecipe();
@@ -38,8 +22,24 @@ void deleteRecipe();
 void header();
 string levelChecker();
 string categoryChecker();
+int ingredientQtyChecker();
+int instructionQtyChecker();
+struct Ingredient {
+    string name;
+    string unit;
+};
 
+struct Recipe {
+    string name;
+    vector<Ingredient> ingredients;
+    vector<string> instruction;
+    string cooking_time;
+    string difficulty_level;
+    string category;
+};
 
+Recipe recipes[100]; // ARRAY OF RECIPE STRUCT TO STORE MANY RECIPES 
+int opt = 0, count = 0;
 
 int main()
 {    
@@ -176,13 +176,13 @@ void saveRecipe()
             write << recipes[i].ingredients[j].unit << "|";
         }
 
-        // WRITE NUMBER OF PROCEDURE STEPS
-        write << recipes[i].procedure.size() << "|";
+        // WRITE NUMBER OF instruction STEPS
+        write << recipes[i].instruction.size() << "|";
 
-        // WRITE EACH PROCEDURE STEP
-        for (size_t j = 0; j < recipes[i].procedure.size(); j++) 
+        // WRITE EACH instruction STEP
+        for (size_t j = 0; j < recipes[i].instruction.size(); j++) 
         {
-            write << recipes[i].procedure[j] << "|";
+            write << recipes[i].instruction[j] << "|";
         }
 
         // WRITE COOKING TIME, DIFFICULTY LEVEL, AND CATEGORY
@@ -228,16 +228,16 @@ void loadRecipe()
             getline(read, recipes[i].ingredients[j].unit, '|');
         }
 
-        // READ NUMBER OF PROCEDURE STEPS
-        int procedure_qty;
-        read >> procedure_qty;
+        // READ NUMBER OF instruction STEPS
+        int instruction_qty;
+        read >> instruction_qty;
         read.ignore(); // Ignore the '|' character
-        recipes[i].procedure.resize(procedure_qty);
+        recipes[i].instruction.resize(instruction_qty);
 
-        // READ EACH PROCEDURE STEP
-        for (int j = 0; j < procedure_qty; j++) 
+        // READ EACH instruction STEP
+        for (int j = 0; j < instruction_qty; j++) 
         {
-            getline(read, recipes[i].procedure[j], '|');
+            getline(read, recipes[i].instruction[j], '|');
         }
 
         // READ COOKING TIME, DIFFICULTY LEVEL, AND CATEGORY
@@ -250,29 +250,90 @@ void loadRecipe()
     read.close();
 }
 
+int ingredientQtyChecker() 
+{
+    int ingredients_qty;
+    bool validInput = false;
+
+    while (!validInput) {
+        cout << "  No. of Ingredients: ";
+        cin >> ingredients_qty;
+ 
+        if (cin.fail() || ingredients_qty <= 0) {
+            cin.clear(); // Clear error flag
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Discard invalid input
+            cout << "\033[97m\033[41m"; // White text, red background
+            cout << "\n                                                           ";
+            cout << "\n           Invalid input for Ingredients Quantity!         ";
+            cout << "\n                                                           \033[0m";
+            cout<<endl;
+            cout<<endl;
+        } else {
+            validInput = true;
+        }
+    }
+
+    cin.ignore(); // Clear the newline character left in the buffer
+    return ingredients_qty;
+}
+
+int instructionQtyChecker() 
+{
+    int instruction_qty;
+    bool validInput = false;
+
+    while (!validInput) {
+        cout << "  No. of Instruction Steps: ";
+        cin >> instruction_qty;
+
+        if (cin.fail() || instruction_qty <= 0) {
+            cin.clear(); // Clear error flag
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Discard invalid input
+            cout << "\033[97m\033[41m"; // White text, red background
+            cout << "\n                                                           ";
+            cout << "\n       Invalid input for Instruction Steps Quantity!       ";
+            cout << "\n                                                           \033[0m";
+            cout<<endl;
+            cout<<endl;
+        } else {
+            validInput = true;
+        }
+    }
+
+    cin.ignore(); // Clear the newline character left in the buffer
+    return instruction_qty;
+}
+
 string levelChecker() 
 {
     string difficulty;
     bool validInput = false;
 
     while (!validInput) {
-        cout << "  Difficulty Level (Easy, Medium, Hard): ";
-        getline(cin, difficulty);
-
-        // Convert to lowercase for case-insensitive comparison
-        for (char &c : difficulty) {
-            c = tolower(c);
-        }
+        cout << "  Difficulty Level:" << endl;
+        cout << "    [1] Easy" << endl;
+        cout << "    [2] Medium" << endl;
+        cout << "    [3] Hard" << endl;
+        cout << "  Enter an Option (1, 2, 3): ";
+        cin>>difficulty;
 
         // Check if the input matches valid choices
-        if (difficulty == "easy" || difficulty == "medium" || difficulty == "hard") {
+        if (difficulty == "1") {
+            difficulty = "Easy";
+            validInput = true;
+        } else if (difficulty == "2") {
+            difficulty = "Medium";
+            validInput = true;
+        } else if (difficulty == "3") {
+            difficulty = "Hard";
             validInput = true;
         } else {
-            cout << endl;
-            cout << "\033[97m\033[41m";
-            cout << "                                                           " << endl;
-            cout << "           Invalid difficulty level! Please retry.          " << endl;
-            cout << "                                                           \033[0m" << endl;
+            cout << "\033[97m\033[41m"; // White text, red background
+            cout << "\n                                                            ";
+            cout << "\n           Invalid difficulty level! Please retry.          ";
+            cout << "\n                                                            \033[0m";
+            cout<<endl;
+            cout<<endl;
         }
     }
 
@@ -285,77 +346,34 @@ string categoryChecker()
     bool validInput = false;
 
     while (!validInput) {
-        cout << "  Category (e.g., Breakfast, Lunch, Dinner): ";
-        getline(cin, category);
-
-        // Convert to lowercase for case-insensitive comparison
-        for (char &c : category) {
-            c = tolower(c);
-        }
+        cout << "  Category: "<<endl;
+        cout << "    [1] Breakfast" << endl;
+        cout << "    [2] Lunch" << endl;
+        cout << "    [3] Dinner" << endl;
+        cout << "  Enter an Option (1, 2, 3): ";
+        cin>>category;
 
         // Check if the input matches valid choices
-        if (category == "breakfast" || category == "lunch" || category == "dinner") {
+        if (category == "1") {
+            category = "Breakfast";
+            validInput = true;
+        } else if (category == "2") {
+            category = "Lunch";
+            validInput = true;
+        } else if (category == "3") {
+            category = "Dinner";
             validInput = true;
         } else {
-            cout << endl;
-            cout << "\033[97m\033[41m";
-            cout << "                                                           " << endl;
-            cout << "              Invalid category! Please retry.               " << endl;
-            cout << "                                                           \033[0m" << endl;
+            cout<<"\033[97m\033[41m"; // White text, red background
+            cout<<"\n                                                           ";
+            cout<<"\n              Invalid category! Please retry.              ";
+            cout<<"\n                                                           \033[0m";
+            cout<<endl;
+            cout<<endl;
         }
     }
 
     return category;
-}
-
-int instructionQtyChecker() {
-    int instruction_qty;
-    bool validInput = false;
-
-    while (!validInput) {
-        cout << "  No. of Instruction Steps: ";
-        cin >> instruction_qty;
-
-        if (cin.fail() || instruction_qty <= 0) {
-            cin.clear(); // Clear error flag
-            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Discard invalid input
-            cout << endl;
-            cout << "\033[97m\033[41m"; // White text, red background
-            cout << "                                                           " << endl;
-            cout << "           Invalid input for Instruction Steps Quantity!   " << endl;
-            cout << "                                                           \033[0m" << endl;
-        } else {
-            validInput = true;
-        }
-    }
-
-    cin.ignore(); // Clear the newline character left in the buffer
-    return instruction_qty;
-}
-
-int ingredientQtyChecker() {
-    int ingredients_qty;
-    bool validInput = false;
-
-    while (!validInput) {
-        cout << "  No. of Ingredients: ";
-        cin >> ingredients_qty;
-
-        if (cin.fail() || ingredients_qty <= 0) {
-            cin.clear(); // Clear error flag
-            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Discard invalid input
-            cout << endl;
-            cout << "\033[97m\033[41m"; // White text, red background
-            cout << "                                                           " << endl;
-            cout << "           Invalid input for Ingredients Quantity!         " << endl;
-            cout << "                                                           \033[0m" << endl;
-        } else {
-            validInput = true;
-        }
-    }
-
-    cin.ignore(); // Clear the newline character left in the buffer
-    return ingredients_qty;
 }
 
 void addRecipe() 
@@ -364,14 +382,27 @@ void addRecipe()
     cout << "\033[46m"; // Set magenta background
     cout << "\033[97m"; // Set text color to white
     cout << "                                                           " << endl;
-    cout << "                        Add Recipe                         " << endl;
+    cout<< "                        Add Recipe                         " << endl;
     cout << "                                                           \033[0m" << endl;
     cout << endl;
 
     // Call function to add recipe items
     addRecipeItems();
 
-    cout << endl;
+    cout << endl; 
+    cout << "\033[97m\033[42m";
+    cout << "                                                           " << endl;
+    cout << "                Recipe Added Successfully!                 " << endl;
+    cout << "                                                           \033[0m" << endl;
+    cout<<endl;
+
+    cout << "Press Enter to continue...\a";
+    cin.ignore(); // Wait for user to press Enter to continue
+    cin.get();
+
+    // Show the added recipe details
+    viewRecipe(count);
+    
     cout << "\033[47m";
     cout << "\033[30m";
     cout << "                                                           " << endl;
@@ -407,8 +438,7 @@ void addRecipe()
     }
 }
 
-void addRecipeItems() 
-{
+void addRecipeItems() {
     cin.ignore(); // Clear the input buffer
 
     // Prompt for recipe name
@@ -416,22 +446,7 @@ void addRecipeItems()
     getline(cin, recipes[count].name);
 
     // Prompt for number of ingredients
-    int ingredients_qty;
-    cout << "  No. of Ingredients: ";
-    cin >> ingredients_qty;
-
-    // Validate input for ingredients quantity
-    if (ingredients_qty <= 0) {
-        cout << endl;
-        cout << "\033[97m\033[41m";
-        cout << "                                                           " << endl;
-        cout << "           Invalid input for Ingredients Quantity!         " << endl;
-        cout << "                                                           \033[0m" << endl;
-        cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear input buffer
-        return;
-    }
-
-    cin.ignore(); // Clear the newline character from previous input
+    int ingredients_qty = ingredientQtyChecker();
 
     // Resize ingredients vector
     recipes[count].ingredients.resize(ingredients_qty);
@@ -445,31 +460,16 @@ void addRecipeItems()
         getline(cin, recipes[count].ingredients[i].unit);
     }
 
-    // Prompt for number of procedure steps
-    int procedure_qty;
-    cout << "  No. of Instruction Steps: ";
-    cin >> procedure_qty;
+    // Prompt for number of instruction steps
+    int instruction_qty = instructionQtyChecker();
 
-    // Validate input for procedure steps
-    if (procedure_qty <= 0) {
-        cout << endl;
-        cout << "\033[97m\033[41m";
-        cout << "                                                           " << endl;
-        cout << "           Invalid input for Procedure Quantity!           " << endl;
-        cout << "                                                           \033[0m" << endl;
-        cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear input buffer
-        return;
-    }
+    // Resize instruction vector
+    recipes[count].instruction.resize(instruction_qty);
 
-    cin.ignore(); // Clear the newline character from previous input
-
-    // Resize procedure vector
-    recipes[count].procedure.resize(procedure_qty);
-
-    // Prompt for each procedure step
-    for (int i = 0; i < procedure_qty; ++i) {
+    // Prompt for each instruction step
+    for (int i = 0; i < instruction_qty; ++i) {
         cout << "    Step " << i + 1 << ": ";
-        getline(cin, recipes[count].procedure[i]);
+        getline(cin, recipes[count].instruction[i]);
     }
 
     // Prompt for cooking time
@@ -484,21 +484,12 @@ void addRecipeItems()
 
     // Increment recipe count
     count++;
-
-    cout << endl;
-    cout << "\033[97m\033[42m";
-    cout << "                                                           " << endl;
-    cout << "                Recipe Added Successfully!                 " << endl;
-    cout << "                                                           \033[0m" << endl;
-
     // Save the recipe to file
     saveRecipe();
 
     // Reload recipes from file to update count variable
     loadRecipe();
 
-    // Optionally view the recently added recipe
-    viewRecipe(count);
 }
 
 void viewRecipe(int recipeNumber) 
@@ -538,8 +529,8 @@ void viewRecipe(int recipeNumber)
                 cout << "    - " << recipes[index].ingredients[j].name << " (" << recipes[index].ingredients[j].unit << ")" << endl;
             }
             cout << "  Instructions:" << endl;
-            for (size_t j = 0; j < recipes[index].procedure.size(); j++) {
-                cout << "    - " << recipes[index].procedure[j] << endl;
+            for (size_t j = 0; j < recipes[index].instruction.size(); j++) {
+                cout << "    Step "<<j + 1<<": " << recipes[index].instruction[j] << endl;
             }
             cout << "  Cooking Time: " << recipes[index].cooking_time << endl;
             cout << "  Difficulty Level: " << recipes[index].difficulty_level << endl;
@@ -626,8 +617,8 @@ void checkExistingRecipe()
             cout << "    • " << recipes[i].ingredients[j].name << " (" << recipes[i].ingredients[j].unit << ")" << endl;
         }
         cout << "  Instructions:" << endl;
-        for (size_t j = 0; j < recipes[i].procedure.size(); j++) {
-            cout << "    • " << recipes[i].procedure[j] << endl;
+        for (size_t j = 0; j < recipes[i].instruction.size(); j++) {
+            cout << "    • " << recipes[i].instruction[j] << endl;
         }
         cout << "  Cooking Time: " << recipes[i].cooking_time << endl;
         cout << "  Difficulty Level: " << recipes[i].difficulty_level << endl;
@@ -641,69 +632,98 @@ void checkExistingRecipe()
     cin.get();
 }
 
-void searchRecipe() 
-{
+void searchRecipe() {
     clearScreen();
-
-    // Load recipes from file if not already loaded
-    if (recipes[0].name.empty()) {
-        loadRecipe();
+    
+    ifstream file("recipes.txt");
+    if (!file.is_open()) {
+        cout << "\033[97m\033[41m";
+        cout << "                                                           " << endl;
+        cout << "                  Unable to open file!                     " << endl;
+        cout << "               Please check the file path!                 " << endl;
+        cout << "                                                           \033[0m" << endl;
+        cin.ignore();
+        cin.get();
+        return;
     }
 
-    cout << "\033[46m\033[97m"; // Set background to cyan and text to white
+    cout << "\033[46m\033[97m";
     cout << "                                                           " << endl;
     cout << "                    Search Recipe                          " << endl;
     cout << "                                                           \033[0m" << endl;
     cout << endl;
 
-    // Prompt user to enter recipe name to search
     cout << "  Enter Recipe Name to Search: ";
     string searchName;
+    cin.ignore();
     getline(cin, searchName);
 
     bool found = false;
+    int totalRecipes;
+    file >> totalRecipes;
+    file.ignore();
 
-    // Search for the recipe by name
-    for (size_t i = 0; i < sizeof(recipes) / sizeof(recipes[0]); ++i) {
+    for (int i = 0; i < totalRecipes; i++) {
+        getline(file, recipes[i].name, '|');
+
+        int ingredients_qty;
+        file >> ingredients_qty;
+        file.ignore();
+        recipes[i].ingredients.resize(ingredients_qty);
+        for (int j = 0; j < ingredients_qty; j++) {
+            getline(file, recipes[i].ingredients[j].name, '|');
+            getline(file, recipes[i].ingredients[j].unit, '|');
+        }
+
+        int instruction_qty;
+        file >> instruction_qty;
+        file.ignore();
+        recipes[i].instruction.resize(instruction_qty);
+        for (int j = 0; j < instruction_qty; j++) {
+            getline(file, recipes[i].instruction[j], '|');
+        }
+
+        getline(file, recipes[i].cooking_time, '|');
+        getline(file, recipes[i].difficulty_level, '|');
+        getline(file, recipes[i].category);
+
         if (recipes[i].name == searchName) {
             clearScreen();
-            cout << "\033[97m\033[42m"; // Set text to white and background to green
+            cout << "\033[97m\033[42m";
             cout << "                                                           " << endl;
             cout << "                Recipe Found Successfully!                 " << endl;
             cout << "                                                           \033[0m" << endl;
             cout << endl;
-
             cout << "  Recipe Name: " << recipes[i].name << endl;
             cout << "  Ingredients:" << endl;
-            for (const auto& ingredient : recipes[i].ingredients) {
-                cout << "    • " << ingredient.name << " (" << ingredient.unit << ")" << endl;
+            for (int j = 0; j < ingredients_qty; j++) {
+                cout << "    - " << recipes[i].ingredients[j].name <<" ("<<recipes[i].ingredients[j].unit<<")"<< endl;
             }
-
             cout << "  Instructions:" << endl;
-            for (const auto& instruction : recipes[i].procedure) {
-                cout << "    • " << instruction << endl;
+            for (int j = 0; j < instruction_qty; j++) {
+                cout << "    Steps "<<j+1<<": " << recipes[i].instruction[j] << endl;
             }
-
             cout << "  Cooking Time: " << recipes[i].cooking_time << endl;
             cout << "  Difficulty Level: " << recipes[i].difficulty_level << endl;
             cout << "  Category: " << recipes[i].category << endl;
-
+            cout << endl;
             found = true;
             break;
         }
     }
 
+    file.close();
+
     if (!found) {
-        clearScreen();
-        cout << "\033[97m\033[41m"; // Set text to white and background to red
+        cout << "\033[97m\033[41m";
         cout << "                                                           " << endl;
         cout << "                     Recipe Not Found!                     " << endl;
+        cout << "                                                           " << endl;
         cout << "                                                           \033[0m" << endl;
+        cout << endl;
     }
 
-    // Display options to user
-    cout << endl;
-    cout << "\033[47m\033[30m"; // Set background to white and text to black
+    cout << "\033[47m\033[30m";
     cout << "                                                           " << endl;
     cout << "  [1] Search another Recipe                                " << endl;
     cout << "  [2] Back to Homepage                                     " << endl;
@@ -716,31 +736,22 @@ void searchRecipe()
 
     switch (option) {
         case 1:
-            // Search another recipe
-            cin.ignore(); // Ignore newline left in input buffer
             searchRecipe();
             break;
         case 2:
-            // Return to the main menu (homepage)
-            cin.ignore(); // Ignore newline left in input buffer
-            return;
+            return; // Return to the main loop
         case 3:
-            // Exit the program
             cout << "  Exiting the program..." << endl;
-            exit(0);
+            exit(0); // Exit the program
         default:
-            // Invalid choice
-            clearScreen();
-            cout << "\033[97m\033[41m"; // Set text to white and background to red
+            cout << "\033[97m\033[41m";
             cout << "                                                           " << endl;
             cout << "                      Invalid Choice!                      " << endl;
             cout << "                                                           \033[0m" << endl;
-            cout << endl;
             cout << "  Exiting the program..." << endl;
             exit(1);
     }
 }
-
 void clearScreen()
 {
     cout<< "\033[2J\033[1;1H";
@@ -850,8 +861,7 @@ void updateRecipe()
     }
 }
 
-void updateRecipeItems(int index, int num) 
-{
+void updateRecipeItems(int index, int num) {
     clearScreen();
 
     cout << "\033[46m\033[97m"; // Set background to cyan and text to white
@@ -912,17 +922,17 @@ void updateRecipeItems(int index, int num)
                 getline(cin, recipes[index].ingredients[i].unit);
             }
 
-            // Update procedure steps
-            int procedure_qty;
+            // Update instruction steps
+            int instruction_qty;
             cout << "  No. of Instruction Steps: ";
-            cin >> procedure_qty;
+            cin >> instruction_qty;
 
-            if (cin.fail() || procedure_qty < 0) {
+            if (cin.fail() || instruction_qty < 0) {
                 validInput = false;
                 cout << endl;
                 cout << "\033[97m\033[41m"; // Set text to white and background to red
                 cout << "                                                           " << endl;
-                cout << "            Invalid input for Procedure Quantity!          " << endl;
+                cout << "            Invalid input for instruction Quantity!          " << endl;
                 cout << "                                                           \033[0m" << endl;
                 cin.clear();
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -931,11 +941,11 @@ void updateRecipeItems(int index, int num)
             cin.ignore(); // Ignore newline character left in the buffer
 
             if (validInput) {
-                // Resize procedure vector and prompt to enter each procedure step
-                recipes[index].procedure.resize(procedure_qty);
-                for (int i = 0; i < procedure_qty; ++i) {
+                // Resize instruction vector and prompt to enter each instruction step
+                recipes[index].instruction.resize(instruction_qty);
+                for (int i = 0; i < instruction_qty; ++i) {
                     cout << "  Step " << i + 1 << ": ";
-                    getline(cin, recipes[index].procedure[i]);
+                    getline(cin, recipes[index].instruction[i]);
                 }
 
                 // Update cooking time, difficulty level, and category
@@ -959,8 +969,18 @@ void updateRecipeItems(int index, int num)
                 saveRecipe();
                 loadRecipe();
 
-                // View updated recipe details
+                cout << "Press Enter to continue...";
+                cin.ignore(); // Wait for user to press Enter to continue
+
+                // Clear screen and display updated recipe details
+                clearScreen();
+                cout << "\033[46m\033[97m"; // Set background to cyan and text to white
+                cout << "                                                           " << endl;
+                cout << "                    Update Recipe                          " << endl;
+                cout << "                                                           \033[0m" << endl;
                 cout << endl;
+
+                cout << "  Updated Recipe Details:" << endl;
                 viewRecipe(num);
             }
         }
@@ -1047,9 +1067,9 @@ void deleteRecipe()
                 for (size_t j = 0; j < recipes[i].ingredients.size(); j++) {
                     write << recipes[i].ingredients[j].name << "|" << recipes[i].ingredients[j].unit << "|";
                 }
-                write << recipes[i].procedure.size() << "|";
-                for (size_t j = 0; j < recipes[i].procedure.size(); j++) {
-                    write << recipes[i].procedure[j] << "|";
+                write << recipes[i].instruction.size() << "|";
+                for (size_t j = 0; j < recipes[i].instruction.size(); j++) {
+                    write << recipes[i].instruction[j] << "|";
                 }
                 write << recipes[i].cooking_time << "|" << recipes[i].difficulty_level << "|" << recipes[i].category << endl;
             }
