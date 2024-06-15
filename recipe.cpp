@@ -298,12 +298,12 @@ void addRecipeItems() {
     cin.ignore(); // Clear the input buffer
 
     // Prompt for recipe name
-    cout << "  Enter Recipe Name: ";
+    cout << "  Recipe Name: ";
     getline(cin, recipes[count].name);
 
     // Prompt for number of ingredients
     int ingredients_qty;
-    cout << "  Enter Quantity of Ingredients: ";
+    cout << "  No. of Ingredients: ";
     cin >> ingredients_qty;
 
     // Validate input for ingredients quantity
@@ -325,16 +325,16 @@ void addRecipeItems() {
 
     // Prompt for each ingredient
     for (int i = 0; i < ingredients_qty; ++i) {
-        cout << "  Enter Ingredient " << i + 1 << " Name: ";
+        cout << "  Ingredients " << i + 1 << ":" << endl;
+        cout << "    Name: ";
         getline(cin, recipes[count].ingredients[i].name);
-
-        cout << "  Enter Ingredient " << i + 1 << " Unit: ";
+        cout << "    Unit: ";
         getline(cin, recipes[count].ingredients[i].unit);
     }
 
     // Prompt for number of procedure steps
     int procedure_qty;
-    cout << "  Enter Number of Steps in Procedure: ";
+    cout << "  No. of Procedures: ";
     cin >> procedure_qty;
 
     // Validate input for procedure steps
@@ -356,18 +356,18 @@ void addRecipeItems() {
 
     // Prompt for each procedure step
     for (int i = 0; i < procedure_qty; ++i) {
-        cout << "  Enter Procedure Step " << i + 1 << ": ";
+        cout << "    Step " << i + 1 << ": ";
         getline(cin, recipes[count].procedure[i]);
     }
 
     // Prompt for cooking time, difficulty level, and category
-    cout << "  Enter Cooking Time: ";
+    cout << "  Cooking Time: ";
     getline(cin, recipes[count].cooking_time);
 
-    cout << "  Enter Difficulty Level: ";
+    cout << "  Difficulty Level: ";
     getline(cin, recipes[count].difficulty_level);
 
-    cout << "  Enter Category: ";
+    cout << "  Category: ";
     getline(cin, recipes[count].category);
 
     // Increment recipe count
@@ -423,11 +423,11 @@ void viewRecipe(int recipeNumber) {
             cout << "  Recipe Name: " << recipes[index].name << endl;
             cout << "  Ingredients:" << endl;
             for (size_t j = 0; j < recipes[index].ingredients.size(); j++) {
-                cout << "    • " << recipes[index].ingredients[j].name << " (" << recipes[index].ingredients[j].unit << ")" << endl;
+                cout << "    - " << recipes[index].ingredients[j].name << " (" << recipes[index].ingredients[j].unit << ")" << endl;
             }
             cout << "  Instructions:" << endl;
             for (size_t j = 0; j < recipes[index].procedure.size(); j++) {
-                cout << "    • " << recipes[index].procedure[j] << endl;
+                cout << "    - " << recipes[index].procedure[j] << endl;
             }
             cout << "  Cooking Time: " << recipes[index].cooking_time << endl;
             cout << "  Difficulty Level: " << recipes[index].difficulty_level << endl;
