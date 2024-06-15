@@ -3,6 +3,7 @@
 #include <string>
 #include <limits>
 #include <vector>
+#include <cctype>
 using namespace std;
 
 struct Ingredient {
@@ -35,6 +36,9 @@ void updateRecipeItems(int num, int count);
 void viewRecipe(int recipeNumber);
 void deleteRecipe();
 void header();
+string levelChecker();
+string categoryChecker();
+
 
 
 int main()
@@ -246,7 +250,116 @@ void loadRecipe()
     read.close();
 }
 
-void addRecipe() {
+string levelChecker() 
+{
+    string difficulty;
+    bool validInput = false;
+
+    while (!validInput) {
+        cout << "  Difficulty Level (Easy, Medium, Hard): ";
+        getline(cin, difficulty);
+
+        // Convert to lowercase for case-insensitive comparison
+        for (char &c : difficulty) {
+            c = tolower(c);
+        }
+
+        // Check if the input matches valid choices
+        if (difficulty == "easy" || difficulty == "medium" || difficulty == "hard") {
+            validInput = true;
+        } else {
+            cout << endl;
+            cout << "\033[97m\033[41m";
+            cout << "                                                           " << endl;
+            cout << "           Invalid difficulty level! Please retry.          " << endl;
+            cout << "                                                           \033[0m" << endl;
+        }
+    }
+
+    return difficulty;
+}
+
+string categoryChecker() 
+{
+    string category;
+    bool validInput = false;
+
+    while (!validInput) {
+        cout << "  Category (e.g., Breakfast, Lunch, Dinner): ";
+        getline(cin, category);
+
+        // Convert to lowercase for case-insensitive comparison
+        for (char &c : category) {
+            c = tolower(c);
+        }
+
+        // Check if the input matches valid choices
+        if (category == "breakfast" || category == "lunch" || category == "dinner") {
+            validInput = true;
+        } else {
+            cout << endl;
+            cout << "\033[97m\033[41m";
+            cout << "                                                           " << endl;
+            cout << "              Invalid category! Please retry.               " << endl;
+            cout << "                                                           \033[0m" << endl;
+        }
+    }
+
+    return category;
+}
+
+int instructionQtyChecker() {
+    int instruction_qty;
+    bool validInput = false;
+
+    while (!validInput) {
+        cout << "  No. of Instruction Steps: ";
+        cin >> instruction_qty;
+
+        if (cin.fail() || instruction_qty <= 0) {
+            cin.clear(); // Clear error flag
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Discard invalid input
+            cout << endl;
+            cout << "\033[97m\033[41m"; // White text, red background
+            cout << "                                                           " << endl;
+            cout << "           Invalid input for Instruction Steps Quantity!   " << endl;
+            cout << "                                                           \033[0m" << endl;
+        } else {
+            validInput = true;
+        }
+    }
+
+    cin.ignore(); // Clear the newline character left in the buffer
+    return instruction_qty;
+}
+
+int ingredientQtyChecker() {
+    int ingredients_qty;
+    bool validInput = false;
+
+    while (!validInput) {
+        cout << "  No. of Ingredients: ";
+        cin >> ingredients_qty;
+
+        if (cin.fail() || ingredients_qty <= 0) {
+            cin.clear(); // Clear error flag
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Discard invalid input
+            cout << endl;
+            cout << "\033[97m\033[41m"; // White text, red background
+            cout << "                                                           " << endl;
+            cout << "           Invalid input for Ingredients Quantity!         " << endl;
+            cout << "                                                           \033[0m" << endl;
+        } else {
+            validInput = true;
+        }
+    }
+
+    cin.ignore(); // Clear the newline character left in the buffer
+    return ingredients_qty;
+}
+
+void addRecipe() 
+{
     clearScreen();
     cout << "\033[46m"; // Set magenta background
     cout << "\033[97m"; // Set text color to white
@@ -294,7 +407,8 @@ void addRecipe() {
     }
 }
 
-void addRecipeItems() {
+void addRecipeItems() 
+{
     cin.ignore(); // Clear the input buffer
 
     // Prompt for recipe name
@@ -309,8 +423,7 @@ void addRecipeItems() {
     // Validate input for ingredients quantity
     if (ingredients_qty <= 0) {
         cout << endl;
-        cout << "\033[97m";
-        cout << "\033[41m";
+        cout << "\033[97m\033[41m";
         cout << "                                                           " << endl;
         cout << "           Invalid input for Ingredients Quantity!         " << endl;
         cout << "                                                           \033[0m" << endl;
@@ -325,7 +438,7 @@ void addRecipeItems() {
 
     // Prompt for each ingredient
     for (int i = 0; i < ingredients_qty; ++i) {
-        cout << "  Ingredients " << i + 1 << ":" << endl;
+        cout << "  Ingredient " << i + 1 << ":" << endl;
         cout << "    Name: ";
         getline(cin, recipes[count].ingredients[i].name);
         cout << "    Unit: ";
@@ -334,14 +447,13 @@ void addRecipeItems() {
 
     // Prompt for number of procedure steps
     int procedure_qty;
-    cout << "  No. of Procedures: ";
+    cout << "  No. of Instruction Steps: ";
     cin >> procedure_qty;
 
     // Validate input for procedure steps
     if (procedure_qty <= 0) {
         cout << endl;
-        cout << "\033[97m";
-        cout << "\033[41m";
+        cout << "\033[97m\033[41m";
         cout << "                                                           " << endl;
         cout << "           Invalid input for Procedure Quantity!           " << endl;
         cout << "                                                           \033[0m" << endl;
@@ -360,22 +472,21 @@ void addRecipeItems() {
         getline(cin, recipes[count].procedure[i]);
     }
 
-    // Prompt for cooking time, difficulty level, and category
+    // Prompt for cooking time
     cout << "  Cooking Time: ";
     getline(cin, recipes[count].cooking_time);
 
-    cout << "  Difficulty Level: ";
-    getline(cin, recipes[count].difficulty_level);
+    // Prompt for difficulty level
+    recipes[count].difficulty_level = levelChecker();
 
-    cout << "  Category: ";
-    getline(cin, recipes[count].category);
+    // Prompt for category
+    recipes[count].category = categoryChecker();
 
     // Increment recipe count
     count++;
 
     cout << endl;
-    cout << "\033[97m";
-    cout << "\033[42m";
+    cout << "\033[97m\033[42m";
     cout << "                                                           " << endl;
     cout << "                Recipe Added Successfully!                 " << endl;
     cout << "                                                           \033[0m" << endl;
@@ -390,7 +501,8 @@ void addRecipeItems() {
     viewRecipe(count);
 }
 
-void viewRecipe(int recipeNumber) {
+void viewRecipe(int recipeNumber) 
+{
     clearScreen();
     cout << "\033[46m";  // Set background color to cyan
     cout << "\033[97m";  // Set text color to white
@@ -457,7 +569,8 @@ void viewRecipe(int recipeNumber) {
     cin.ignore(); // Wait for user input to continue
 }
 
-void checkExistingRecipe() {
+void checkExistingRecipe() 
+{
     clearScreen();
 
     // Open the file to read
@@ -528,7 +641,8 @@ void checkExistingRecipe() {
     cin.get();
 }
 
-void searchRecipe() {
+void searchRecipe() 
+{
     clearScreen();
 
     // Load recipes from file if not already loaded
@@ -736,7 +850,8 @@ void updateRecipe()
     }
 }
 
-void updateRecipeItems(int index, int num) {
+void updateRecipeItems(int index, int num) 
+{
     clearScreen();
 
     cout << "\033[46m\033[97m"; // Set background to cyan and text to white
@@ -765,12 +880,12 @@ void updateRecipeItems(int index, int num) {
         cout << endl;
 
         // Update recipe name
-        cout << "  Enter Recipe Name: ";
+        cout << "  Recipe Name: ";
         getline(cin, recipes[index].name);
 
         // Update ingredients
         int ingredients_qty;
-        cout << "  Enter Quantity of Ingredients: ";
+        cout << "  No. of Ingredients: ";
         cin >> ingredients_qty;
 
         if (cin.fail() || ingredients_qty < 0) {
@@ -799,7 +914,7 @@ void updateRecipeItems(int index, int num) {
 
             // Update procedure steps
             int procedure_qty;
-            cout << "  Enter Number of Steps in Procedure: ";
+            cout << "  No. of Instruction Steps: ";
             cin >> procedure_qty;
 
             if (cin.fail() || procedure_qty < 0) {
@@ -819,17 +934,19 @@ void updateRecipeItems(int index, int num) {
                 // Resize procedure vector and prompt to enter each procedure step
                 recipes[index].procedure.resize(procedure_qty);
                 for (int i = 0; i < procedure_qty; ++i) {
-                    cout << "  Enter Procedure Step " << i + 1 << ": ";
+                    cout << "  Step " << i + 1 << ": ";
                     getline(cin, recipes[index].procedure[i]);
                 }
 
                 // Update cooking time, difficulty level, and category
-                cout << "  Enter Cooking Time: ";
+                cout << "  Cooking Time: ";
                 getline(cin, recipes[index].cooking_time);
-                cout << "  Enter Difficulty Level: ";
-                getline(cin, recipes[index].difficulty_level);
-                cout << "  Enter Category: ";
-                getline(cin, recipes[index].category);
+
+                // Prompt for difficulty level
+                recipes[index].difficulty_level = levelChecker();
+
+                // Prompt for category
+                recipes[index].category = categoryChecker();
 
                 // Display success message for recipe update
                 cout << endl;
@@ -857,7 +974,8 @@ void updateRecipeItems(int index, int num) {
     }
 }
 
-void deleteRecipe() {
+void deleteRecipe() 
+{
     ifstream file("recipes.txt");
     if (!file.is_open()) {
         cout << endl;

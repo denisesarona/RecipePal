@@ -1,4 +1,6 @@
-3
+5
 heh|1|asd|2 tbsp|1|sda|dsd|sd|sd
 Adobo|2|Kangkong|2 pieces|Pechay|3 pcs|1|sdsd|dsd|sd|sd
 Ad|1|Toyo|2dsd|1|sds|2mins|Easy|HArd
+Hotdog|1|hotdog|2 pcs|1|Fry the htodog|2mins|easy|breakfast
+SAge|1|sdsd|sd|2|sd|sd|2 mins|easy|dinner
