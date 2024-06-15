@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <iomanip>
 #include <limits>
 #include <vector>
 #include <cctype>
@@ -20,7 +21,8 @@ void updateRecipeItems(int num, int count);
 void viewRecipe(int recipeNumber);
 void deleteRecipe();
 void header();
-void printTabs();
+void displayFavoriteRecipes();
+void printTabs(int tabNum);
 string levelChecker();
 string categoryChecker();
 int ingredientQtyChecker();
@@ -37,112 +39,162 @@ struct Recipe {
     string cooking_time;
     string difficulty_level;
     string category;
+    bool isFavorite;
 };
 
 Recipe recipes[100]; // ARRAY OF RECIPE STRUCT TO STORE MANY RECIPES 
 int opt = 0, count = 0;
 
-int main()
-{    
+int main() {    
     header();
     loadRecipe();
     clearScreen();
-    while (true)
-    {
+    int option;
+    while (true) {
         clearScreen();
-        printTabs(); cout<<",------.              ,--.              ,------.         ,--. \n";
-        printTabs(); cout<<"|  .--. ' ,---.  ,---.`--' ,---.  ,---. |  .--. ' ,--,--.|  | \n";
-        printTabs(); cout<<"|  '--'.'| .-. :| .--',--.| .-. || .-. :|  '--' |' ,-.  ||  | \n";
-        printTabs(); cout<<"|  |\\  \\ \\   --.\\ `--.|  || '-' '\\   --.|  | --' \\ '-'  ||  | \n";
-        printTabs(); cout<<"`--' '--' `----' `---'`--'|  |-'  `----'`--'      `--`--'`--' \n";
-        printTabs(); cout<<"                          `--'                                 \n";
-
+        printTabs(5); cout<<",------.              ,--.              ,------.         ,--. \n";
+        printTabs(5); cout<<"|  .--. ' ,---.  ,---.`--' ,---.  ,---. |  .--. ' ,--,--.|  | \n";
+        printTabs(5); cout<<"|  '--'.'| .-. :| .--',--.| .-. || .-. :|  '--' |' ,-.  ||  | \n";
+        printTabs(5); cout<<"|  |\\  \\ \\   --.\\ `--.|  || '-' '\\   --.|  | --' \\ '-'  ||  | \n";
+        printTabs(5); cout<<"`--' '--' `----' `---'`--'|  |-'  `----'`--'      `--`--'`--' \n";
+        printTabs(5); cout<<"                          `--'                                 \n";
         cout<<endl;
         cout<<"\033[48;2;255;255;255m";
         cout<<"\033[30m";
-        printTabs(); cout<<"                                                           "<<endl; 
-        printTabs(); cout<<"                Welcome to RecipePal!                      "<<endl; 
-        printTabs(); cout<<"         Organize your Recipes in an Instant               "<<endl; 
-        printTabs(); cout<<"                                                           "<<endl;
-        printTabs(); cout<<"  [1] Add a Recipe                                         "<<endl; 
-        printTabs(); cout<<"  [2] Search for a Recipe                                  "<<endl; 
-        printTabs(); cout<<"  [3] Update a Recipe                                      "<<endl; 
-        printTabs(); cout<<"  [4] Check Existing Recipe                                "<<endl; 
-        printTabs(); cout<<"  [5] Delete Recipe                                        "<<endl; 
-        printTabs(); cout<<"  [6] Exit                                                 "<<endl; 
-        printTabs(); cout<<"                                                           \033[0m" << endl;
+        printTabs(5); cout<<"                                                           "<<endl; 
+        printTabs(5); cout<<"                  Welcome to RecipePal!                    "<<endl; 
+        printTabs(5); cout<<"           Organize your Recipes in an Instant             "<<endl; 
+        printTabs(5); cout<<"                                                           "<<endl;
+        printTabs(5); cout<<"  [1] Recipes Menu                                         "<<endl; 
+        printTabs(5); cout<<"  [2] Favorite Recipes                                     "<<endl; 
+        printTabs(5); cout<<"  [3] Exit                                                 "<<endl; 
+        printTabs(5); cout<<"                                                           \033[0m" << endl;
         cout<<endl; 
-        printTabs(); cout<<"  Enter Option: ";
-        cin>>opt;
+        printTabs(5); cout<<"  Enter Option: ";
+        cin>>option;
 
-        switch(opt)
-        {
+        switch(option) {
             case 1: 
-                addRecipe(); 
+                while (true) {
+                    clearScreen();
+                    printTabs(5); cout<<",------.              ,--.              ,------.         ,--. \n";
+                    printTabs(5); cout<<"|  .--. ' ,---.  ,---.`--' ,---.  ,---. |  .--. ' ,--,--.|  | \n";
+                    printTabs(5); cout<<"|  '--'.'| .-. :| .--',--.| .-. || .-. :|  '--' |' ,-.  ||  | \n";
+                    printTabs(5); cout<<"|  |\\  \\ \\   --.\\ `--.|  || '-' '\\   --.|  | --' \\ '-'  ||  | \n";
+                    printTabs(5); cout<<"`--' '--' `----' `---'`--'|  |-'  `----'`--'      `--`--'`--' \n";
+                    printTabs(5); cout<<"                          `--'                                 \n";
+                    cout<<endl;
+                    cout<<"\033[48;2;255;255;255m";
+                    cout<<"\033[30m";
+                    printTabs(5); cout<<"                                                           "<<endl; 
+                    printTabs(5); cout<<"                  Welcome to RecipePal!                    "<<endl; 
+                    printTabs(5); cout<<"           Organize your Recipes in an Instant             "<<endl; 
+                    printTabs(5); cout<<"                                                           "<<endl;
+                    printTabs(5); cout<<"  [1] Check Existing Recipes                               "<<endl; 
+                    printTabs(5); cout<<"  [2] Add Recipes                                          "<<endl; 
+                    printTabs(5); cout<<"  [3] Search Recipes                                       "<<endl; 
+                    printTabs(5); cout<<"  [4] Update Recipes                                       "<<endl; 
+                    printTabs(5); cout<<"  [5] Delete Recipes                                       "<<endl; 
+                    printTabs(5); cout<<"  [6] Return to Home Page                                  "<<endl; 
+                    printTabs(5); cout<<"  [7] Exit                                                 "<<endl; 
+                    printTabs(5); cout<<"                                                           \033[0m" << endl;
+                    cout<<endl; 
+                    printTabs(5); cout<<"  Enter Option: ";
+                    int opt;
+                    cin>>opt;
+
+                    switch(opt) {
+                        case 1: 
+                            checkExistingRecipe(); 
+                            break;
+                        case 2: 
+                            addRecipe(); 
+                            break;
+                        case 3: 
+                            searchRecipe(); 
+                            break;
+                        case 4: 
+                            updateRecipe();
+                            break;
+                        case 5: 
+                            deleteRecipe();
+                            break;
+                        case 6: 
+                            break; // Return to outer menu
+                        case 7: 
+                            printTabs(5); cout<<"  Exiting the program..."<<endl;
+                            exit(0); // Exit the program
+                        default: 
+                            cout<<endl;
+                            cout<<"\033[97m"; 
+                            cout<<"\033[41m";
+                            printTabs(5); cout<<"                                                           "<<endl;
+                            printTabs(5); cout<<"                      Invalid Choice!                      "<<endl;
+                            printTabs(5); cout<<"                                                           \033[0m"<<endl;
+                            cout<<endl;
+                            printTabs(5); cout<<"  Exiting the program..."<<endl;
+                            exit(1);
+                    }
+                    if (opt == 6) {
+                        break; // Exit the inner while loop
+                    }
+                }
                 break;
             case 2: 
-                searchRecipe(); 
+                displayFavoriteRecipes(); 
                 break;
             case 3: 
-                updateRecipe(); 
-                break;
-            case 4: 
-                checkExistingRecipe(); 
-                break;
-            case 5: 
-                deleteRecipe();
-                break;
-            case 6: 
-                printTabs(); cout<<"  Exiting the program..."<<endl;
+                printTabs(5); cout<<"  Exiting the program..."<<endl;
                 exit(0); // Exit the program
             default: 
                 cout<<endl;
                 cout<<"\033[97m"; 
                 cout<<"\033[41m";
-                printTabs(); cout<<"                                                           "<<endl;
-                printTabs(); cout<<"                      Invalid Choice!                      "<<endl;
-                printTabs(); cout<<"                                                           \033[0m"<<endl;
+                printTabs(5); cout<<"                                                           "<<endl;
+                printTabs(5); cout<<"                      Invalid Choice!                      "<<endl;
+                printTabs(5); cout<<"                                                           \033[0m"<<endl;
                 cout<<endl;
-                printTabs(); cout<<"  Exiting the program..."<<endl;
+                printTabs(5); cout<<"  Exiting the program..."<<endl;
                 exit(1);
         }
     }
 }
+
 
 void header()
 {
     cout<<endl;
     cout<<endl;
     cout<<endl;
-    cout << "\033[32m";
-	cout << "                                                                    @@@@+     :=*%\n";
-    cout << "                  @@@@@@@@@@@@@     @@@@@@@@@@.                    @@@@#  +@@@@@@@@@@@   @@@@@@@@@@+\n";
-    cout << "                  @@@@@@@@@@@@@@    @@@@@@@@@@          @@@@@@@@          +@@@*   .@@@@  @@@@@@@@@@\n";
-    cout << "                  @@@@+:::.@@@@@@   @@@@@%            @@@@@@@@@@   @@@@   *@@@-    @@@@  @@@@@@\n";
-    cout << "                  @@@@      @@@@@   @@@@@#          +@@@@@@@@      @@@@*  *@@@=    @@@@  @@@@@@\n";
-    cout << "                  @@@@     -@@@@-   @@@@@@@@@       @@@@@@         @@@@#  +@@@@.+@@@@@   @@@@@@@@@\n";
-    cout << "                  @@@@  .@@@@@@     @@@@@@@@@#      @@@@@          @@@@%  +@@@@@@@@      @@@@@@@@@@\n";
-    cout << "                  @@@@@@@@@@@@%     %@@@@@          @@@@           @@@@#  =@@@@+         @@@@@@\n";
-    cout << "                  @@@@@@@@@@@@@     *@@@@@         =@@@@@          @@@@*  -@@@@          @@@@@@\n";
-    cout << "                  @@@@@   @@@@@@    -@@@@@          @@@@@@@@@%-    @@@@*  :@@@%          @@@@@@\n";
-    cout << "                  @@@@@     @@@@@     @@@@@@@@@@@%    +@@@@@@@@@:   @@@@*  :@@@*          @@@@@@@@@@*\n";
-    cout << "                  @@@@@      @@@@@    @@@@@@@@@@%        @@@@@@@    @@@@*  .@@@+          *@@@@@@@@@\n";
-    cout << "                             @@\n";
-    cout << "\033[0m";
+    cout<<"\033[32m";
+	cout<<"                                                                    @@@@+     :=*%\n";
+    cout<<"                  @@@@@@@@@@@@@     @@@@@@@@@@.                    @@@@#  +@@@@@@@@@@@   @@@@@@@@@@+\n";
+    cout<<"                  @@@@@@@@@@@@@@    @@@@@@@@@@          @@@@@@@@          +@@@*   .@@@@  @@@@@@@@@@\n";
+    cout<<"                  @@@@+:::.@@@@@@   @@@@@%            @@@@@@@@@@   @@@@   *@@@-    @@@@  @@@@@@\n";
+    cout<<"                  @@@@      @@@@@   @@@@@#          +@@@@@@@@      @@@@*  *@@@=    @@@@  @@@@@@\n";
+    cout<<"                  @@@@     -@@@@-   @@@@@@@@@       @@@@@@         @@@@#  +@@@@.+@@@@@   @@@@@@@@@\n";
+    cout<<"                  @@@@  .@@@@@@     @@@@@@@@@#      @@@@@          @@@@%  +@@@@@@@@      @@@@@@@@@@\n";
+    cout<<"                  @@@@@@@@@@@@%     %@@@@@          @@@@           @@@@#  =@@@@+         @@@@@@\n";
+    cout<<"                  @@@@@@@@@@@@@     *@@@@@         =@@@@@          @@@@*  -@@@@          @@@@@@\n";
+    cout<<"                  @@@@@   @@@@@@    -@@@@@          @@@@@@@@@%-    @@@@*  :@@@%          @@@@@@\n";
+    cout<<"                  @@@@@     @@@@@     @@@@@@@@@@@%    +@@@@@@@@@:   @@@@*  :@@@*          @@@@@@@@@@*\n";
+    cout<<"                  @@@@@      @@@@@    @@@@@@@@@@%        @@@@@@@    @@@@*  .@@@+          *@@@@@@@@@\n";
+    cout<<"                             @@\n";
+    cout<<"\033[0m";
 	cout<<endl;
 	cout<<endl;
-    cout << "                                      @@@@@@@@@\n";
-    cout << "                                      @@@@@@@@@@@@      @@@@@@         @@@@@:\n";
-    cout << "                                      @@@@     @@@-    +@@@@@@.        @@@@@\n";
-    cout << "                                      @@@@     @@@@    @@@@@@@@        @@@@@\n";
-    cout << "                                      @@@@    @@@@     @@@@ @@@@       @@@@@\n";
-    cout << "                                      @@@@@@@@@@      @@@@@  @@@@      %@@@@\n";
-    cout << "                                      @@@@@@@         @@@@@  @@@@@     *@@@@\n";
-    cout << "                                      @@@@+          :@@@@@@@@@@@@-    +@@@@\n";
-    cout << "                                      @@@@:          @@@@@@@@%*@@@@    +@@@@\n";
-    cout << "                                      @@@@.          @@@@       @@@@   *@@@@@@@@@@@\n";
-    cout << "                                      @@@@           @@@@       -@@@.  %@@@@@@@@@@@\n";
-    cout << "                                       *@@           -+%               =@@@@@@@@@@@\n";
+    cout<<"                                      @@@@@@@@@\n";
+    cout<<"                                      @@@@@@@@@@@@      @@@@@@         @@@@@:\n";
+    cout<<"                                      @@@@     @@@-    +@@@@@@.        @@@@@\n";
+    cout<<"                                      @@@@     @@@@    @@@@@@@@        @@@@@\n";
+    cout<<"                                      @@@@    @@@@     @@@@ @@@@       @@@@@\n";
+    cout<<"                                      @@@@@@@@@@      @@@@@  @@@@      %@@@@\n";
+    cout<<"                                      @@@@@@@         @@@@@  @@@@@     *@@@@\n";
+    cout<<"                                      @@@@+          :@@@@@@@@@@@@-    +@@@@\n";
+    cout<<"                                      @@@@:          @@@@@@@@%*@@@@    +@@@@\n";
+    cout<<"                                      @@@@.          @@@@       @@@@   *@@@@@@@@@@@\n";
+    cout<<"                                      @@@@           @@@@       -@@@.  %@@@@@@@@@@@\n";
+    cout<<"                                       *@@           -+%               =@@@@@@@@@@@\n";
 
     cin.get();
 }
@@ -152,28 +204,29 @@ void saveRecipe()
     // OPEN FILE STREAM FOR WRITING
     ofstream write("recipes.txt");
 
-    if (!write.is_open()) {
-        cout << "Unable to open file!" << endl;
+    if(!write.is_open()) 
+    {
+        cout<<"Unable to open file!"<<endl;
         return;
     }
 
     // WRITE THE TOTAL COUNT OF RECIPES
-    write << count << endl;
+    write<<count<<endl;
 
     // LOOP THROUGH EACH RECIPE
-    for (int i = 0; i < count; i++) 
+    for(int i = 0; i < count; i++) 
     {
         // WRITE RECIPE NAME
-        write << recipes[i].name << "|";
+        write<<recipes[i].name<<"|";
 
         // WRITE NUMBER OF INGREDIENTS
-        write << recipes[i].ingredients.size() << "|";
+        write<<recipes[i].ingredients.size()<<"|";
 
         // WRITE EACH INGREDIENT
-        for (size_t j = 0; j < recipes[i].ingredients.size(); j++) 
+        for(size_t j = 0; j < recipes[i].ingredients.size(); j++) 
         {
-            write << recipes[i].ingredients[j].name << "|";
-            write << recipes[i].ingredients[j].unit << "|";
+            write<< recipes[i].ingredients[j].name << "|";
+            write<< recipes[i].ingredients[j].unit << "|";
         }
 
         // WRITE NUMBER OF instruction STEPS
@@ -381,9 +434,9 @@ void addRecipe()
     clearScreen();
     cout << "\033[46m"; // Set magenta background
     cout << "\033[97m"; // Set text color to white
-    printTabs();cout << "                                                           " << endl;
-    printTabs();cout << "                        Add Recipe                         " << endl;
-    printTabs();cout << "                                                           \033[0m" << endl;
+    printTabs(5);cout << "                                                           " << endl;
+    printTabs(5);cout << "                        Add Recipe                         " << endl;
+    printTabs(5);cout << "                                                           \033[0m" << endl;
     cout << endl;
 
     // Call function to add recipe items
@@ -492,8 +545,7 @@ void addRecipeItems() {
 
 }
 
-void viewRecipe(int recipeNumber) 
-{
+void viewRecipe(int recipeNumber) {
     clearScreen();
     cout << "\033[46m";  // Set background color to cyan
     cout << "\033[97m";  // Set text color to white
@@ -530,12 +582,28 @@ void viewRecipe(int recipeNumber)
             }
             cout << "  Instructions:" << endl;
             for (size_t j = 0; j < recipes[index].instruction.size(); j++) {
-                cout << "    Step "<<j + 1<<": " << recipes[index].instruction[j] << endl;
+                cout << "    Step " << j + 1 << ": " << recipes[index].instruction[j] << endl;
             }
             cout << "  Cooking Time: " << recipes[index].cooking_time << endl;
             cout << "  Difficulty Level: " << recipes[index].difficulty_level << endl;
             cout << "  Category: " << recipes[index].category << endl;
-        } else {
+            cout << endl;
+
+            string opt;
+            cout << "  Add this recipe to favorites? [Y/N]: ";
+            cin >> opt;
+
+            if (opt == "Y" || opt == "y") {
+                recipes[index].isFavorite = true;
+                cout << "  Recipe added to favorites!" << endl;
+            } else if (opt == "N" || opt == "n") {
+                recipes[index].isFavorite = false;
+                cout << "  Recipe removed from favorites." << endl;
+            } else {
+                cout << "  Incorrect input. Recipe not added to favorites." << endl;
+            }
+        }
+        else {
             // Display error message for invalid recipe ID
             cout << endl;
             cout << "\033[97m";
@@ -547,7 +615,8 @@ void viewRecipe(int recipeNumber)
 
         // Close the file
         read.close();
-    } else {
+    }
+    else {
         // Display error message for unable to open file
         cout << endl;
         cout << "\033[97m";
@@ -560,8 +629,7 @@ void viewRecipe(int recipeNumber)
     cin.ignore(); // Wait for user input to continue
 }
 
-void checkExistingRecipe() 
-{
+void checkExistingRecipe() {
     clearScreen();
 
     // Open the file to read
@@ -598,38 +666,83 @@ void checkExistingRecipe()
 
     cout << "\033[46m";
     cout << "\033[97m";
-    cout << "                                                           " << endl;
-    cout << "                   Check Existing Recipe                   " << endl;
-    cout << "                                                           \033[0m" << endl;
+    printTabs(5); cout << "                                                           " << endl;
+    printTabs(5); cout << "                   Check Existing Recipe                   " << endl;
+    printTabs(5); cout << "                                                           \033[0m" << endl;
     cout << endl;
 
-    // Display details of existing recipes
-    for (int i = 0; i < count; i++) {
-        cout << "\033[47m";
-        cout << "\033[30m";
-        cout << "                                                           " << endl;
-        cout << "                       " << "Recipe No. " << i + 1 << "                        " << endl;
-        cout << "                                                           \033[0m" << endl;
-        cout << endl;
-        cout << "  Recipe Name: " << recipes[i].name << endl;
-        cout << "  Ingredients:" << endl;
-        for (size_t j = 0; j < recipes[i].ingredients.size(); j++) {
-            cout << "    - " << recipes[i].ingredients[j].name << " (" << recipes[i].ingredients[j].unit << ")" << endl;
-        }
-        cout << "  Instructions:" << endl;
-        for (size_t j = 0; j < recipes[i].instruction.size(); j++) {
-            cout << "    Step "<<j+1<<": " << recipes[i].instruction[j] << endl;
-        }
-        cout << "  Cooking Time: " << recipes[i].cooking_time << endl;
-        cout << "  Difficulty Level: " << recipes[i].difficulty_level << endl;
-        cout << "  Category: " << recipes[i].category << endl;
-        cout << endl;
+    printTabs(3); cout << " " << setw(15) << left << "Recipe No." << setw(25) << left << "Recipe Name" << setw(25) << left << "Category" << setw(20) << left << "Difficulty Level" << endl;
+    printTabs(3); cout << " -----------------------------------------------------------------------------------" << endl;
+
+    for (int i = 0; i < count; i++) 
+    {
+        printTabs(3);
+        cout << "    " << setw(15) << left << i + 1;
+        cout << setw(25) << left << recipes[i].name;
+        cout << setw(25) << left << recipes[i].category;
+        cout << setw(20) << left << recipes[i].difficulty_level << endl;
     }
 
-    // Wait for user input before returning to main menu
-    cout << "  Press Enter to return to main menu...";
-    cin.ignore();
-    cin.get();
+    cout << endl;
+    cout << "\033[47m";
+    cout << "\033[30m";
+    printTabs(5); cout << "                                                           " << endl;
+    printTabs(5); cout << "  [1] View Recipe Details                                  " << endl;
+    printTabs(5); cout << "  [2] Back to Homepage                                     " << endl;
+    printTabs(5); cout << "  [3] Exit the Program                                     " << endl;
+    printTabs(5); cout << "                                                           \033[0m" << endl;
+    cout << endl;
+    cout << "  Enter Option: ";
+    int option;
+    cin >> option;
+
+    switch (option) 
+    {
+    case 1: 
+    {
+        int recipeNumber;
+        cout << "  Enter Recipe Number: ";
+        cin >> recipeNumber;
+
+        // Validate the recipe number
+        if (recipeNumber >= 1 && recipeNumber <= count) 
+        {
+            viewRecipe(recipeNumber);
+            cout << endl;
+            cout << "  Press Enter to return to the main menu...";
+            cin.ignore();
+            cin.get();
+        } else 
+        {
+            cout << endl;
+            cout << "\033[97m";
+            cout << "\033[41m";
+            cout << "                                                           " << endl;
+            cout << "                    Invalid Recipe Number!                 " << endl;
+            cout << "                                                           \033[0m" << endl;
+            cout << endl;
+        }
+        // After viewing recipe details, stay on existing recipe page
+        checkExistingRecipe();
+        return;
+    }
+    case 2:
+        // Return to the main loop or homepage function
+        return;
+    case 3:
+        cout << "  Exiting the program..." << endl;
+        exit(0); // Exit the program
+    default:
+        cout << endl;
+        cout << "\033[97m";
+        cout << "\033[41m";
+        cout << "                                                           " << endl;
+        cout << "                      Invalid Choice!                      " << endl;
+        cout << "                                                           \033[0m" << endl;
+        cout << endl;
+        cout << "  Exiting the program..." << endl;
+        exit(1);
+    }
 }
 
 void searchRecipe() 
@@ -637,7 +750,8 @@ void searchRecipe()
     clearScreen();
     
     ifstream file("recipes.txt");
-    if (!file.is_open()) {
+    if (!file.is_open()) 
+    {
         cout << "\033[97m\033[41m";
         cout << "                                                           " << endl;
         cout << "                  Unable to open file!                     " << endl;
@@ -664,14 +778,16 @@ void searchRecipe()
     file >> totalRecipes;
     file.ignore();
 
-    for (int i = 0; i < totalRecipes; i++) {
+    for (int i = 0; i < totalRecipes; i++) 
+    {
         getline(file, recipes[i].name, '|');
 
         int ingredients_qty;
         file >> ingredients_qty;
         file.ignore();
         recipes[i].ingredients.resize(ingredients_qty);
-        for (int j = 0; j < ingredients_qty; j++) {
+        for (int j = 0; j < ingredients_qty; j++) 
+        {
             getline(file, recipes[i].ingredients[j].name, '|');
             getline(file, recipes[i].ingredients[j].unit, '|');
         }
@@ -680,7 +796,9 @@ void searchRecipe()
         file >> instruction_qty;
         file.ignore();
         recipes[i].instruction.resize(instruction_qty);
-        for (int j = 0; j < instruction_qty; j++) {
+
+        for (int j = 0; j < instruction_qty; j++) 
+        {
             getline(file, recipes[i].instruction[j], '|');
         }
 
@@ -688,7 +806,8 @@ void searchRecipe()
         getline(file, recipes[i].difficulty_level, '|');
         getline(file, recipes[i].category);
 
-        if (recipes[i].name == searchName) {
+        if (recipes[i].name == searchName) 
+        {
             clearScreen();
             cout << "\033[97m\033[42m";
             cout << "                                                           " << endl;
@@ -697,11 +816,16 @@ void searchRecipe()
             cout << endl;
             cout << "  Recipe Name: " << recipes[i].name << endl;
             cout << "  Ingredients:" << endl;
-            for (int j = 0; j < ingredients_qty; j++) {
+
+            for (int j = 0; j < ingredients_qty; j++) 
+            {
                 cout << "    - " << recipes[i].ingredients[j].name <<" ("<<recipes[i].ingredients[j].unit<<")"<< endl;
             }
+
             cout << "  Instructions:" << endl;
-            for (int j = 0; j < instruction_qty; j++) {
+
+            for (int j = 0; j < instruction_qty; j++) 
+            {
                 cout << "    Steps "<<j+1<<": " << recipes[i].instruction[j] << endl;
             }
             cout << "  Cooking Time: " << recipes[i].cooking_time << endl;
@@ -1128,9 +1252,99 @@ void deleteRecipe()
     }
 }
 
-void printTabs() 
+void displayFavoriteRecipes() {
+    clearScreen();
+    cout << "\033[46m";  // Set background color to cyan
+    cout << "\033[97m";  // Set text color to white
+    printTabs(5); cout << "                                                           " << endl;
+    printTabs(5); cout << "                   Favorite Recipes                        " << endl;
+    printTabs(5); cout << "                                                           \033[0m" << endl;
+    cout << endl;
+
+    // Display header for the table
+    printTabs(3); cout << " " << setw(15) << left << "Recipe No." << setw(25) << left << "Recipe Name" << setw(25) << left << "Category" << setw(20) << left << "Difficulty Level" << endl;
+    printTabs(3); cout << " -----------------------------------------------------------------------------------" << endl;
+
+    // Iterate through recipes to display favorites
+    int favoriteCount = 0;
+    for (int i = 0; i < count; i++) {
+        if (recipes[i].isFavorite) {
+            printTabs(3);
+            cout << "    " << setw(15) << left << i + 1;
+            cout << setw(25) << left << recipes[i].name;
+            cout << setw(25) << left << recipes[i].category;
+            cout << setw(20) << left << recipes[i].difficulty_level << endl;
+            favoriteCount++;
+        }
+    }
+
+    // If no favorites found, display message
+    if (favoriteCount == 0) {
+        cout << endl;
+        cout << " No favorite recipes found." << endl;
+        cout << endl;
+    }
+
+    cout << "\033[47m";
+    cout << "\033[30m";
+    printTabs(5); cout << "                                                           " << endl;
+    printTabs(5); cout << "  [1] View Recipe Details                                  " << endl;
+    printTabs(5); cout << "  [2] Back to Homepage                                     " << endl;
+    printTabs(5); cout << "  [3] Exit the Program                                     " << endl;
+    printTabs(5); cout << "                                                           \033[0m" << endl;
+    cout << endl;
+    cout << "  Enter Option: ";
+    int option;
+    cin >> option;
+
+    switch (option) {
+    case 1: {
+        int recipeNumber;
+        cout << "  Enter Recipe Number: ";
+        cin >> recipeNumber;
+
+        // Validate the recipe number
+        if (recipeNumber >= 1 && recipeNumber <= count) {
+            viewRecipe(recipeNumber);
+            cout << endl;
+            cout << "  Press Enter to return to the main menu...";
+            cin.ignore();
+            cin.get();
+        } else {
+            cout << endl;
+            cout << "\033[97m";
+            cout << "\033[41m";
+            cout << "                                                           " << endl;
+            cout << "                    Invalid Recipe Number!                 " << endl;
+            cout << "                                                           \033[0m" << endl;
+            cout << endl;
+        }
+        // After viewing recipe details, stay on favorite recipes page
+        displayFavoriteRecipes();
+        return;
+    }
+    case 2:
+        // Return to the main loop or homepage function
+        return;
+    case 3:
+        cout << "  Exiting the program..." << endl;
+        exit(0); // Exit the program
+    default:
+        cout << endl;
+        cout << "\033[97m";
+        cout << "\033[41m";
+        cout << "                                                           " << endl;
+        cout << "                      Invalid Choice!                      " << endl;
+        cout << "                                                           \033[0m" << endl;
+        cout << endl;
+        cout << "  Exiting the program..." << endl;
+        exit(1);
+    }
+}
+
+void printTabs(int tabNum) 
 {
-    for (int i = 0; i < 5; ++i) {
+    for (int i = 0; i < tabNum; ++i) {
         cout << "\t";
     }
 }
