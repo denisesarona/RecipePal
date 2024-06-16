@@ -1,12 +1,4 @@
-11
-Adobe|1|sds|2222|1|sdsd|444|Beginner Level|Unknown
-|1|||1|||Beginner Level|Unknown
-|1|||1|||Beginner Level|Unknown
-|1|||1|||Beginner Level|Unknown
-|1|||1|||Beginner Level|Unknown
-|1|||1|||Beginner Level|Unknown
-|1|||1|||Beginner Level|Unknown
-Kape|2|sdds|ds|sd|sd|1|sd|ds|Intermediate Level|Drink
-Codm|1|sds|sd|1|sd|sd|Beginner Level|Dessert
-dddd|1|sds|sd|1|sds|sd|Beginner Level|Drink
-dsd|1|sds|sd|1|xcdxc|ds|Intermediate Level|Appetizer
+3
+Adobo|1|dfdf|df|1|dfdf|df|1|3|1
+Cheese|1|dsff|df|1|dff|df|2|1|0
+Nova|1|dfd|1 pcs|1|Eat nove|1|0|6|0
