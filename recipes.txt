@@ -1,26 +1,5 @@
-25
-heh|1|asd|2 tbsp|1|sda|dsd|sd|sd
-Adobo|2|Kangkong|2 pieces|Pechay|3 pcs|1|sdsd|dsd|sd|sd
-Ad|1|Toyo|2dsd|1|sds|2mins|Easy|HArd
-Hotdog|1|hotdog|2 pcs|1|Fry the htodog|2mins|easy|breakfast
-SAge|1|sdsd|sd|2|sd|sd|2 mins|easy|dinner
-sas|1|asa|sas|1|sas|s|hard|dinner
-dsf|1|asas|as|1|asfdd|sdf|easy|dinner
-asd|1|asd|asd|1|asd||Easy|Breakfast
-asd|1|asd|asd|1|asd|asd|Easy|Lunch
-asd|2|zsdf|sdf|sdf|sdf|2|sdf|sdf|sdf|Easy|Dinner
-asd|1|asd|asd|2|asd|asd|1|Hard|Breakfast
-asd|1|asd|asd|1|asd|asd|Easy|Breakfast
-asd|1|sdf|asd|1|asd|asd|Medium|Dinner
-asd|1|asd|asd|2|asd|asd|1|Easy|Lunch
-asd|1|asd|1|1|asd|asd|Easy|Lunch
-asdf|1|sadff|sadf|1|sdf|sdf|Easy|Lunch
-asdfg|1|sdf||1|sdf|sdf|Medium|Dinner
-asfdf|1|asf|asf|1|sdf|sdf|Medium|Dinner
-sdfg|1|sdf|sdf|1|sdg|sdf|Medium|Dinner
-asffd|1|sdf|1|1|sdf|sdf|Medium|Breakfast
-sdfsdf|1|sdf|sdf|1|sdf|s|Easy|Breakfast
-sas|2|sd|sd|sd|sd|2|sd|sd|sd|Easy|Breakfast
-df|1|sr|sd|1|sd|sd|Easy|Lunch
-sd|1|sd|sd|1|df|df|Easy|Lunch
-ddd|1|dsds|sds|1|dsd|sd|Easy|Lunch
+4
+Come|1|dsf|df|2|df|df|1|Medium|2
+fdf|1|df|df|2|df|df|12|Easy|3
+Hotdog|1|sd|zd|1|sd|sd|Medium|1
+Tinola|1|as|as|1|as|as|Hard|1
