@@ -468,6 +468,7 @@ void loadRecipe() {
     // CLOSE THE FILE STREAM
     read.close();
 }
+
 int ingredientQtyChecker() 
 {
     int ingredients_qty;
@@ -1383,7 +1384,6 @@ void addToFavorites(int index) {
     saveRecipe();
 }
 
-
 void removeFromFavorites(int index) {
     // Load recipes from file to update in-memory data
     loadRecipe();
@@ -1412,10 +1412,6 @@ void removeFromFavorites(int index) {
         return; // Exit function on incorrect input
     }
 }
-
-
-
-
 
 void deleteRecipe() 
 {
@@ -1632,13 +1628,10 @@ void displayFavoriteRecipes()
         cout << "  Enter Recipe Number: ";
         cin >> recipeNumber;
 
-        // Validate the recipe number
-        if (recipeNumber >= 1 && recipeNumber <= count) {
-            removeFromFavorites(recipeNumber - 1);
-            cout << endl;
-            cout << "  Press Enter to return to the main menu...";
-            cin.ignore();
-            cin.get();
+        // Validate the recipe number against favorites count
+        if (recipeNumber >= 1 && recipeNumber <= favoriteCount) {
+            int index = favoriteIndexes[recipeNumber - 1]; // Get index of the selected favorite recipe
+            removeFromFavorites(index); // View recipe details
         } else {
             cout << endl;
             cout << "\033[97m";
@@ -1648,6 +1641,8 @@ void displayFavoriteRecipes()
             cout << "                                                           \033[0m" << endl;
             cout << endl;
         }
+        // After viewing recipe details, stay on favorite recipes page
+        displayFavoriteRecipes();
         return;
     }
     case 3:
