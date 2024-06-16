@@ -60,6 +60,7 @@ void printTabs(int tabNum);
 void showRecipesByCategory(Category category);
 void addToFavorites(int index);
 void removeFromFavorites(int index);
+void viewRecipeDetails(int index);
 int ingredientQtyChecker();
 int instructionQtyChecker();
 
@@ -397,7 +398,7 @@ void saveRecipe() {
         write << recipes[i].cooking_time << "|";
         write << static_cast<int>(recipes[i].difficulty_level) << "|";
         write << static_cast<int>(recipes[i].category) << "|";
-        write << recipes[i].isFavorite << endl; // Add isFavorite flag
+        write << (recipes[i].isFavorite ? 1 : 0) << endl;
     }
 
     // CLOSE THE FILE STREAM
@@ -458,9 +459,10 @@ void loadRecipe() {
         read.ignore(); // Ignore the '|' character
         recipes[i].category = static_cast<Category>(category);
 
-        // READ ISFAVORITE FLAG
-        read >> recipes[i].isFavorite;
-        read.ignore(); // Consume the newline left by '>>'
+        int isFavoriteInt;
+        read >> isFavoriteInt;
+        read.ignore(); // Ignore the newline character
+        recipes[i].isFavorite = (isFavoriteInt == 1);
     }
 
     // CLOSE THE FILE STREAM
@@ -1372,7 +1374,7 @@ void addToFavorites(int index) {
         cout << "Recipe added to favorites!" << endl;
     } else if (opt == "N" || opt == "n") {
         recipes[index].isFavorite = false;
-        cout << "Recipe removed from favorites." << endl;
+        cout << "Recipe not added to favorites." << endl;
     } else {
         cout << "Incorrect input. Recipe not added to favorites." << endl;
     }
@@ -1383,17 +1385,36 @@ void addToFavorites(int index) {
 
 
 void removeFromFavorites(int index) {
+    // Load recipes from file to update in-memory data
+    loadRecipe();
+
+    // Check if the index is valid
     if (index < 0 || index >= count) {
         cout << "Invalid recipe index." << endl;
         return;
     }
 
-    recipes[index].isFavorite = false;
-    cout << "Recipe removed from favorites." << endl;
+    string opt;
+    cout << "Remove this recipe from favorites? [Y/N]: ";
+    cin >> opt;
 
-    // Save favorites to file after modification
-    saveRecipe();
+    if (opt == "Y" || opt == "y") {
+        recipes[index].isFavorite = false;
+        cout << "Recipe removed from favorites!" << endl;
+
+        // Save updated favorites to file after modification
+        saveRecipe();
+    } else if (opt == "N" || opt == "n") {
+        cout << "Recipe remains in favorites." << endl;
+        // No change needed if recipe remains in favorites
+    } else {
+        cout << "Incorrect input. Recipe not removed from favorites." << endl;
+        return; // Exit function on incorrect input
+    }
 }
+
+
+
 
 
 void deleteRecipe() 
@@ -1547,15 +1568,18 @@ void displayFavoriteRecipes()
     printTabs(3); cout << " " << setw(15) << left << "Recipe No." << setw(25) << left << "Recipe Name" << setw(25) << left << "Category" << setw(20) << left << "Difficulty Level" << endl;
     printTabs(3); cout << " -----------------------------------------------------------------------------------" << endl;
 
+    vector<int> favoriteIndexes;
+
     // Iterate through recipes to display favorites
     int favoriteCount = 0;
     for (int i = 0; i < count; i++) {
         if (recipes[i].isFavorite) {
             printTabs(3);
-            cout << "    " << setw(15) << left << i + 1;
+            cout << "    " << setw(15) << left << favoriteCount + 1;
             cout << setw(25) << left << recipes[i].name;
             cout << setw(25) << left << categoryToString(recipes[i].category);
             cout << setw(20) << left << difficultyLevelToString(recipes[i].difficulty_level) << endl;
+            favoriteIndexes.push_back(i); // Store index of the favorite recipe
             favoriteCount++;
         }
     }
@@ -1571,8 +1595,9 @@ void displayFavoriteRecipes()
     cout << "\033[30m";
     printTabs(5); cout << "                                                           " << endl;
     printTabs(5); cout << "  [1] View Recipe Details                                  " << endl;
-    printTabs(5); cout << "  [2] Back to Homepage                                     " << endl;
-    printTabs(5); cout << "  [3] Exit the Program                                     " << endl;
+    printTabs(5); cout << "  [2] Remove a Recipe from Favorites                       " << endl;
+    printTabs(5); cout << "  [3] Back to Homepage                                     " << endl;
+    printTabs(5); cout << "  [4] Exit the Program                                     " << endl;
     printTabs(5); cout << "                                                           \033[0m" << endl;
     cout << endl;
     cout << "  Enter Option: ";
@@ -1585,13 +1610,10 @@ void displayFavoriteRecipes()
         cout << "  Enter Recipe Number: ";
         cin >> recipeNumber;
 
-        // Validate the recipe number
-        if (recipeNumber >= 1 && recipeNumber <= count) {
-            viewRecipe(recipeNumber);
-            cout << endl;
-            cout << "  Press Enter to return to the main menu...";
-            cin.ignore();
-            cin.get();
+        // Validate the recipe number against favorites count
+        if (recipeNumber >= 1 && recipeNumber <= favoriteCount) {
+            int index = favoriteIndexes[recipeNumber - 1]; // Get index of the selected favorite recipe
+            viewRecipeDetails(index); // View recipe details
         } else {
             cout << endl;
             cout << "\033[97m";
@@ -1605,12 +1627,99 @@ void displayFavoriteRecipes()
         displayFavoriteRecipes();
         return;
     }
-    case 2:
+    case 2:{
+        int recipeNumber;
+        cout << "  Enter Recipe Number: ";
+        cin >> recipeNumber;
+
+        // Validate the recipe number
+        if (recipeNumber >= 1 && recipeNumber <= count) {
+            removeFromFavorites(recipeNumber - 1);
+            cout << endl;
+            cout << "  Press Enter to return to the main menu...";
+            cin.ignore();
+            cin.get();
+        } else {
+            cout << endl;
+            cout << "\033[97m";
+            cout << "\033[41m";
+            cout << "                                                           " << endl;
+            cout << "                    Invalid Recipe Number!                 " << endl;
+            cout << "                                                           \033[0m" << endl;
+            cout << endl;
+        }
+        return;
+    }
+    case 3:
         // Return to the main loop or homepage function
         return;
-    case 3:
+    case 4:
         cout << "  Exiting the program..." << endl;
         exit(0); // Exit the program
+    default:
+        cout << endl;
+        cout << "\033[97m";
+        cout << "\033[41m";
+        cout << "                                                           " << endl;
+        cout << "                      Invalid Choice!                      " << endl;
+        cout << "                                                           \033[0m" << endl;
+        cout << endl;
+        cout << "  Exiting the program..." << endl;
+        exit(1);
+    }
+}
+
+void viewRecipeDetails(int index) {
+    clearScreen();
+    cout << "\033[46m";  // Set background color to cyan
+    cout << "\033[97m";  // Set text color to white
+    printTabs(5); cout << "                                                           " << endl;
+    printTabs(5); cout << "                   Recipe Details                          " << endl;
+    printTabs(5); cout << "                                                           \033[0m" << endl;
+    cout << endl;
+
+    // Display details of the recipe at the given index
+    cout << " Recipe Name: " << recipes[index].name << endl;
+    cout << " Category: " << categoryToString(recipes[index].category) << endl;
+    cout << " Difficulty Level: " << difficultyLevelToString(recipes[index].difficulty_level) << endl;
+    cout << " Cooking Time: " << recipes[index].cooking_time << endl;
+
+    cout << endl;
+    cout << " Ingredients:" << endl;
+    for (size_t i = 0; i < recipes[index].ingredients.size(); ++i) {
+        cout << " - " << recipes[index].ingredients[i].name << " (" << recipes[index].ingredients[i].unit << ")" << endl;
+    }
+
+    cout << endl;
+    cout << " Instructions:" << endl;
+    for (size_t i = 0; i < recipes[index].instruction.size(); ++i) {
+        cout << " " << (i + 1) << ". " << recipes[index].instruction[i] << endl;
+    }
+
+    cout << "\033[47m";
+    cout << "\033[30m";
+    printTabs(5); cout << "                                                           " << endl;
+    printTabs(5); cout << "  [1] Back to Favorite Recipes                             " << endl;
+    printTabs(5); cout << "  [2] Back to Homepage                                     " << endl;
+    printTabs(5); cout << "  [3] Exit the Program                                     " << endl;
+    printTabs(5); cout << "                                                           \033[0m" << endl;
+    cout << endl;
+    cout << "  Enter Option: ";
+    int option;
+    cin >> option;
+
+    switch (option) {
+    case 1:
+        // Return to favorite recipes
+        displayFavoriteRecipes();
+        break;
+    case 2:
+        // Return to homepage
+        return;
+    case 3:
+        // Exit the program
+        cout << "  Exiting the program..." << endl;
+        exit(0);
     default:
         cout << endl;
         cout << "\033[97m";
