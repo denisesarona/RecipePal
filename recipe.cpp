@@ -58,6 +58,8 @@ void displayFavoriteRecipes();
 void displayByDifficulty(DifficultyLevel level);
 void printTabs(int tabNum);
 void showRecipesByCategory(Category category);
+void addToFavorites(int index);
+void removeFromFavorites(int index);
 int ingredientQtyChecker();
 int instructionQtyChecker();
 
@@ -783,19 +785,6 @@ void viewRecipe(int recipeNumber) {
             cout << "  Category: " << categoryToString(recipes[index].category) << endl;
             cout << endl;
 
-            string opt;
-            cout << "  Add this recipe to favorites? [Y/N]: ";
-            cin >> opt;
-
-            if (opt == "Y" || opt == "y") {
-                recipes[index].isFavorite = true;
-                cout << "  Recipe added to favorites!" << endl;
-            } else if (opt == "N" || opt == "n") {
-                recipes[index].isFavorite = false;
-                cout << "  Recipe removed from favorites." << endl;
-            } else {
-                cout << "  Incorrect input. Recipe not added to favorites." << endl;
-            }
         }
         else {
             // Display error message for invalid recipe ID
@@ -1374,6 +1363,38 @@ void updateRecipeItems(int index, int num) {
         cout << "                                                           \033[0m" << endl;
     }
 }
+
+void addToFavorites(int index) {
+    if (index < 0 || index >= count) {
+        cout << "Invalid recipe index." << endl;
+        return;
+    }
+
+    string opt;
+    cout << "Add this recipe to favorites? [Y/N]: ";
+    cin >> opt;
+
+    if (opt == "Y" || opt == "y") {
+        recipes[index].isFavorite = true;
+        cout << "Recipe added to favorites!" << endl;
+    } else if (opt == "N" || opt == "n") {
+        cout << "Recipe not added to favorites." << endl;
+    } else {
+        cout << "Incorrect input. Recipe not added to favorites." << endl;
+    }
+}
+
+
+void removeFromFavorites(int index) {
+    if (index < 0 || index >= count) {
+        cout << "Invalid recipe index." << endl;
+        return;
+    }
+
+    recipes[index].isFavorite = false;
+    cout << "Recipe removed from favorites." << endl;
+}
+
 
 void deleteRecipe() 
 {
