@@ -58,7 +58,7 @@ void chooseCategory();
 void displayFavoriteRecipes();
 void displayByDifficulty(DifficultyLevel level);
 void printTabs(int tabNum);
-void showRecipesByCategory(Category category);
+void displayByCategory(Category category);
 void addToFavorites(int index);
 void removeFromFavorites(int index);
 void viewRecipeDetails(int index);
@@ -467,7 +467,7 @@ int instructionQtyChecker()
     return instruction_qty;
 }
 
-void showRecipesByCategory(Category category) {
+void displayByCategory(Category category) {
     clearScreen();
     printTabs(5); cout << "                                                                    " << endl;
     printTabs(5); cout << "             Recipes in Category: " << categoryToString(category) << endl;
@@ -1534,7 +1534,42 @@ void chooseCategory() {
             category = Other;
             break;
     }
-    showRecipesByCategory(category);
+    displayByCategory(category);
+}
+
+void chooseDifficulty(){
+    clearScreen();
+    cout<<"\033[48;2;255;255;255m";
+    cout<<"\033[30m";
+    printTabs(5); cout<<"                                                           "<<endl; 
+    printTabs(5); cout<<"                Select a Cooking Difficulty!               "<<endl; 
+    printTabs(5); cout<<"                                                           "<<endl;
+    printTabs(5); cout<<"  [1] Beginner Level                                       "<<endl; 
+    printTabs(5); cout<<"  [2] Intermediate Level                                   "<<endl; 
+    printTabs(5); cout<<"  [3] Advanced Level                                       "<<endl; 
+    printTabs(5); cout<<"                                                           \033[0m" << endl;
+    cout<<endl;
+    printTabs(5); cout << "Enter your choice: ";
+    int levelOption;
+    cin >> levelOption;
+    cin.ignore(); // Consume the newline left by cin
+    DifficultyLevel level;
+    switch (levelOption) {
+        case 1:
+            level = Beginner;
+            break;
+        case 2:
+            level = Intermediate;
+            break;
+        case 3:
+            level = Advanced;
+            break;
+        default:
+            cout << "Invalid option. Setting difficulty to Beginner by default." << endl;
+            level = Beginner;
+            break;
+    }
+    displayByDifficulty(level);
 }
 
 void deleteRecipe() 
@@ -1851,35 +1886,154 @@ void viewRecipeDetails(int index) {
 void displayByDifficulty(DifficultyLevel level) {
     clearScreen();
     printTabs(5); cout << "                                                                    " << endl;
-    printTabs(5); cout << "            Recipes in Category: " << difficultyLevelToString(level)<< endl;
-    printTabs(5); cout << "                                                                    " << endl;
+    printTabs(5); cout << "             Recipes in Difficulty Level: " << difficultyLevelToString(level) << endl;
+    printTabs(5); cout << "                                                                    \033[0m" << endl;
     cout << endl;
 
-
-    bool found = false;
-    // Print table headers
-    printTabs(6); cout << setw(15) << "Recipe No." << setw(20) << "Recipe Name" << endl;
-    printTabs(6); cout << "---------------------------------------" << endl;
-
-    // Iterate through the recipes array up to recipeCount
+    // Find recipes in the specified category
+    vector<int> levelIndexes; // Store indexes of recipes in the current category
+    int levelCount = 0;
     for (int i = 0; i < count; ++i) {
         if (recipes[i].difficulty_level == level) {
-            found = true;
             printTabs(6);
-            cout << setw(10) << i + 1; // Recipe number
-            cout << setw(22) << recipes[i].name<<endl; // Recipe name
-
+            cout << setw(10) << levelCount + 1; // Recipe number
+            cout << setw(22) << recipes[i].name << endl; // Recipe name
+            levelIndexes.push_back(i); // Store index of the recipe
+            levelCount++;
         }
     }
 
     cout << endl;
-    if (!found) {
-        printTabs(6); cout << "No recipes found in this difficulty." << endl;
-    }
 
-    cout<<endl;
-    printTabs(7); cout << "Press Enter to continue...";
-    cin.ignore(); // Wait for user to press Enter
+    if (levelCount == 0) {
+        printTabs(6); cout << "No recipes found in this difficulty level." << endl;
+        cout << endl;
+        cout << "\033[47m";
+        cout << "\033[30m";
+        printTabs(5); cout << "                                                           " << endl;
+        printTabs(5); cout << "  [1] Choose another Difficulty Level                      " << endl;
+        printTabs(5); cout << "  [2] Back to Homepage                                     " << endl;
+        printTabs(5); cout << "  [3] Exit the Program                                     " << endl;
+        printTabs(5); cout << "                                                           \033[0m" << endl;
+        cout << endl;
+        cout << "  Enter Option: ";
+        int option;
+        cin >> option;
+
+        switch (option) {
+            case 1:
+                chooseDifficulty();
+                break;
+            case 2:
+                return; // Return to the main menu or homepage
+            case 3:
+                cout << "  Exiting the program..." << endl;
+                exit(0); // Exit the program
+            default:
+                cout << endl;
+                cout << "\033[97m";
+                cout << "\033[41m";
+                cout << "                                                           " << endl;
+                cout << "                      Invalid Choice!                      " << endl;
+                cout << "                                                           \033[0m" << endl;
+                cout << endl;
+                cout << "  Exiting the program..." << endl;
+                exit(1);
+        }
+    } else {
+        cout << "\033[47m";
+        cout << "\033[30m";
+        printTabs(5); cout << "                                                           " << endl;
+        printTabs(5); cout << "  [1] View Recipe Details                                  " << endl;
+        printTabs(5); cout << "  [2] Choose another Difficulty Level                      " << endl;
+        printTabs(5); cout << "  [3] Back to Homepage                                     " << endl;
+        printTabs(5); cout << "  [4] Exit the Program                                     " << endl;
+        printTabs(5); cout << "                                                           \033[0m" << endl;
+        cout << endl;
+        cout << "  Enter Option: ";
+        int option;
+        cin >> option;
+
+        switch (option) {
+            case 1: {
+                int recipeNumber;
+                cout << "  Enter Recipe Number: ";
+                cin >> recipeNumber;
+
+                // Validate the recipe number against the recipes in the category
+                if (recipeNumber >= 1 && recipeNumber <= levelCount) {
+                    int index = levelIndexes[recipeNumber - 1]; // Get index of the selected recipe
+                    viewRecipeDetails(index); // View recipe details
+
+                    // After viewing recipe details, show menu again
+                    cout << endl;
+                    cout << "\033[47m";
+                    cout << "\033[30m";
+                    printTabs(5); cout << "                                                           " << endl;
+                    printTabs(5); cout << "  [1] Choose another Difficulty Level                              " << endl;
+                    printTabs(5); cout << "  [2] Back to Homepage                                     " << endl;
+                    printTabs(5); cout << "  [3] Exit the Program                                     " << endl;
+                    printTabs(5); cout << "                                                           \033[0m" << endl;
+                    cout << endl;
+                    cout << "  Enter Option: ";
+                    int option;
+                    cin >> option;
+
+                    switch (option) {
+                        case 1:
+                            chooseDifficulty();
+                            break;
+                        case 2:
+                            return; // Return to the main menu or homepage
+                        case 3:
+                            cout << "  Exiting the program..." << endl;
+                            exit(0); // Exit the program
+                        default:
+                            cout << endl;
+                            cout << "\033[97m";
+                            cout << "\033[41m";
+                            cout << "                                                           " << endl;
+                            cout << "                      Invalid Choice!                      " << endl;
+                            cout << "                                                           \033[0m" << endl;
+                            cout << endl;
+                            cout << "  Exiting the program..." << endl;
+                            exit(1);
+                    }
+                } else {
+                    cout << endl;
+                    cout << "\033[97m";
+                    cout << "\033[41m";
+                    cout << "                                                           " << endl;
+                    cout << "                    Invalid Recipe Number!                 " << endl;
+                    cout << "                                                           \033[0m" << endl;
+                    cout << endl;
+                    printTabs(6); cout << "Press Enter to continue...\a";
+                    cin.ignore(); // Clear input buffer
+                    cin.get(); // Wait for user to press Enter
+                    chooseDifficulty();
+                }
+                break;
+            }
+            case 2:
+                chooseDifficulty();
+                break;
+            case 3:
+                return; // Return to the main menu or homepage
+            case 4:
+                cout << "  Exiting the program..." << endl;
+                exit(0); // Exit the program
+            default:
+                cout << endl;
+                cout << "\033[97m";
+                cout << "\033[41m";
+                cout << "                                                           " << endl;
+                cout << "                      Invalid Choice!                      " << endl;
+                cout << "                                                           \033[0m" << endl;
+                cout << endl;
+                cout << "  Exiting the program..." << endl;
+                exit(1);
+        }
+    }
 }
 
 void printTabs(int tabNum) 
