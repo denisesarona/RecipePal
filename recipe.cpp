@@ -359,58 +359,52 @@ void header()
     cin.get();
 }
 
-void saveRecipe() 
-{
+void saveRecipe() {
     // OPEN FILE STREAM FOR WRITING
     ofstream write("recipes.txt");
 
-    if(!write.is_open()) 
-    {
-        cout<<"Unable to open file!"<<endl;
+    if (!write.is_open()) {
+        cout << "Unable to open file!" << endl;
         return;
     }
 
     // WRITE THE TOTAL COUNT OF RECIPES
-    write<<count<<endl;
+    write << count << endl;
 
     // LOOP THROUGH EACH RECIPE
-    for(int i = 0; i < count; i++) 
-    {
+    for (int i = 0; i < count; i++) {
         // WRITE RECIPE NAME
-        write<<recipes[i].name<<"|";
+        write << recipes[i].name << "|";
 
         // WRITE NUMBER OF INGREDIENTS
-        write<<recipes[i].ingredients.size()<<"|";
+        write << recipes[i].ingredients.size() << "|";
 
         // WRITE EACH INGREDIENT
-        for(size_t j = 0; j < recipes[i].ingredients.size(); j++) 
-        {
-            write<< recipes[i].ingredients[j].name << "|";
-            write<< recipes[i].ingredients[j].unit << "|";
+        for (size_t j = 0; j < recipes[i].ingredients.size(); j++) {
+            write << recipes[i].ingredients[j].name << "|";
+            write << recipes[i].ingredients[j].unit << "|";
         }
 
-        // WRITE NUMBER OF instruction STEPS
+        // WRITE NUMBER OF INSTRUCTION STEPS
         write << recipes[i].instruction.size() << "|";
 
-        // WRITE EACH instruction STEP
-        for (size_t j = 0; j < recipes[i].instruction.size(); j++) 
-        {
+        // WRITE EACH INSTRUCTION STEP
+        for (size_t j = 0; j < recipes[i].instruction.size(); j++) {
             write << recipes[i].instruction[j] << "|";
         }
 
-        // WRITE COOKING TIME, DIFFICULTY LEVEL, AND CATEGORY
+        // WRITE COOKING TIME, DIFFICULTY LEVEL, CATEGORY, AND FAVORITE STATUS
         write << recipes[i].cooking_time << "|";
         write << static_cast<int>(recipes[i].difficulty_level) << "|";
-        write << static_cast<int>(recipes[i].category)<<endl;
-        
+        write << static_cast<int>(recipes[i].category) << "|";
+        write << recipes[i].isFavorite << endl; // Add isFavorite flag
     }
 
     // CLOSE THE FILE STREAM
     write.close();
 }
 
-void loadRecipe() 
-{
+void loadRecipe() {
     // OPEN FILE STREAM FOR READING
     ifstream read("recipes.txt");
 
@@ -424,8 +418,7 @@ void loadRecipe()
     read.ignore(); // Ignore the newline character left by '>>'
 
     // LOOP THROUGH EACH RECIPE
-    for (int i = 0; i < count; i++) 
-    {
+    for (int i = 0; i < count; i++) {
         // READ RECIPE NAME
         getline(read, recipes[i].name, '|');
 
@@ -436,21 +429,19 @@ void loadRecipe()
         recipes[i].ingredients.resize(ingredients_qty);
 
         // READ EACH INGREDIENT
-        for (int j = 0; j < ingredients_qty; j++) 
-        {
+        for (int j = 0; j < ingredients_qty; j++) {
             getline(read, recipes[i].ingredients[j].name, '|');
             getline(read, recipes[i].ingredients[j].unit, '|');
         }
 
-        // READ NUMBER OF instruction STEPS
+        // READ NUMBER OF INSTRUCTION STEPS
         int instruction_qty;
         read >> instruction_qty;
         read.ignore(); // Ignore the '|' character
         recipes[i].instruction.resize(instruction_qty);
 
-        // READ EACH instruction STEP
-        for (int j = 0; j < instruction_qty; j++) 
-        {
+        // READ EACH INSTRUCTION STEP
+        for (int j = 0; j < instruction_qty; j++) {
             getline(read, recipes[i].instruction[j], '|');
         }
 
@@ -458,20 +449,23 @@ void loadRecipe()
         getline(read, recipes[i].cooking_time, '|');
         
         int difficultyLevel;
-        read >> difficultyLevel; // "Difficulty Level: x"
-        read.ignore(); // Consume the newline left by file
+        read >> difficultyLevel; // Read the difficulty level as integer
+        read.ignore(); // Consume the newline left by '>>'
         recipes[i].difficulty_level = static_cast<DifficultyLevel>(difficultyLevel);
 
         int category;
         read >> category; // Read the category as integer
-        read.ignore(); // Ignore the newline character
+        read.ignore(); // Ignore the '|' character
         recipes[i].category = static_cast<Category>(category);
 
+        // READ ISFAVORITE FLAG
+        read >> recipes[i].isFavorite;
+        read.ignore(); // Consume the newline left by '>>'
     }
+
     // CLOSE THE FILE STREAM
     read.close();
 }
-
 int ingredientQtyChecker() 
 {
     int ingredients_qty;
@@ -586,7 +580,7 @@ void addRecipe()
 
     // Show the added recipe details
     viewRecipe(count);
-    
+    addToFavorites(count - 1);
     cout << "\033[47m";
     cout << "\033[30m";
     cout << "                                                           " << endl;
@@ -784,7 +778,6 @@ void viewRecipe(int recipeNumber) {
             cout << "  Difficulty Level: " << difficultyLevelToString(recipes[index].difficulty_level) << endl;
             cout << "  Category: " << categoryToString(recipes[index].category) << endl;
             cout << endl;
-
         }
         else {
             // Display error message for invalid recipe ID
@@ -1378,10 +1371,14 @@ void addToFavorites(int index) {
         recipes[index].isFavorite = true;
         cout << "Recipe added to favorites!" << endl;
     } else if (opt == "N" || opt == "n") {
-        cout << "Recipe not added to favorites." << endl;
+        recipes[index].isFavorite = false;
+        cout << "Recipe removed from favorites." << endl;
     } else {
         cout << "Incorrect input. Recipe not added to favorites." << endl;
     }
+
+    // Save favorites to file after modification
+    saveRecipe();
 }
 
 
@@ -1393,6 +1390,9 @@ void removeFromFavorites(int index) {
 
     recipes[index].isFavorite = false;
     cout << "Recipe removed from favorites." << endl;
+
+    // Save favorites to file after modification
+    saveRecipe();
 }
 
 
