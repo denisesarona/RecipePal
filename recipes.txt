@@ -1,6 +1,3 @@
-5
-Come|1|dsf|df|2|df|df|1|Medium|Dessert
-Hotdog|1|sd|zd|1|sd|sd|Medium|Main Course
-Tinola|1|as|as|1|as|as|Hard|Main Course
-Nova|2|sds|sd|sd|sd|1|sd|sd|Medium|Snack
-Tapsilog|2|dssd|ds|ds|ds|2|ds|ds|2 mins|Medium|Main Course
+2
+Adobe|1|sds|2222|1|sdsd|444|Easy|4
+JUice|1|Oragne|1 pcs|1|Peel|1 min|Hard|3
