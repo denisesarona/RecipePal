@@ -13,6 +13,11 @@ enum Category {
     MainCourse,
     Dessert,
     Drink,
+    Soup,
+    Salad,
+    Snack,
+    Breakfast,
+    SideDish,
     Other
 };
 struct Ingredient {
@@ -61,6 +66,14 @@ string categoryToString(Category category) {
             return "Dessert";
         case Drink:
             return "Drink";
+        case Soup:
+            return "Soup";
+        case Snack:
+            return "Snack";
+        case Breakfast:
+            return "Breakfast";
+        case SideDish:
+            return "Side Dish";
         case Other:
             return "Other";
         default:
@@ -68,11 +81,11 @@ string categoryToString(Category category) {
     }
 }
 
-
 Recipe recipes[100]; // ARRAY OF RECIPE STRUCT TO STORE MANY RECIPES 
 int opt = 0, count = 0;
 
-int main() {    
+int main() 
+{    
     header();
     loadRecipe();
     clearScreen();
@@ -176,13 +189,23 @@ int main() {
             case 3: 
                 {
                     clearScreen();
-                    cout << "Select Category:" << endl;
-                    cout << "  [1] Appetizer" << endl;
-                    cout << "  [2] Main Course" << endl;
-                    cout << "  [3] Dessert" << endl;
-                    cout << "  [4] Drink" << endl;
-                    cout << "  [5] Other" << endl;
-                    cout << "Enter your choice: ";
+                    cout<<"\033[48;2;255;255;255m";
+                    cout<<"\033[30m";
+                    printTabs(5); cout<<"                                                           "<<endl; 
+                    printTabs(5); cout<<"                   Select a Category!                      "<<endl; 
+                    printTabs(5); cout<<"                                                           "<<endl;
+                    printTabs(5); cout<<"  [1] Appetizer                                            "<<endl; 
+                    printTabs(5); cout<<"  [2] Main Course                                          "<<endl; 
+                    printTabs(5); cout<<"  [3] Dessert                                              "<<endl; 
+                    printTabs(5); cout<<"  [4] Drink                                                "<<endl; 
+                    printTabs(5); cout<<"  [5] Soup                                                 "<<endl; 
+                    printTabs(5); cout<<"  [6] Snack                                                "<<endl; 
+                    printTabs(5); cout<<"  [7] Breakfast                                            "<<endl; 
+                    printTabs(5); cout<<"  [8] Side Dish                                            "<<endl;
+                    printTabs(5); cout<<"  [9] Other                                                "<<endl; 
+                    printTabs(5); cout<<"                                                           \033[0m" << endl;
+                    cout<<endl;
+                    printTabs(5); cout << "Enter your choice: ";
                     int categoryOption;
                     cin >> categoryOption;
                     cin.ignore(); // Consume the newline left by cin
@@ -201,6 +224,18 @@ int main() {
                             category = Drink;
                             break;
                         case 5:
+                            category = Soup;
+                            break;
+                        case 6:
+                            category = Snack;
+                            break;
+                        case 7:
+                            category = Breakfast;
+                            break;
+                        case 8:
+                            category = SideDish;
+                            break;
+                        case 9:
                             category = Other;
                             break;
                         default:
@@ -266,8 +301,8 @@ void header()
     cout<<"                                      @@@@           @@@@       -@@@.  %@@@@@@@@@@@\n";
     cout<<"                                       *@@           -+%               =@@@@@@@@@@@\n";
 
-    cout << "Press Enter to continue...\a";
-    cin.ignore(); // Wait for user to press Enter to continue
+    cout<<endl;
+    printTabs(6); cout << "Press Enter to continue...\a";
     cin.get();
 }
 
@@ -386,7 +421,7 @@ int ingredientQtyChecker()
     bool validInput = false;
 
     while (!validInput) {
-        cout << "  No. of Ingredients: ";
+        printTabs(5); cout << "  No. of Ingredients: ";
         cin >> ingredients_qty;
  
         if (cin.fail() || ingredients_qty <= 0) {
@@ -472,40 +507,38 @@ string levelChecker()
 
 void showRecipesByCategory(Category category) {
     clearScreen();
-    cout << "\033[46m";  // Set background color to cyan
-    cout << "\033[97m";  // Set text color to white
-    cout << "                                                           " << endl;
-    cout << "                    Recipes in Category: " << categoryToString(category) << "                  " << endl;
-    cout << "                                                           \033[0m" << endl;
+    printTabs(5); cout << "                                                                    " << endl;
+    printTabs(5); cout << "            Recipes in Category: " << categoryToString(category)<< endl;
+    printTabs(5); cout << "                                                                    " << endl;
     cout << endl;
 
+
     bool found = false;
-    for (size_t i = 0; i < count ; ++i) {
+    // Print table headers
+    printTabs(6); cout << setw(15) << "Recipe No." << setw(20) << "Recipe Name" << endl;
+    printTabs(6); cout << "---------------------------------------" << endl;
+
+    // Iterate through the recipes array up to recipeCount
+    for (int i = 0; i < count; ++i) {
         if (recipes[i].category == category) {
             found = true;
-            cout << "Recipe " << i + 1 << ":" << endl;
-            cout << "  Name: " << recipes[i].name << endl;
-            cout << "  Ingredients:" << endl;
-            for (size_t j = 0; j < recipes[i].ingredients.size(); ++j) {
-                cout << "    - " << recipes[i].ingredients[j].name << " (" << recipes[i].ingredients[j].unit << ")" << endl;
-            }
-            cout << "  Instructions:" << endl;
-            for (size_t j = 0; j < recipes[i].instruction.size(); ++j) {
-                cout << "    Step " << j + 1 << ": " << recipes[i].instruction[j] << endl;
-            }
-            cout << "  Cooking Time: " << recipes[i].cooking_time << " minutes" << endl;
-            cout << "  Difficulty Level: " << recipes[i].difficulty_level << endl;
-            cout << endl;
+            printTabs(6);
+            cout << setw(10) << i + 1; // Recipe number
+            cout << setw(22) << recipes[i].name<<endl; // Recipe name
+
         }
     }
 
+    cout << endl;
     if (!found) {
-        cout << "No recipes found in this category." << endl;
+        printTabs(6); cout << "No recipes found in this category." << endl;
     }
 
-    cout << "Press Enter to continue...";
-    cin.ignore();
+    cout<<endl;
+    printTabs(7); cout << "Press Enter to continue...";
+    cin.ignore(); // Wait for user to press Enter
 }
+
 
 void addRecipe() 
 {
@@ -573,7 +606,7 @@ void addRecipeItems() {
     cin.ignore(); // Clear the input buffer
 
     // Prompt for recipe name
-    cout << "  Recipe Name: ";
+    printTabs(5); cout << "  Recipe Name: ";
     getline(cin, recipes[count].name);
 
     // Prompt for number of ingredients
@@ -584,10 +617,10 @@ void addRecipeItems() {
 
     // Prompt for each ingredient
     for (int i = 0; i < ingredients_qty; ++i) {
-        cout << "  Ingredient " << i + 1 << ":" << endl;
-        cout << "    Name: ";
+        printTabs(5); cout << "  Ingredient " << i + 1 << ":" << endl;
+        printTabs(5); cout << "    Name: ";
         getline(cin, recipes[count].ingredients[i].name);
-        cout << "    Unit: ";
+        printTabs(5); cout << "    Unit: ";
         getline(cin, recipes[count].ingredients[i].unit);
     }
 
@@ -599,24 +632,28 @@ void addRecipeItems() {
 
     // Prompt for each instruction step
     for (int i = 0; i < instruction_qty; ++i) {
-        cout << "    Step " << i + 1 << ": ";
+        printTabs(5); cout << "    Step " << i + 1 << ": ";
         getline(cin, recipes[count].instruction[i]);
     }
 
     // Prompt for cooking time
-    cout << "  Cooking Time: ";
+    printTabs(5); cout << "  Cooking Time: ";
     getline(cin, recipes[count].cooking_time);
 
     // Prompt for difficulty level
     recipes[count].difficulty_level = levelChecker();
 
-        cout << "Select Category:" << endl;
-    cout << "  [1] Appetizer" << endl;
-    cout << "  [2] Main Course" << endl;
-    cout << "  [3] Dessert" << endl;
-    cout << "  [4] Drink" << endl;
-    cout << "  [5] Other" << endl;
-    cout << "Enter your choice: ";
+    printTabs(5); cout << "  Select Category:" << endl;
+    printTabs(5); cout << "    [1] Appetizer" << endl;
+    printTabs(5); cout << "    [2] Main Course" << endl;
+    printTabs(5); cout << "    [3] Dessert" << endl;
+    printTabs(5); cout << "    [4] Drink" << endl;
+    printTabs(5); cout << "    [5] Soup" << endl;
+    printTabs(5); cout << "    [6] Snack" << endl;
+    printTabs(5); cout << "    [7] Breakfast" << endl;
+    printTabs(5); cout << "    [8] Side Dish" << endl;
+    printTabs(5); cout << "    [9] Other" << endl;
+    printTabs(5); cout << "  Enter your choice: ";
     int categoryOption;
     cin >> categoryOption;
     cin.ignore(); // Consume the newline left by cin
@@ -634,6 +671,18 @@ void addRecipeItems() {
             recipes[count].category = Drink;
             break;
         case 5:
+            recipes[count].category = Soup;
+            break;
+        case 6:
+            recipes[count].category = Snack;
+            break;
+        case 7:
+            recipes[count].category = Breakfast;
+            break;
+        case 8:
+            recipes[count].category = SideDish;
+            break;
+        case 9:
             recipes[count].category = Other;
             break;
         default:
@@ -1111,6 +1160,7 @@ void updateRecipeItems(int index, int num) {
     getline(cin, choice);
 
     if (choice == "Y" || choice == "y") {
+        clearScreen();
         bool validInput = true;
 
         cout << endl;
@@ -1186,8 +1236,53 @@ void updateRecipeItems(int index, int num) {
                 // Prompt for difficulty level
                 recipes[index].difficulty_level = levelChecker();
 
-                // Prompt for category
-                //recipes[index].category = catChecker();
+                printTabs(5); cout << "  Select Category:" << endl;
+                printTabs(5); cout << "    [1] Appetizer" << endl;
+                printTabs(5); cout << "    [2] Main Course" << endl;
+                printTabs(5); cout << "    [3] Dessert" << endl;
+                printTabs(5); cout << "    [4] Drink" << endl;
+                printTabs(5); cout << "    [5] Soup" << endl;
+                printTabs(5); cout << "    [6] Snack" << endl;
+                printTabs(5); cout << "    [7] Breakfast" << endl;
+                printTabs(5); cout << "    [8] Side Dish" << endl;
+                printTabs(5); cout << "    [9] Other" << endl;
+                printTabs(5); cout << "  Enter your choice: ";
+                int categoryOption;
+                cin >> categoryOption;
+                cin.ignore(); // Consume the newline left by cin
+                switch (categoryOption) {
+                    case 1:
+                        recipes[index].category = Appetizer;
+                        break;
+                    case 2:
+                        recipes[index].category = MainCourse;
+                        break;
+                    case 3:
+                        recipes[index].category = Dessert;
+                        break;
+                    case 4:
+                        recipes[index].category = Drink;
+                        break;
+                    case 5:
+                        recipes[index].category = Soup;
+                        break;
+                    case 6:
+                        recipes[index].category = Snack;
+                        break;
+                    case 7:
+                        recipes[index].category = Breakfast;
+                        break;
+                    case 8:
+                        recipes[index].category = SideDish;
+                        break;
+                    case 9:
+                        recipes[index].category = Other;
+                        break;
+                    default:
+                        cout << "Invalid option. Setting category to Other by default." << endl;
+                        recipes[index].category = Other;
+                        break;
+                }
 
                 // Display success message for recipe update
                 cout << endl;
