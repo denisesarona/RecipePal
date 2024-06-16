@@ -1,3 +1,6 @@
-2
-Adobe|1|sds|2222|1|sdsd|444|Easy|4
-JUice|1|Oragne|1 pcs|1|Peel|1 min|Hard|3
+5
+Adobe|1|sds|2222|1|sdsd|444|0|6487512
+|1|||1|||0|6487512
+dsj|1|sd|d|1|sdf|ds|1|1
+SAAA|1|sds|sd|1|sd|sd|2|1
+sds|1|sd|sd|1|ds|sd|2|6

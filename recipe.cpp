@@ -8,6 +8,12 @@
 
 using namespace std;
 
+enum DifficultyLevel {
+    Beginner,
+    Intermediate,
+    Advanced
+};
+
 enum Category {
     Appetizer,
     MainCourse,
@@ -30,8 +36,8 @@ struct Recipe {
     vector<Ingredient> ingredients;
     vector<string> instruction;
     string cooking_time;
-    string difficulty_level;
     bool isFavorite;
+    DifficultyLevel difficulty_level;
     Category category; // Enum to denote category
 };
 
@@ -49,12 +55,24 @@ void viewRecipe(int recipeNumber);
 void deleteRecipe();
 void header();
 void displayFavoriteRecipes();
-void displayByDifficulty();
+void displayByDifficulty(DifficultyLevel level);
 void printTabs(int tabNum);
 void showRecipesByCategory(Category category);
-string levelChecker();
 int ingredientQtyChecker();
 int instructionQtyChecker();
+
+string difficultyLevelToString(DifficultyLevel level) {
+    switch (level) {
+        case Beginner:
+            return "Beginner Level";
+        case Intermediate:
+            return "Intermediate Level";
+        case Advanced:
+            return "Advanced Level";
+        default:
+            return "Unknown";
+    }
+}
 
 string categoryToString(Category category) {
     switch (category) {
@@ -247,8 +265,41 @@ int main()
                     break;
                 }
             case 4: 
-                displayFavoriteRecipes(); 
-                break;
+                {
+                    clearScreen();
+                    cout<<"\033[48;2;255;255;255m";
+                    cout<<"\033[30m";
+                    printTabs(5); cout<<"                                                           "<<endl; 
+                    printTabs(5); cout<<"               Select a Cooking Difficulty!                "<<endl; 
+                    printTabs(5); cout<<"                                                           "<<endl;
+                    printTabs(5); cout<<"  [1] Beginner Level                                       "<<endl; 
+                    printTabs(5); cout<<"  [2] Intermediate Level                                   "<<endl; 
+                    printTabs(5); cout<<"  [3] Advance Level                                        "<<endl; 
+                    printTabs(5); cout<<"                                                           \033[0m" << endl;
+                    cout<<endl;
+                    printTabs(5); cout << "Enter your choice: ";
+                    int difficultyOption;
+                    cin >> difficultyOption;
+                    cin.ignore(); // Consume the newline left by cin
+                    DifficultyLevel level;
+                    switch (difficultyOption) {
+                        case 1:
+                            level = Beginner;
+                            break;
+                        case 2:
+                            level = Intermediate;
+                            break;
+                        case 3:
+                            level = Advanced;
+                            break;
+                        default:
+                            cout << "Invalid option. Setting difficulty to Beginner by default." << endl;
+                            level = Beginner;
+                            break;
+                    }
+                    displayByDifficulty(level);
+                    break;
+                }
             case 5: 
                 printTabs(5); cout<<"  Exiting the program..."<<endl;
                 exit(0); // Exit the program
@@ -347,7 +398,7 @@ void saveRecipe()
 
         // WRITE COOKING TIME, DIFFICULTY LEVEL, AND CATEGORY
         write << recipes[i].cooking_time << "|";
-        write << recipes[i].difficulty_level << "|";
+        write << static_cast<int>(recipes[i].difficulty_level) << "|";
         write << static_cast<int>(recipes[i].category)<<endl;
         
     }
@@ -403,8 +454,12 @@ void loadRecipe()
 
         // READ COOKING TIME, DIFFICULTY LEVEL, AND CATEGORY
         getline(read, recipes[i].cooking_time, '|');
-        getline(read, recipes[i].difficulty_level, '|');
         
+        int difficultyLevel;
+        read >> difficultyLevel; // "Difficulty Level: x"
+        read.ignore(); // Consume the newline left by file
+        recipes[i].difficulty_level = static_cast<DifficultyLevel>(difficultyLevel);
+
         int category;
         read >> category; // Read the category as integer
         read.ignore(); // Ignore the newline character
@@ -467,42 +522,6 @@ int instructionQtyChecker()
 
     cin.ignore(); // Clear the newline character left in the buffer
     return instruction_qty;
-}
-
-string levelChecker() 
-{
-    string difficulty;
-    bool validInput = false;
-
-    while (!validInput) {
-        cout << "  Difficulty Level:" << endl;
-        cout << "    [1] Easy" << endl;
-        cout << "    [2] Medium" << endl;
-        cout << "    [3] Hard" << endl;
-        cout << "  Enter an Option (1, 2, 3): ";
-        cin>>difficulty;
-
-        // Check if the input matches valid choices
-        if (difficulty == "1") {
-            difficulty = "Easy";
-            validInput = true;
-        } else if (difficulty == "2") {
-            difficulty = "Medium";
-            validInput = true;
-        } else if (difficulty == "3") {
-            difficulty = "Hard";
-            validInput = true;
-        } else {
-            cout << "\033[97m\033[41m"; // White text, red background
-            cout << "\n                                                            ";
-            cout << "\n           Invalid difficulty level! Please retry.          ";
-            cout << "\n                                                            \033[0m";
-            cout<<endl;
-            cout<<endl;
-        }
-    }
-
-    return difficulty;
 }
 
 void showRecipesByCategory(Category category) {
@@ -639,8 +658,29 @@ void addRecipeItems() {
     printTabs(5); cout << "  Cooking Time: ";
     getline(cin, recipes[count].cooking_time);
 
-    // Prompt for difficulty level
-    recipes[count].difficulty_level = levelChecker();
+    cout << "Select Cooking Difficulty Level:" << endl;
+    cout << "  [1] Beginner Level" << endl;
+    cout << "  [2] Intermediate Level" << endl;
+    cout << "  [3] Advanced Level" << endl;
+    cout << "Enter an Option (1, 2, 3): ";
+    int difficultyOption;
+    cin >> difficultyOption;
+    cin.ignore(); // Consume the newline left by cin
+    switch (difficultyOption) {
+        case 1:
+            recipes[count].difficulty_level = Beginner;
+            break;
+        case 2:
+            recipes[count].difficulty_level = Intermediate;
+            break;
+        case 3:
+            recipes[count].difficulty_level = Advanced;
+            break;
+        default:
+            cout << "Invalid option. Setting difficulty to Beginner by default." << endl;
+            recipes[count].difficulty_level = Beginner;
+            break;
+    }
 
     printTabs(5); cout << "  Select Category:" << endl;
     printTabs(5); cout << "    [1] Appetizer" << endl;
@@ -739,7 +779,7 @@ void viewRecipe(int recipeNumber) {
                 cout << "    Step " << j + 1 << ": " << recipes[index].instruction[j] << endl;
             }
             cout << "  Cooking Time: " << recipes[index].cooking_time << endl;
-            cout << "  Difficulty Level: " << recipes[index].difficulty_level << endl;
+            cout << "  Difficulty Level: " << difficultyLevelToString(recipes[index].difficulty_level) << endl;
             cout << "  Category: " << categoryToString(recipes[index].category) << endl;
             cout << endl;
 
@@ -826,7 +866,7 @@ void checkExistingRecipe() {
             cout << "    " << setw(15) << left << i + 1;
             cout << setw(25) << left << recipes[i].name;
             cout << setw(25) << left << categoryToString(recipes[i].category);
-            cout << setw(20) << left << recipes[i].difficulty_level << endl;
+            cout << setw(20) << left << difficultyLevelToString(recipes[i].difficulty_level) << endl;
         }
 
         cout << endl;
@@ -950,7 +990,9 @@ void searchRecipe()
         }
 
         getline(file, recipes[i].cooking_time, '|');
-        getline(file, recipes[i].difficulty_level, '|');
+
+        string diffStr;
+        getline(file, diffStr, '|');
 
         string categoryStr;
         getline(file, categoryStr, '|');
@@ -979,7 +1021,7 @@ void searchRecipe()
                 cout << "    Steps "<<j+1<<": " << recipes[i].instruction[j] << endl;
             }
             cout << "  Cooking Time: " << recipes[i].cooking_time << endl;
-            cout << "  Difficulty Level: " << recipes[i].difficulty_level << endl;
+            cout << "  Difficulty Level: " << difficultyLevelToString(recipes[i].difficulty_level) << endl;
             cout << "  Category: " << categoryToString(recipes[i].category) << endl;
             cout << endl;
             found = true;
@@ -1225,7 +1267,29 @@ void updateRecipeItems(int index, int num) {
                 getline(cin, recipes[index].cooking_time);
 
                 // Prompt for difficulty level
-                recipes[index].difficulty_level = levelChecker();
+                cout << "Select Cooking Difficulty Level:" << endl;
+                cout << "  [1] Beginner Level" << endl;
+                cout << "  [2] Intermediate Level" << endl;
+                cout << "  [3] Advanced Level" << endl;
+                cout << "Enter an Option (1, 2, 3): ";
+                int difficultyOption;
+                cin >> difficultyOption;
+                cin.ignore(); // Consume the newline left by cin
+                switch (difficultyOption) {
+                    case 1:
+                        recipes[index].difficulty_level = Beginner;
+                        break;
+                    case 2:
+                        recipes[index].difficulty_level = Intermediate;
+                        break;
+                    case 3:
+                        recipes[index].difficulty_level = Advanced;
+                        break;
+                    default:
+                        cout << "Invalid option. Setting difficulty to Beginner by default." << endl;
+                        recipes[index].difficulty_level = Beginner;
+                        break;
+                }
 
                 printTabs(5); cout << "  Select Category:" << endl;
                 printTabs(5); cout << "    [1] Appetizer" << endl;
@@ -1388,7 +1452,7 @@ void deleteRecipe()
                 for (size_t j = 0; j < recipes[i].instruction.size(); j++) {
                     write << recipes[i].instruction[j] << "|";
                 }
-                write << recipes[i].cooking_time << "|" << recipes[i].difficulty_level << "|" << categoryToString(recipes[i].category) << endl;
+                write << recipes[i].cooking_time << "|" << difficultyLevelToString(recipes[i].difficulty_level) << "|" << categoryToString(recipes[i].category) << endl;
             }
             write.close();
 
@@ -1470,7 +1534,7 @@ void displayFavoriteRecipes()
             cout << "    " << setw(15) << left << i + 1;
             cout << setw(25) << left << recipes[i].name;
             cout << setw(25) << left << categoryToString(recipes[i].category);
-            cout << setw(20) << left << recipes[i].difficulty_level << endl;
+            cout << setw(20) << left << difficultyLevelToString(recipes[i].difficulty_level) << endl;
             favoriteCount++;
         }
     }
@@ -1539,96 +1603,38 @@ void displayFavoriteRecipes()
     }
 }
 
-void displayByDifficulty(){
-    {
+void displayByDifficulty(DifficultyLevel level) {
     clearScreen();
-    cout << "\033[46m";  // Set background color to cyan
-    cout << "\033[97m";  // Set text color to white
-    printTabs(5); cout << "                                                           " << endl;
-    printTabs(5); cout << "                   Favorite Recipes                        " << endl;
-    printTabs(5); cout << "                                                           \033[0m" << endl;
+    printTabs(5); cout << "                                                                    " << endl;
+    printTabs(5); cout << "            Recipes in Category: " << difficultyLevelToString(level)<< endl;
+    printTabs(5); cout << "                                                                    " << endl;
     cout << endl;
 
-    // Display header for the table
-    printTabs(3); cout << " " << setw(15) << left << "Recipe No." << setw(25) << left << "Recipe Name" << setw(25) << left << "Category" << setw(20) << left << "Difficulty Level" << endl;
-    printTabs(3); cout << " -----------------------------------------------------------------------------------" << endl;
 
-    // Iterate through recipes to display favorites
-    int favoriteCount = 0;
-    for (int i = 0; i < count; i++) {
-        if (recipes[i].isFavorite) {
-            printTabs(3);
-            cout << "    " << setw(15) << left << i + 1;
-            cout << setw(25) << left << recipes[i].name;
-            cout << setw(25) << left << categoryToString(recipes[i].category);
-            cout << setw(20) << left << recipes[i].difficulty_level << endl;
-            favoriteCount++;
+    bool found = false;
+    // Print table headers
+    printTabs(6); cout << setw(15) << "Recipe No." << setw(20) << "Recipe Name" << endl;
+    printTabs(6); cout << "---------------------------------------" << endl;
+
+    // Iterate through the recipes array up to recipeCount
+    for (int i = 0; i < count; ++i) {
+        if (recipes[i].difficulty_level == level) {
+            found = true;
+            printTabs(6);
+            cout << setw(10) << i + 1; // Recipe number
+            cout << setw(22) << recipes[i].name<<endl; // Recipe name
+
         }
     }
 
-    // If no favorites found, display message
-    if (favoriteCount == 0) {
-        cout << endl;
-        cout << " No favorite recipes found." << endl;
-        cout << endl;
-    }
-
-    cout << "\033[47m";
-    cout << "\033[30m";
-    printTabs(5); cout << "                                                           " << endl;
-    printTabs(5); cout << "  [1] View Recipe Details                                  " << endl;
-    printTabs(5); cout << "  [2] Back to Homepage                                     " << endl;
-    printTabs(5); cout << "  [3] Exit the Program                                     " << endl;
-    printTabs(5); cout << "                                                           \033[0m" << endl;
     cout << endl;
-    cout << "  Enter Option: ";
-    int option;
-    cin >> option;
-
-    switch (option) {
-    case 1: {
-        int recipeNumber;
-        cout << "  Enter Recipe Number: ";
-        cin >> recipeNumber;
-
-        // Validate the recipe number
-        if (recipeNumber >= 1 && recipeNumber <= count) {
-            viewRecipe(recipeNumber);
-            cout << endl;
-            cout << "  Press Enter to return to the main menu...";
-            cin.ignore();
-            cin.get();
-        } else {
-            cout << endl;
-            cout << "\033[97m";
-            cout << "\033[41m";
-            cout << "                                                           " << endl;
-            cout << "                    Invalid Recipe Number!                 " << endl;
-            cout << "                                                           \033[0m" << endl;
-            cout << endl;
-        }
-        // After viewing recipe details, stay on favorite recipes page
-        displayFavoriteRecipes();
-        return;
+    if (!found) {
+        printTabs(6); cout << "No recipes found in this difficulty." << endl;
     }
-    case 2:
-        // Return to the main loop or homepage function
-        return;
-    case 3:
-        cout << "  Exiting the program..." << endl;
-        exit(0); // Exit the program
-    default:
-        cout << endl;
-        cout << "\033[97m";
-        cout << "\033[41m";
-        cout << "                                                           " << endl;
-        cout << "                      Invalid Choice!                      " << endl;
-        cout << "                                                           \033[0m" << endl;
-        cout << endl;
-        cout << "  Exiting the program..." << endl;
-        exit(1);
-    }
-}
+
+    cout<<endl;
+    printTabs(7); cout << "Press Enter to continue...";
+    cin.ignore(); // Wait for user to press Enter
 }
 
 void printTabs(int tabNum) 
