@@ -8,13 +8,15 @@
 
 using namespace std;
 
-enum DifficultyLevel {
+enum DifficultyLevel 
+{
     Beginner,
     Intermediate,
     Advanced
 };
 
-enum Category {
+enum Category 
+{
     Appetizer,
     MainCourse,
     Dessert,
@@ -26,12 +28,14 @@ enum Category {
     SideDish,
     Other
 };
-struct Ingredient {
+struct Ingredient 
+{
     string name;
     string unit;
 };
 
-struct Recipe {
+struct Recipe 
+{
     string name;
     vector<Ingredient> ingredients;
     vector<string> instruction;
@@ -489,6 +493,9 @@ void displayByCategory(Category category)
     printTabs(5); cout<<"             Recipes in Category: " << categoryToString(category)<<endl;
     printTabs(5); cout<<"                                                                    \033[0m"<<endl;
     cout<<endl;
+   
+    printTabs(6); cout<<"      "<<setw(20)<<left<<"Recipe No."<<setw(25)<<left<<"Recipe Name"<<endl;
+    printTabs(6); cout<<"-----------------------------------------"<<endl;
 
     // Find recipes in the specified category
     vector<int> categIndexes; // Store indexes of recipes in the current category
@@ -498,9 +505,9 @@ void displayByCategory(Category category)
     {
         if (recipes[i].category == category) 
         {
-            printTabs(6);
-            cout<<setw(10)<<categCount + 1; // Recipe number
-            cout<<setw(22)<<recipes[i].name<<endl; // Recipe name
+            printTabs(7);
+            cout<<" "<<setw(17)<<categCount + 1; // Recipe number
+            cout<<setw(25)<<recipes[i].name<<endl; // Recipe name
 
             categIndexes.push_back(i); // Store index of the recipe
             categCount++;
@@ -553,6 +560,7 @@ void displayByCategory(Category category)
     } 
     else 
     {
+        cout<<endl;
         cout<<"\033[47m";
         cout<<"\033[30m";
         printTabs(5); cout<<"                                                           "<<endl;
@@ -630,7 +638,7 @@ void displayByCategory(Category category)
                     printTabs(5); cout<<"                                                           \033[0m"<<endl;
                     cout<<endl;
 
-                    printTabs(6); cout<<"Press Enter to continue...";
+                    printTabs(6); cout<<"        Press Enter to continue...";
                     cin.ignore(); // Clear input buffer
                     cin.get(); // Wait for user to press Enter
 
@@ -681,13 +689,15 @@ void addRecipe()
     printTabs(5); cout<<"                                                           \033[0m"<<endl;
     cout<<endl;
 
-    printTabs(7); cout << "Press Enter to continue...";
+    printTabs(6); cout << "        Press Enter to continue...";
     cin.ignore(); // Wait for user to press Enter to continue
     cin.get();
 
     // Show the added recipe details
     viewRecipe(count);
     addToFavorites(count - 1);
+    
+    cout<<endl;
     cout<<"\033[47m";
     cout<<"\033[30m";
     printTabs(5); cout<<"                                                           "<<endl;
@@ -961,7 +971,7 @@ void checkExistingRecipe()
 
         // Prompt user to continue
         cout<<endl;
-        printTabs(6); cout<<"Press Enter to continue...";
+        printTabs(6); cout<<"        Press Enter to continue...";
         cin.ignore();
         cin.get();
 
@@ -1062,7 +1072,8 @@ void checkExistingRecipe()
     }
 }
 
-void searchRecipe() {
+void searchRecipe() 
+{
     clearScreen();
 
     ifstream read("recipes.txt");
@@ -1076,7 +1087,7 @@ void searchRecipe() {
 
         // Prompt user to continue
         cout<<endl;
-        printTabs(6); cout<< "Press Enter to continue...";
+        printTabs(6); cout<< "        Press Enter to continue...";
         cin.ignore();
         cin.get();
 
@@ -1227,8 +1238,6 @@ void searchRecipe() {
     }
 }
 
-
-
 void updateRecipe()
 {
     // Open the file to read
@@ -1238,16 +1247,17 @@ void updateRecipe()
     if (!file.is_open())
     {
         // Display error message if file cannot be opened
-        cout << endl;
-        cout << "\033[97m";
-        cout << "\033[41m";
-        cout << "                                                           " << endl;
-        cout << "                  Unable to open file!                     " << endl;
-        cout << "               Please check the file path!                 " << endl;
-        cout << "                                                           \033[0m" << endl;
-        cout << endl;
+        cout<<endl;
+        cout<<"\033[97m";
+        cout<<"\033[41m";
+        printTabs(5); cout<<"                                                           "<<endl;
+        printTabs(5); cout<<"                  Unable to open file!                     "<<endl;
+        printTabs(5); cout<<"               Please check the file path!                 "<<endl;
+        printTabs(5); cout<<"                                                           \033[0m"<<endl;
+        cout<<endl;
 
         // Wait for user input
+        printTabs(6); cout<<"        Press Enter to continue..."; 
         cin.ignore();
         cin.get();
 
@@ -1260,36 +1270,42 @@ void updateRecipe()
     // Load recipes from file
     loadRecipe();
 
-    cout << "\033[46m";
-    cout << "\033[97m";
-    cout << "                                                           " << endl;
-    cout << "                    Update Recipe                          " << endl;
-    cout << "                                                           \033[0m" << endl;
-    cout << endl;
+    cout<<"\033[46m";
+    cout<<"\033[97m";
+    printTabs(5); cout<<"                                                           "<<endl;
+    printTabs(5); cout<<"                    Update Recipe                          "<<endl;
+    printTabs(5); cout<<"                                                           \033[0m"<<endl;
+    cout<<endl;
 
     // Display existing recipes
-    cout << "  Existing Recipes:" << endl;
+    printTabs(5); cout<<"  Existing Recipes:"<<endl;
+
     for (int i = 0; i < count; i++)
     {
-        cout << "  " << i + 1 << ". " << recipes[i].name << endl;
+        printTabs(5); cout<<"  "<< i + 1 <<". "<<recipes[i].name<<endl;
     }
 
     int num = 0;
-    cout << "\n  Enter Recipe Number to Update: ";
-    cin >> num;
+
+    cout<<endl;
+    printTabs(5); cout<<"  Enter Recipe Number to Update: ";
+    cin>>num;
 
     // Validate user input for recipe number
     if (num < 1 || num > count)
     {
-        cout << "\033[97m";
-        cout << "\033[41m";
-        cout << "                                                           " << endl;
-        cout << "               Invalid Recipe Number!                      " << endl;
-        cout << "               Please choose a valid number.               " << endl;
-        cout << "                                                           \033[0m" << endl;
-        cout << endl;
-        cout << "  Exiting the program..." << endl;
-        exit(1);
+        cout<<endl;
+        cout<<"\033[97m";
+        cout<<"\033[41m";
+        printTabs(5); cout<<"                                                           "<<endl;
+        printTabs(5); cout<<"               Invalid Recipe Number!                      "<<endl;
+        printTabs(5); cout<<"                                                           \033[0m"<<endl;
+        cout<<endl;
+
+        printTabs(6); cout<<"        Press Enter to continue..."<<endl;
+        cin.ignore();
+        cin.get();
+        return;
     }
 
     int index = num - 1;
@@ -1297,297 +1313,380 @@ void updateRecipe()
     // Call function to update recipe items
     updateRecipeItems(index, num);
 
-    cout << endl;
-    cout << "\033[47m";
-    cout << "\033[30m";
-    cout << "                                                           " << endl;
-    cout << "  [1] Update another Recipe                                " << endl;
-    cout << "  [2] Back to Homepage                                     " << endl;
-    cout << "  [3] Exit the Program                                     " << endl;
-    cout << "                                                           \033[0m" << endl;
-    cout << endl;
-    cout << "  Enter Option: ";
+    cout<<endl;
+    cout<<"\033[47m";
+    cout<<"\033[30m";
+    printTabs(5); cout<<"                                                           "<<endl;
+    printTabs(5); cout<<"  [1] Update another Recipe                                "<<endl;
+    printTabs(5); cout<<"  [2] Back to Homepage                                     "<<endl;
+    printTabs(5); cout<<"  [3] Exit the Program                                     "<<endl;
+    printTabs(5); cout<<"                                                           \033[0m"<<endl;
+    cout<<endl;
+
     int option;
-    cin >> option;
+
+    printTabs(5); cout<<"  Enter Option: ";
+    cin>>option;
 
     switch (option)
     {
-    case 1:
-        updateRecipe();
-        break;
-    case 2:
-        return;
-    case 3:
-        cout << "  Exiting the program..." << endl;
-        exit(0);
-    default:
-        cout << endl;
-        cout << "\033[97m";
-        cout << "\033[41m";
-        cout << "                                                           " << endl;
-        cout << "                      Invalid Choice!                      " << endl;
-        cout << "                                                           \033[0m" << endl;
-        cout << endl;
-        cout << "  Exiting the program..." << endl;
-        exit(1);
+        case 1:
+            updateRecipe();
+            break;
+        case 2:
+            return;
+        case 3:
+            printTabs(5); cout<<"  Exiting the program..."<<endl;
+            exit(0);
+        default:
+            cout<<endl;
+            cout<<"\033[97m";
+            cout<<"\033[41m";
+            printTabs(5); cout<<"                                                           "<<endl;
+            printTabs(5); cout<<"                      Invalid Choice!                      "<<endl;
+            printTabs(5); cout<<"                                                           \033[0m"<<endl;
+            cout<<endl;
+            printTabs(5); cout<<"  Exiting the program..."<<endl;
+            exit(1);
     }
 }
 
-void updateRecipeItems(int index, int num) {
+void updateRecipeItems(int index, int num) 
+{
     clearScreen();
 
-    cout << "\033[46m\033[97m"; // Set background to cyan and text to white
-    cout << "                                                           " << endl;
-    cout << "                    Update Recipe                          " << endl;
-    cout << "                                                           \033[0m" << endl;
-    cout << endl;
+    cout<<"\033[46m";
+    cout<<"\033[97m"; // Set background to cyan and text to white
+    printTabs(5); cout<<"                                                           "<<endl;
+    printTabs(5); cout<<"                    Update Recipe                          "<<endl;
+    printTabs(5); cout<<"                                                           \033[0m"<<endl;
+    cout<<endl;
 
     // Display existing recipe details
-    cout << "  Existing Recipe Details:" << endl;
+    printTabs(5); cout<<"  Existing Recipe Details:"<<endl;
+
     viewRecipe(num);
-    cout << endl;
+
+    cout<<endl;
 
     string choice;
-    cout << "  Confirm to Update Recipe No. " << num << "? [Y/N]: ";
+
+    printTabs(5); cout<<"  Confirm to Update Recipe No. "<<num<<"? [Y/N]: ";
     getline(cin, choice);
 
-    if (choice == "Y" || choice == "y") {
+    if (choice == "Y" || choice == "y")
+    {
         clearScreen();
+
         bool validInput = true;
 
-        cout << endl;
-        cout << "\033[97m\033[42m"; // Set text to white and background to green
-        cout << "                                                           " << endl;
-        cout << "             Starting Update of Recipe No." << num << "!               " << endl;
-        cout << "                                                           \033[0m" << endl;
-        cout << endl;
+        cout<<"\033[97m";
+        cout<<"\033[42m"; // Set text to white and background to green
+        printTabs(5); cout<<"                                                           "<<endl;
+        printTabs(5); cout<<"             Starting Update of Recipe No." << num << "!               "<<endl;
+        printTabs(5); cout<<"                                                           \033[0m"<<endl;
+        cout<<endl;
 
         // Update recipe name
-        cout << "  Recipe Name: ";
+        printTabs(5); cout<<"  Recipe Name: ";
         getline(cin, recipes[index].name);
 
-        // Update ingredients
-        int ingredients_qty;
-        cout << "  No. of Ingredients: ";
-        cin >> ingredients_qty;
+        int ingredients_qty = ingredientQtyChecker();
 
-        if (cin.fail() || ingredients_qty < 0) {
-            validInput = false;
-            cout << endl;
-            cout << "\033[97m\033[41m"; // Set text to white and background to red
-            cout << "                                                           " << endl;
-            cout << "           Invalid input for Ingredients Quantity!         " << endl;
-            cout << "                                                           \033[0m" << endl;
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        // Resize ingredients vector
+        recipes[index].ingredients.resize(ingredients_qty);
+
+        // Prompt for each ingredient
+        for (int i = 0; i < ingredients_qty; ++i) 
+        {
+            printTabs(5); cout<<"  Ingredient "<< i + 1 <<":"<<endl;
+            printTabs(5); cout<<"     Name: ";
+            getline(cin, recipes[index].ingredients[i].name);
+            printTabs(5); cout<<"     Unit: ";
+            getline(cin, recipes[index].ingredients[i].unit);
         }
 
-        cin.ignore(); // Ignore newline character left in the buffer
+        // Prompt for number of instruction steps
+        int instruction_qty = instructionQtyChecker();
 
-        if (validInput) {
-            // Resize ingredients vector and prompt to enter each ingredient
-            recipes[index].ingredients.resize(ingredients_qty);
-            for (int i = 0; i < ingredients_qty; ++i) {
-                cout << "  Ingredient " << i + 1 << ":" << endl;
-                cout << "    Name: ";
-                getline(cin, recipes[index].ingredients[i].name);
-                cout << "    Unit: ";
-                getline(cin, recipes[index].ingredients[i].unit);
+        // Resize instruction vector
+        recipes[index].instruction.resize(instruction_qty);
+
+        // Prompt for each instruction step
+        for (int i = 0; i < instruction_qty; ++i) 
+        {
+            printTabs(5); cout<< "     Step "<< i + 1 <<": ";
+            getline(cin, recipes[index].instruction[i]);
+        }
+
+        // Update cooking time, difficulty level, and category
+        printTabs(5); cout<<"  Cooking Time: ";
+        getline(cin, recipes[index].cooking_time);
+
+        // Prompt for difficulty level
+        cout<<endl;
+        printTabs(5); cout<<"  Select Cooking Difficulty Level:"<<endl;
+        printTabs(5); cout<<"     [1] Beginner Level"<<endl;
+        printTabs(5); cout<<"     [2] Intermediate Level"<<endl;
+        printTabs(5); cout<<"     [3] Advanced Level"<<endl;
+        printTabs(5); cout<<"  Enter Option: ";
+
+        int difficultyOption;
+
+        cin>>difficultyOption;
+        cin.ignore(); // Consume the newline left by cin
+
+        switch (difficultyOption) 
+        {
+            case 1:
+                recipes[index].difficulty_level = Beginner;
+                break;
+            case 2:
+                recipes[index].difficulty_level = Intermediate;
+                break;
+            case 3:
+                recipes[index].difficulty_level = Advanced;
+                break;
+            default:
+                cout<<endl;
+                cout<<"\033[97m";
+                cout<<"\033[41m";
+                printTabs(5); cout<<"                                                           "<<endl;
+                printTabs(5); cout<<"                      Invalid Option!                      "<<endl;
+                printTabs(5); cout<<"         Setting difficulty to Beginner by default.         "<<endl;
+                printTabs(5); cout<<"                                                           \033[0m"<<endl;
+                cout<<endl;
+
+                recipes[index].difficulty_level = Beginner;
+                break;
             }
 
-            // Update instruction steps
-            int instruction_qty;
-            cout << "  No. of Instruction Steps: ";
-            cin >> instruction_qty;
+            cout<<endl;
+            printTabs(5); cout<<"  Select Category:"<<endl;
+            printTabs(5); cout<<"     [1] Appetizer     [4] Drink    [7] Breakfast"<<endl;
+            printTabs(5); cout<<"     [2] Main Course   [5] Soup     [8] Side Dish"<<endl;
+            printTabs(5); cout<<"     [3] Dessert       [6] Snack    [9] Other"<<endl;
+            printTabs(5); cout<<"  Enter Option: ";
+                
+            int categoryOption;
 
-            if (cin.fail() || instruction_qty < 0) {
-                validInput = false;
-                cout << endl;
-                cout << "\033[97m\033[41m"; // Set text to white and background to red
-                cout << "                                                           " << endl;
-                cout << "            Invalid input for instruction Quantity!          " << endl;
-                cout << "                                                           \033[0m" << endl;
-                cin.clear();
-                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cin>>categoryOption;
+            cin.ignore(); // Consume the newline left by cinm
+
+            switch (categoryOption) 
+            {
+                case 1:
+                    recipes[index].category = Appetizer;
+                    break;
+                case 2:
+                    recipes[index].category = MainCourse;
+                    break;
+                case 3:
+                    recipes[index].category = Dessert;
+                    break;
+                case 4:
+                    recipes[index].category = Drink;
+                    break;
+                case 5:
+                    recipes[index].category = Soup;
+                    break;
+                case 6:
+                    recipes[index].category = Snack;
+                    break;
+                case 7:
+                    recipes[index].category = Breakfast;
+                    break;
+                case 8:
+                    recipes[index].category = SideDish;
+                    break;
+                case 9:
+                    recipes[index].category = Other;
+                    break;
+                default:
+                    cout<<endl;
+                    cout<<"\033[97m";
+                    cout<<"\033[41m";
+                    printTabs(5); cout<<"                                                           "<<endl;
+                    printTabs(5); cout<<"                      Invalid Option!                      "<<endl;
+                    printTabs(5); cout<<"          Setting category to Other by default.            "<<endl;
+                    printTabs(5); cout<<"                                                           \033[0m"<<endl;
+                    cout<<endl;
+                        
+                    recipes[index].category = Other;
+                    break;
             }
 
-            cin.ignore(); // Ignore newline character left in the buffer
+            // Display success message for recipe update
+            cout<<endl;
+            cout<<"\033[97m";
+            cout<<"\033[42m"; // Set text to white and background to green
+            printTabs(5); cout<<"                                                           "<<endl;
+            printTabs(5); cout<<"               Recipe Updated Successfully!                "<<endl;
+            printTabs(5); cout<<"                                                           \033[0m"<<endl;
+            cout<<endl;
+            
+            // Save recipe changes to file and reload recipes
+            saveRecipe();
+            loadRecipe();
 
-            if (validInput) {
-                // Resize instruction vector and prompt to enter each instruction step
-                recipes[index].instruction.resize(instruction_qty);
-                for (int i = 0; i < instruction_qty; ++i) {
-                    cout << "  Step " << i + 1 << ": ";
-                    getline(cin, recipes[index].instruction[i]);
-                }
+            printTabs(6); cout<<"        Press Enter to continue...";
+            cin.ignore(); // Wait for user to press Enter to continue
 
-                // Update cooking time, difficulty level, and category
-                cout << "  Cooking Time: ";
-                getline(cin, recipes[index].cooking_time);
+            // Clear screen and display updated recipe details
+            clearScreen();
 
-                // Prompt for difficulty level
-                cout << "Select Cooking Difficulty Level:" << endl;
-                cout << "  [1] Beginner Level" << endl;
-                cout << "  [2] Intermediate Level" << endl;
-                cout << "  [3] Advanced Level" << endl;
-                cout << "Enter an Option (1, 2, 3): ";
-                int difficultyOption;
-                cin >> difficultyOption;
-                cin.ignore(); // Consume the newline left by cin
-                switch (difficultyOption) {
-                    case 1:
-                        recipes[index].difficulty_level = Beginner;
-                        break;
-                    case 2:
-                        recipes[index].difficulty_level = Intermediate;
-                        break;
-                    case 3:
-                        recipes[index].difficulty_level = Advanced;
-                        break;
-                    default:
-                        cout << "Invalid option. Setting difficulty to Beginner by default." << endl;
-                        recipes[index].difficulty_level = Beginner;
-                        break;
-                }
+            cout<<"\033[46m";
+            cout<<"\033[97m"; // Set background to cyan and text to white
+            printTabs(5); cout<<"                                                           "<<endl;
+            printTabs(5); cout<<"                    Update Recipe                          "<<endl;
+            printTabs(5); cout<<"                                                           \033[0m"<<endl;
+            cout<<endl;
 
-                printTabs(5); cout << "  Select Category:" << endl;
-                printTabs(5); cout << "    [1] Appetizer" << endl;
-                printTabs(5); cout << "    [2] Main Course" << endl;
-                printTabs(5); cout << "    [3] Dessert" << endl;
-                printTabs(5); cout << "    [4] Drink" << endl;
-                printTabs(5); cout << "    [5] Soup" << endl;
-                printTabs(5); cout << "    [6] Snack" << endl;
-                printTabs(5); cout << "    [7] Breakfast" << endl;
-                printTabs(5); cout << "    [8] Side Dish" << endl;
-                printTabs(5); cout << "    [9] Other" << endl;
-                printTabs(5); cout << "  Enter your choice: ";
-                int categoryOption;
-                cin >> categoryOption;
-                cin.ignore(); // Consume the newline left by cin
-                switch (categoryOption) {
-                    case 1:
-                        recipes[index].category = Appetizer;
-                        break;
-                    case 2:
-                        recipes[index].category = MainCourse;
-                        break;
-                    case 3:
-                        recipes[index].category = Dessert;
-                        break;
-                    case 4:
-                        recipes[index].category = Drink;
-                        break;
-                    case 5:
-                        recipes[index].category = Soup;
-                        break;
-                    case 6:
-                        recipes[index].category = Snack;
-                        break;
-                    case 7:
-                        recipes[index].category = Breakfast;
-                        break;
-                    case 8:
-                        recipes[index].category = SideDish;
-                        break;
-                    case 9:
-                        recipes[index].category = Other;
-                        break;
-                    default:
-                        cout << "Invalid option. Setting category to Other by default." << endl;
-                        recipes[index].category = Other;
-                        break;
-                }
+            printTabs(5); cout<<"  Updated Recipe Details:"<<endl;
 
-                // Display success message for recipe update
-                cout << endl;
-                cout << "\033[97m\033[42m"; // Set text to white and background to green
-                cout << "                                                           " << endl;
-                cout << "               Recipe Updated Successfully!                " << endl;
-                cout << "                                                           \033[0m" << endl;
+            viewRecipe(num);
 
-                // Save recipe changes to file and reload recipes
-                saveRecipe();
-                loadRecipe();
-
-                cout << "Press Enter to continue...";
-                cin.ignore(); // Wait for user to press Enter to continue
-
-                // Clear screen and display updated recipe details
-                clearScreen();
-                cout << "\033[46m\033[97m"; // Set background to cyan and text to white
-                cout << "                                                           " << endl;
-                cout << "                    Update Recipe                          " << endl;
-                cout << "                                                           \033[0m" << endl;
-                cout << endl;
-
-                cout << "  Updated Recipe Details:" << endl;
-                viewRecipe(num);
+            if (recipes[index].isFavorite == 0)
+            {
+                printTabs(5); cout<<"  This recipe is not added to favorites"<<endl;
+                addToFavorites(index);
+            } 
+            else if (recipes[index].isFavorite == 1)
+            {
+                printTabs(5); cout<<"  This recipe is in favorites"<<endl;
+                removeFromFavorites(index);
             }
         }
-    } else {
+    else 
+    {
         // Display message if update is cancelled
-        cout << endl;
-        cout << "\033[97m\033[41m"; // Set text to white and background to red
-        cout << "                                                           " << endl;
-        cout << "                     Update Cancelled!                     " << endl;
-        cout << "                                                           \033[0m" << endl;
+        cout<<endl;
+        cout<<"\033[97m";
+        cout<<"\033[41m"; // Set text to white and background to red
+        printTabs(5); cout<<"                                                           "<<endl;
+        printTabs(5); cout<<"                     Update Cancelled!                     "<<endl;
+        printTabs(5); cout<<"                                                           \033[0m"<<endl;
+        cout<<endl;
+
+        printTabs(6); cout<<"        Press Enter to continue...";
+        cin.ignore();
+        cin.get();
+        return;
     }
 }
 
-void addToFavorites(int index) {
-    if (index < 0 || index >= count) {
-        cout << "Invalid recipe index." << endl;
+void addToFavorites(int index) 
+{
+    if (index < 0 || index >= count) 
+    {
+        cout<<"\033[97m";
+        cout<<"\033[41m";
+        printTabs(5); cout<<"                                                           "<<endl;
+        printTabs(5); cout<<"                  Invalid recipe index!                    "<<endl;
+        printTabs(5); cout<<"                                                           \033[0m"<<endl;
+        cout<<endl;
         return;
     }
 
     string opt;
-    cout << "Add this recipe to favorites? [Y/N]: ";
-    cin >> opt;
 
-    if (opt == "Y" || opt == "y") {
+    printTabs(5); cout<<"  Add this recipe to favorites? [Y/N]: ";
+    cin>>opt;
+
+    if (opt == "Y" || opt == "y") 
+    {
         recipes[index].isFavorite = true;
-        cout << "Recipe added to favorites!" << endl;
-    } else if (opt == "N" || opt == "n") {
+        cout<<endl;
+        cout<<"\033[97m";
+        cout<<"\033[42m";
+        printTabs(5); cout<<"                                                           "<<endl;
+        printTabs(5); cout<<"                Recipe added to Favorites!                 "<<endl;
+        printTabs(5); cout<<"                                                           \033[0m"<<endl;
+    } 
+    else if (opt == "N" || opt == "n") 
+    {
         recipes[index].isFavorite = false;
-        cout << "Recipe not added to favorites." << endl;
-    } else {
-        cout << "Incorrect input. Recipe not added to favorites." << endl;
+        cout<<endl;
+        cout<<"\033[97m";
+        cout<<"\033[42m";
+        printTabs(5); cout<<"                                                           "<<endl;
+        printTabs(5); cout<<"               Recipe not added to favorites!              "<<endl;
+        printTabs(5); cout<<"                                                           \033[0m"<<endl;
+    } 
+    else 
+    {
+        cout<<endl;
+        cout<<"\033[97m";
+        cout<<"\033[41m";
+        printTabs(5); cout<<"                                                           "<<endl;
+        printTabs(5); cout<<"                     Invalid Input!                        "<<endl;
+        printTabs(5); cout<<"              Recipe not added to Favorites!               "<<endl;
+        printTabs(5); cout<<"                                                           \033[0m"<<endl;
     }
 
     // Save favorites to file after modification
     saveRecipe();
 }
 
-void removeFromFavorites(int index) {
+void removeFromFavorites(int index) 
+{
     // Load recipes from file to update in-memory data
     loadRecipe();
 
     // Check if the index is valid
-    if (index < 0 || index >= count) {
-        cout << "Invalid recipe index." << endl;
+    if (index < 0 || index >= count) 
+    {
+        cout<<"\033[97m";
+        cout<<"\033[41m";
+        printTabs(5); cout<<"                                                           "<<endl;
+        printTabs(5); cout<<"                  Invalid recipe index!                    "<<endl;
+        printTabs(5); cout<<"                                                           \033[0m"<<endl;
+        cout<<endl;
         return;
     }
 
     string opt;
-    cout << "Remove this recipe from favorites? [Y/N]: ";
-    cin >> opt;
 
-    if (opt == "Y" || opt == "y") {
+    printTabs(5); cout<<"  Remove this recipe from favorites? [Y/N]: ";
+    cin>>opt;
+
+    if (opt == "Y" || opt == "y") 
+    {
         recipes[index].isFavorite = false;
-        cout << "Recipe removed from favorites!" << endl;
+        cout<<endl;
+        cout<<"\033[97m";
+        cout<<"\033[42m";
+        printTabs(5); cout<<"                                                           "<<endl;
+        printTabs(5); cout<<"              Recipe removed from Favorites!               "<<endl;
+        printTabs(5); cout<<"                                                           \033[0m"<<endl;
 
         // Save updated favorites to file after modification
         saveRecipe();
-    } else if (opt == "N" || opt == "n") {
-        cout << "Recipe remains in favorites." << endl;
-        // No change needed if recipe remains in favorites
-    } else {
-        cout << "Incorrect input. Recipe not removed from favorites." << endl;
-        return; // Exit function on incorrect input
+    } 
+    else if (opt == "N" || opt == "n") 
+    {
+        cout<<endl;
+        cout<<"\033[97m";
+        cout<<"\033[42m";
+        printTabs(5); cout<<"                                                           "<<endl;
+        printTabs(5); cout<<"               Recipe remains in Favorites!                "<<endl;
+        printTabs(5); cout<<"                                                           \033[0m"<<endl;
+    } 
+    else 
+    {
+        cout<<"\033[97m";
+        cout<<"\033[41m";
+        printTabs(5); cout<<"                                                           "<<endl;
+        printTabs(5); cout<<"                     Invalid Input!                        "<<endl;
+        printTabs(5); cout<<"            Recipe not removed from Favorites!             "<<endl;
+        printTabs(5); cout<<"                                                           \033[0m"<<endl;
+        cout<<endl;
+        return;
     }
 }
 
-void chooseCategory() {
+void chooseCategory() 
+{
     clearScreen();
     cout<<"\033[48;2;255;255;255m";
     cout<<"\033[30m";
@@ -1603,14 +1702,19 @@ void chooseCategory() {
     printTabs(5); cout<<"  [7] Breakfast                                            "<<endl; 
     printTabs(5); cout<<"  [8] Side Dish                                            "<<endl;
     printTabs(5); cout<<"  [9] Other                                                "<<endl; 
-    printTabs(5); cout<<"                                                           \033[0m" << endl;
+    printTabs(5); cout<<"                                                           \033[0m"<<endl;
     cout<<endl;
-    printTabs(5); cout << "Enter your choice: ";
+
+    printTabs(5); cout<<"  Enter your choice: ";
+    
     int categoryOption;
-    cin >> categoryOption;
+    cin>>categoryOption;
     cin.ignore(); // Consume the newline left by cin
+
     Category category;
-    switch (categoryOption) {
+ 
+    switch (categoryOption) 
+    {
         case 1:
             category = Appetizer;
             break;
@@ -1639,15 +1743,25 @@ void chooseCategory() {
             category = Other;
             break;
         default:
-            cout << "Invalid option." << endl;
+            cout<<endl;
+            cout<<"\033[97m";
+            cout<<"\033[41m";
+            printTabs(5); cout<<"                                                           "<<endl;
+            printTabs(5); cout<<"                      Invalid Option!                      "<<endl;
+            printTabs(5); cout<<"          Setting category to Other by default.            "<<endl;
+            printTabs(5); cout<<"                                                           \033[0m"<<endl;
+            cout<<endl;
+
             category = Other;
             break;
     }
     displayByCategory(category);
 }
 
-void chooseDifficulty(){
+void chooseDifficulty()
+{
     clearScreen();
+
     cout<<"\033[48;2;255;255;255m";
     cout<<"\033[30m";
     printTabs(5); cout<<"                                                           "<<endl; 
@@ -1656,14 +1770,19 @@ void chooseDifficulty(){
     printTabs(5); cout<<"  [1] Beginner Level                                       "<<endl; 
     printTabs(5); cout<<"  [2] Intermediate Level                                   "<<endl; 
     printTabs(5); cout<<"  [3] Advanced Level                                       "<<endl; 
-    printTabs(5); cout<<"                                                           \033[0m" << endl;
+    printTabs(5); cout<<"                                                           \033[0m"<<endl;
     cout<<endl;
-    printTabs(5); cout << "Enter your choice: ";
+
+    printTabs(5); cout<<"  Enter your choice: ";
+
     int levelOption;
-    cin >> levelOption;
+    cin>>levelOption;
     cin.ignore(); // Consume the newline left by cin
+    
     DifficultyLevel level;
-    switch (levelOption) {
+
+    switch (levelOption) 
+    {
         case 1:
             level = Beginner;
             break;
@@ -1674,7 +1793,15 @@ void chooseDifficulty(){
             level = Advanced;
             break;
         default:
-            cout << "Invalid option. Setting difficulty to Beginner by default." << endl;
+            cout<<endl;
+            cout<<"\033[97m";
+            cout<<"\033[41m";
+            printTabs(5); cout<<"                                                           "<<endl;
+            printTabs(5); cout<<"                      Invalid Option!                      "<<endl;
+            printTabs(5); cout<<"         Setting difficulty to Beginner by default.         "<<endl;
+            printTabs(5); cout<<"                                                           \033[0m"<<endl;
+            cout<<endl;
+
             level = Beginner;
             break;
     }
@@ -1684,15 +1811,18 @@ void chooseDifficulty(){
 void deleteRecipe() 
 {
     ifstream file("recipes.txt");
-    if (!file.is_open()) {
-        cout << endl;
-        cout << "\033[97m\033[41m";
-        cout << "                                                           " << endl;
-        cout << "                  Unable to open file!                     " << endl;
-        cout << "               Please check the file path!                 " << endl;
-        cout << "                                                           \033[0m" << endl;
-        cout << endl;
 
+    if (!file.is_open()) 
+    {
+        cout<<endl;
+        cout<<"\033[97m";
+        cout<<"\033[41m";
+        printTabs(5); cout<<"                                                           "<<endl;
+        printTabs(5); cout<<"                  Unable to open file!                     "<<endl;
+        printTabs(5); cout<<"                                                           \033[0m"<<endl;
+        cout<<endl;
+
+        printTabs(6); cout<<"        Press Enter to continue...";
         cin.ignore();
         cin.get();
         file.close();
@@ -1700,120 +1830,149 @@ void deleteRecipe()
     }
 
     clearScreen();
-    cout << "\033[46m\033[97m";
-    cout << "                                                           " << endl;
-    cout << "                    Delete Recipe                          " << endl;
-    cout << "                                                           \033[0m" << endl;
-    cout << endl;
 
-    cout << "  Existing Recipes:" << endl;
-    for (int i = 0; i < count; i++) {
-        cout << "  " << i + 1 << ". " << recipes[i].name << endl;
+    cout<<"\033[46m";
+    cout<<"\033[97m";
+    printTabs(5); cout<<"                                                           "<<endl;
+    printTabs(5); cout<<"                    Delete Recipe                          "<<endl;
+    printTabs(5); cout<<"                                                           \033[0m"<<endl;
+    cout<<endl;
+
+    printTabs(5); cout<<"  Existing Recipes:"<<endl;
+
+    for (int i = 0; i < count; i++) 
+    {
+        printTabs(5); cout<<"  "<< i + 1 <<". "<<recipes[i].name<<endl;
     }
 
     int num = 0;
     string choice;
-    cout << endl;
-    cout << "  Enter Recipe ID to Delete: ";
-    cin >> num;
+
+    cout<<endl;
+    printTabs(5); cout<<"  Enter Recipe ID to Delete: ";
+    cin>>num;
     cin.ignore();
+
     int index = num - 1;
 
-    if (index < 0 || index >= count) {
-        cout << endl;
-        cout << "\033[97m\033[41m";
-        cout << "                                                           " << endl;
-        cout << "                    Invalid Recipe ID!                     " << endl;
-        cout << "                                                           \033[0m" << endl;
-        cout << endl;
+    if (index < 0 || index >= count) 
+    {
+        cout<<endl;
+        cout<<"\033[97m";
+        cout<<"\033[41m";
+        printTabs(5); cout<<"                                                           "<<endl;
+        printTabs(5); cout<<"                    Invalid Recipe ID!                     "<<endl;
+        printTabs(5); cout<<"                                                           \033[0m"<<endl;
+        cout<<endl;
+
         file.close();
         return;
     }
 
-    cout << endl;
-    cout << "\033[97m\033[42m";
-    cout << "                                                           " << endl;
-    cout << "                Recipe Found Successfully!                 " << endl;
-    cout << "                                                           \033[0m" << endl;
-    cout << endl;
+    cout<<endl;
+    cout<<"\033[97m";
+    cout<<"\033[42m";
+    printTabs(5); cout<<"                                                           "<<endl;
+    printTabs(5); cout<<"                Recipe Found Successfully!                 "<<endl;
+    printTabs(5); cout<<"                                                           \033[0m"<<endl;
+    cout<<endl;
 
-    cout << "  Confirm to Delete Recipe No. " << num << "? [Y/N]: ";
+    printTabs(5); cout<<"  Confirm to Delete Recipe No. "<<num<<"? [Y/N]: ";
     getline(cin, choice);
 
-    if (choice == "Y" || choice == "y") {
-        for (int i = index; i < count - 1; i++) {
+    if (choice == "Y" || choice == "y") 
+    {
+        for (int i = index; i < count - 1; i++) 
+        {
             recipes[i] = recipes[i + 1];
         }
         count--;
 
         ofstream write("recipes.txt");
-        if (write.is_open()) {
-            write << count << endl;
-            for (int i = 0; i < count; i++) {
-                write << recipes[i].name << "|" << recipes[i].ingredients.size() << "|";
-                for (size_t j = 0; j < recipes[i].ingredients.size(); j++) {
-                    write << recipes[i].ingredients[j].name << "|" << recipes[i].ingredients[j].unit << "|";
+
+        if (write.is_open()) 
+        {
+            write<<count<<endl;
+
+            for (int i = 0; i < count; i++) 
+            {
+                write<<recipes[i].name<<"|"<<recipes[i].ingredients.size()<<"|";
+
+                for (size_t j = 0; j < recipes[i].ingredients.size(); j++) 
+                {
+                    write<<recipes[i].ingredients[j].name<<"|"<<recipes[i].ingredients[j].unit<<"|";
                 }
-                write << recipes[i].instruction.size() << "|";
-                for (size_t j = 0; j < recipes[i].instruction.size(); j++) {
-                    write << recipes[i].instruction[j] << "|";
+                write<<recipes[i].instruction.size()<<"|";
+
+                for (size_t j = 0; j < recipes[i].instruction.size(); j++) 
+                {
+                    write<<recipes[i].instruction[j]<<"|";
                 }
-                write << recipes[i].cooking_time << "|" << difficultyLevelToString(recipes[i].difficulty_level) << "|" << categoryToString(recipes[i].category) << endl;
+                write<<recipes[i].cooking_time<<"|"<<difficultyLevelToString(recipes[i].difficulty_level)<<"|"<<categoryToString(recipes[i].category)<<endl;
             }
             write.close();
 
-            cout << endl;
-            cout << "\033[97m\033[42m";
-            cout << "                                                           " << endl;
-            cout << "               Recipe Deleted Successfully!                " << endl;
-            cout << "                                                           \033[0m" << endl;
-            cout << endl;
-        } else {
-            cout << endl;
-            cout << "\033[97m\033[41m";
-            cout << "                                                           " << endl;
-            cout << "                    Unable to open file!                   " << endl;
-            cout << "                                                           \033[0m" << endl;
-            cout << endl;
+            cout<<endl;
+            cout<<"\033[97m";
+            cout<<"\033[42m";
+            printTabs(5); cout<<"                                                           "<<endl;
+            printTabs(5); cout<<"               Recipe Deleted Successfully!                "<<endl;
+            printTabs(5); cout<<"                                                           \033[0m"<<endl;
+        } 
+        else 
+        {
+            cout<<endl;
+            cout<<"\033[97m";
+            cout<<"\033[41m";
+            printTabs(5); cout<<"                                                           "<<endl;
+            printTabs(5); cout<<"                    Unable to open file!                   "<<endl;
+            printTabs(5); cout<<"                                                           \033[0m"<<endl;
+            cout<<endl;
         }
-    } else {
-        cout << endl;
-        cout << "\033[97m\033[42m";
-        cout << "                                                           " << endl;
-        cout << "                   Deletion Cancelled!                     " << endl;
-        cout << "                                                           \033[0m" << endl;
-        cout << endl;
+    } 
+    else 
+    {
+        cout<<endl;
+        cout<<"\033[97m";
+        cout<<"\033[42m";
+        printTabs(5); cout<<"                                                           "<<endl;
+        printTabs(5); cout<<"                   Deletion Cancelled!                     "<<endl;
+        printTabs(5); cout<<"                                                           \033[0m"<<endl;
     }
 
-    cout << endl;
-    cout << "\033[47m\033[30m";
-    cout << "                                                           " << endl;
-    cout << "  [1] Delete another Recipe                                " << endl;
-    cout << "  [2] Back to Homepage                                     " << endl;
-    cout << "  [3] Exit the Program                                     " << endl;
-    cout << "                                                           \033[0m" << endl;
-    cout << endl;
-    cout << "  Enter Option: ";
-    int option;
-    cin >> option;
+    cout<<endl;
+    cout<<"\033[47m";
+    cout<<"\033[30m";
+    printTabs(5); cout<<"                                                           "<<endl;
+    printTabs(5); cout<<"  [1] Delete another Recipe                                "<<endl;
+    printTabs(5); cout<<"  [2] Back to Homepage                                     "<<endl;
+    printTabs(5); cout<<"  [3] Exit the Program                                     "<<endl;
+    printTabs(5); cout<<"                                                           \033[0m"<<endl;
+    cout<<endl;
+    printTabs(5); cout<<"  Enter Option: ";
 
-    switch (option) {
+    int option;
+    cin>>option;
+
+    switch (option) 
+    {
         case 1:
             deleteRecipe();
             break;
         case 2:
             return;
         case 3:
-            cout << "  Exiting the program..." << endl;
+            printTabs(5); cout<<"  Exiting the program..."<<endl;
             exit(0);
         default:
-            cout << endl;
-            cout << "\033[97m\033[41m";
-            cout << "                                                           " << endl;
-            cout << "                      Invalid Choice!                      " << endl;
-            cout << "                                                           \033[0m" << endl;
-            cout << endl;
-            cout << "  Exiting the program..." << endl;
+            cout<<endl;
+            cout<<"\033[97m";
+            cout<<"\033[41m";
+            printTabs(5); cout<<"                                                           "<<endl;
+            printTabs(5); cout<<"                      Invalid Choice!                      "<<endl;
+            printTabs(5); cout<<"                                                           \033[0m"<<endl;
+            cout<<endl;
+            cout<<"  Exiting the program..."<<endl;
             exit(1);
     }
 }
@@ -1821,304 +1980,359 @@ void deleteRecipe()
 void displayFavoriteRecipes() 
 {
     clearScreen();
-    cout << "\033[46m";  // Set background color to cyan
-    cout << "\033[97m";  // Set text color to white
-    printTabs(5); cout << "                                                           " << endl;
-    printTabs(5); cout << "                   Favorite Recipes                        " << endl;
-    printTabs(5); cout << "                                                           \033[0m" << endl;
-    cout << endl;
+
+    cout<<"\033[46m";  // Set background color to cyan
+    cout<<"\033[97m";  // Set text color to white
+    printTabs(5); cout<<"                                                           "<<endl;
+    printTabs(5); cout<<"                   Favorite Recipes                        "<<endl;
+    printTabs(5); cout<<"                                                           \033[0m"<<endl;
+    cout<<endl;
 
     // Display header for the table
-    printTabs(3); cout << " " << setw(15) << left << "Recipe No." << setw(25) << left << "Recipe Name" << setw(25) << left << "Category" << setw(20) << left << "Difficulty Level" << endl;
-    printTabs(3); cout << " -----------------------------------------------------------------------------------" << endl;
+    printTabs(3); cout<<" "<<setw(15)<<left<<"Recipe No."<<setw(25)<<left<<"Recipe Name"<<setw(25)<<left<<"Category"<<setw(20)<<left<<"Difficulty Level"<<endl;
+    printTabs(3); cout<<" -----------------------------------------------------------------------------------"<<endl;
 
     vector<int> favoriteIndexes;
 
     // Iterate through recipes to display favorites
     int favoriteCount = 0;
-    for (int i = 0; i < count; i++) {
-        if (recipes[i].isFavorite) {
+
+    for (int i = 0; i < count; i++) 
+    {
+        if (recipes[i].isFavorite) 
+        {
             printTabs(3);
-            cout << "    " << setw(15) << left << favoriteCount + 1;
-            cout << setw(25) << left << recipes[i].name;
-            cout << setw(25) << left << categoryToString(recipes[i].category);
-            cout << setw(20) << left << difficultyLevelToString(recipes[i].difficulty_level) << endl;
+            cout<<"    "<<setw(12)<<left<< favoriteCount + 1;
+            cout<<setw(25)<<left<<recipes[i].name;
+            cout<<setw(24)<<left<<categoryToString(recipes[i].category);
+            cout<<setw(20)<<left<<difficultyLevelToString(recipes[i].difficulty_level)<<endl;
             favoriteIndexes.push_back(i); // Store index of the favorite recipe
             favoriteCount++;
         }
     }
 
     // If no favorites found, display message
-    if (favoriteCount == 0) {
-        cout << endl;
-        cout << " No favorite recipes found." << endl;
-        cout << endl;
+    if (favoriteCount == 0) 
+    {
+        cout<<endl;
+        printTabs(7); cout<<"No favorite recipes found."<<endl;
+        cout<<endl;
     }
 
-    cout << "\033[47m";
-    cout << "\033[30m";
-    printTabs(5); cout << "                                                           " << endl;
-    printTabs(5); cout << "  [1] View Recipe Details                                  " << endl;
-    printTabs(5); cout << "  [2] Remove a Recipe from Favorites                       " << endl;
-    printTabs(5); cout << "  [3] Back to Homepage                                     " << endl;
-    printTabs(5); cout << "  [4] Exit the Program                                     " << endl;
-    printTabs(5); cout << "                                                           \033[0m" << endl;
-    cout << endl;
-    cout << "  Enter Option: ";
+    cout<<"\033[47m";
+    cout<<"\033[30m";
+    cout<<endl;
+    printTabs(5); cout<<"                                                           "<<endl;
+    printTabs(5); cout<<"  [1] View Recipe Details                                  "<<endl;
+    printTabs(5); cout<<"  [2] Remove a Recipe from Favorites                       "<<endl;
+    printTabs(5); cout<<"  [3] Back to Homepage                                     "<<endl;
+    printTabs(5); cout<<"  [4] Exit the Program                                     "<<endl;
+    printTabs(5); cout<<"                                                           \033[0m"<<endl;
+    cout<<endl;
+
+    printTabs(5); cout<<"  Enter Option: ";
     int option;
-    cin >> option;
+    cin>>option;
 
-    switch (option) {
-    case 1: {
-        int recipeNumber;
-        cout << "  Enter Recipe Number: ";
-        cin >> recipeNumber;
+    switch (option) 
+    {
+        case 1: 
+        {
+            int recipeNumber;
 
-        // Validate the recipe number against favorites count
-        if (recipeNumber >= 1 && recipeNumber <= favoriteCount) {
-            int index = favoriteIndexes[recipeNumber - 1]; // Get index of the selected favorite recipe
-            viewRecipeDetails(index); // View recipe details
-            cout<<endl;
-            cout << "\033[47m";
-            cout << "\033[30m";
-            printTabs(5); cout << "                                                           " << endl;
-            printTabs(5); cout << "  [1] Back to Homepage                                     " << endl;
-            printTabs(5); cout << "  [2] Exit the Program                                     " << endl;
-            printTabs(5); cout << "                                                           \033[0m" << endl;
-            cout << endl;
-            cout << "  Enter Option: ";
-            int option;
-            cin >> option;
+            printTabs(5); cout<<"  Enter Recipe Number: ";
+            cin>>recipeNumber;
 
-            switch (option) {
-            case 1:
-                // Return to homepage
-                return;
-            case 2:
-                // Exit the program
-                cout << "  Exiting the program..." << endl;
-                exit(0);
-            default:
-                cout << endl;
-                cout << "\033[97m";
-                cout << "\033[41m";
-                cout << "                                                           " << endl;
-                cout << "                      Invalid Choice!                      " << endl;
-                cout << "                                                           \033[0m" << endl;
-                cout << endl;
-                cout << "  Exiting the program..." << endl;
-                exit(1);
+            // Validate the recipe number against favorites count
+            if (recipeNumber >= 1 && recipeNumber <= favoriteCount) 
+            {
+                int index = favoriteIndexes[recipeNumber - 1]; // Get index of the selected favorite recipe
+                viewRecipeDetails(index);
+                 // View recipe details
+                cout<<endl;
+                cout<<"\033[47m";
+                cout<<"\033[30m";
+                printTabs(5); cout<<"                                                           "<<endl;
+                printTabs(5); cout<<"  [1] Back to Homepage                                     "<<endl;
+                printTabs(5); cout<<"  [2] Exit the Program                                     "<<endl;
+                printTabs(5); cout<<"                                                           \033[0m"<<endl;
+                cout<<endl;
+
+                printTabs(5); cout<<"  Enter Option: ";
+                int option;
+                cin>>option;
+
+                switch (option) 
+                {
+                    case 1:
+                        // Return to homepage
+                        return;
+                    case 2:
+                        // Exit the program
+                        printTabs(5); cout<<"  Exiting the program..."<<endl;
+                        exit(0);
+                    default:
+                        cout<<endl;
+                        cout<<"\033[97m";
+                        cout<<"\033[41m";
+                        printTabs(5); cout<<"                                                           "<<endl;
+                        printTabs(5); cout<<"                      Invalid Choice!                      "<<endl;
+                        printTabs(5); cout<<"                                                           \033[0m"<<endl;
+                        cout<<endl;
+                        printTabs(5); cout<<"  Exiting the program..."<<endl;
+                        exit(1);
+                    }
+            } 
+            else 
+            {
+                cout<<endl;
+                cout<<"\033[97m";
+                cout<<"\033[41m";
+                printTabs(5); cout<<"                                                           "<<endl;
+                printTabs(5); cout<<"                    Invalid Recipe Number!                 "<<endl;
+                printTabs(5); cout<<"                                                           \033[0m"<<endl;
+                cout<<endl;
+
+                printTabs(6); cout<< "        Press Enter to continue...";
+                cin.ignore();
+                cin.get();
             }
-        } else {
-            cout << endl;
-            cout << "\033[97m";
-            cout << "\033[41m";
-            cout << "                                                           " << endl;
-            cout << "                    Invalid Recipe Number!                 " << endl;
-            cout << "                                                           \033[0m" << endl;
-            cout << endl;
+            // After viewing recipe details, stay on favorite recipes page
+            displayFavoriteRecipes();
+            return;
         }
-        // After viewing recipe details, stay on favorite recipes page
-        displayFavoriteRecipes();
-        return;
-    }
-    case 2:{
-        int recipeNumber;
-        cout << "  Enter Recipe Number: ";
-        cin >> recipeNumber;
+        case 2:
+        {
+            int recipeNumber;
+            printTabs(5); cout<<"  Enter Recipe Number: ";
+            cin>>recipeNumber;
 
-        // Validate the recipe number against favorites count
-        if (recipeNumber >= 1 && recipeNumber <= favoriteCount) {
-            int index = favoriteIndexes[recipeNumber - 1]; // Get index of the selected favorite recipe
-            removeFromFavorites(index); // View recipe details
-        } else {
-            cout << endl;
-            cout << "\033[97m";
-            cout << "\033[41m";
-            cout << "                                                           " << endl;
-            cout << "                    Invalid Recipe Number!                 " << endl;
-            cout << "                                                           \033[0m" << endl;
-            cout << endl;
+            // Validate the recipe number against favorites count
+            if (recipeNumber >= 1 && recipeNumber <= favoriteCount) 
+            {
+                int index = favoriteIndexes[recipeNumber - 1]; // Get index of the selected favorite recipe
+                removeFromFavorites(index); // View recipe details
+
+                cout<<endl;
+                printTabs(6); cout<< "        Press Enter to continue...";
+                cin.ignore();
+                cin.get();
+            } 
+            else 
+            {
+                cout<<endl;
+                cout<<"\033[97m";
+                cout<<"\033[41m";
+                printTabs(5); cout<<"                                                           "<<endl;
+                printTabs(5); cout<<"                    Invalid Recipe Number!                 "<<endl;
+                printTabs(5); cout<<"                                                           \033[0m"<<endl;
+                cout<<endl;
+
+                printTabs(6); cout<< "        Press Enter to continue...";
+                cin.ignore();
+                cin.get();
+            }
+            // After viewing recipe details, stay on favorite recipes page
+            displayFavoriteRecipes();
+            return;
         }
-        // After viewing recipe details, stay on favorite recipes page
-        displayFavoriteRecipes();
-        return;
-    }
-    case 3:
-        // Return to the main loop or homepage function
-        return;
-    case 4:
-        cout << "  Exiting the program..." << endl;
-        exit(0); // Exit the program
-    default:
-        cout << endl;
-        cout << "\033[97m";
-        cout << "\033[41m";
-        cout << "                                                           " << endl;
-        cout << "                      Invalid Choice!                      " << endl;
-        cout << "                                                           \033[0m" << endl;
-        cout << endl;
-        cout << "  Exiting the program..." << endl;
-        exit(1);
-    }
+        case 3:
+            // Return to the main loop or homepage function
+            return;
+        case 4:
+            printTabs(5); cout<<"  Exiting the program..."<<endl;
+            exit(0); // Exit the program
+        default:
+            cout<<endl;
+            cout<<"\033[97m";
+            cout<<"\033[41m";
+            printTabs(5); cout<<"                                                           "<<endl;
+            printTabs(5); cout<<"                      Invalid Choice!                      "<<endl;
+            printTabs(5); cout<<"                                                           \033[0m"<<endl;
+            cout<<endl;
+            printTabs(5); cout<<"  Exiting the program..."<<endl;
+            exit(1);
+        }
 }
 
-void viewRecipeDetails(int index) {
+void viewRecipeDetails(int index) 
+{
     clearScreen();
-    cout << "\033[46m";  // Set background color to cyan
-    cout << "\033[97m";  // Set text color to white
-    printTabs(5); cout << "                                                           " << endl;
-    printTabs(5); cout << "                   Recipe Details                          " << endl;
-    printTabs(5); cout << "                                                           \033[0m" << endl;
-    cout << endl;
+    cout<<"\033[46m";  // Set background color to cyan
+    cout<<"\033[97m";  // Set text color to white
+    printTabs(5); cout<<"                                                           "<<endl;
+    printTabs(5); cout<<"                   Recipe Details                          "<<endl;
+    printTabs(5); cout<<"                                                           \033[0m"<<endl;
+    cout<<endl;
 
     // Display details of the recipe at the given index
-    cout << " Recipe Name: " << recipes[index].name << endl;
-    cout << " Category: " << categoryToString(recipes[index].category) << endl;
-    cout << " Difficulty Level: " << difficultyLevelToString(recipes[index].difficulty_level) << endl;
-    cout << " Cooking Time: " << recipes[index].cooking_time << endl;
+    printTabs(5); cout<<"  Recipe Name: "<<recipes[index].name<<endl;
+    printTabs(5); cout<<"  Ingredients:"<<endl;
 
-    cout << endl;
-    cout << " Ingredients:" << endl;
-    for (size_t i = 0; i < recipes[index].ingredients.size(); ++i) {
-        cout << " - " << recipes[index].ingredients[i].name << " (" << recipes[index].ingredients[i].unit << ")" << endl;
+    for (size_t i = 0; i < recipes[index].ingredients.size(); ++i) 
+    {
+        printTabs(5); cout<<"     - "<<recipes[index].ingredients[i].name<<" ("<<recipes[index].ingredients[i].unit<<")"<<endl;
     }
+    printTabs(5); cout<<"  Instructions:"<<endl;
 
-    cout << endl;
-    cout << " Instructions:" << endl;
-    for (size_t i = 0; i < recipes[index].instruction.size(); ++i) {
-        cout << " " << (i + 1) << ". " << recipes[index].instruction[i] << endl;
+    for (size_t i = 0; i < recipes[index].instruction.size(); ++i) 
+    {
+        printTabs(5); cout<< " "<<"    Step "<< i + 1 <<": "<<recipes[index].instruction[i]<<endl;
     }
-    
+    printTabs(5); cout<<"  Cooking Time: "<<recipes[index].cooking_time<<endl;
+    printTabs(5); cout<<"  Difficulty Level: "<<difficultyLevelToString(recipes[index].difficulty_level)<<endl;
+    printTabs(5); cout<<"  Category: "<<categoryToString(recipes[index].category)<<endl;
+
 }
 
-void displayByDifficulty(DifficultyLevel level) {
+void displayByDifficulty(DifficultyLevel level) 
+{
     clearScreen();
-    printTabs(5); cout << "                                                                    " << endl;
-    printTabs(5); cout << "             Recipes in Difficulty Level: " << difficultyLevelToString(level) << endl;
-    printTabs(5); cout << "                                                                    \033[0m" << endl;
-    cout << endl;
+
+    printTabs(5); cout<<"                                                                    "<<endl;
+    printTabs(5); cout<<"             Recipes in Difficulty Level: " << difficultyLevelToString(level)<<endl;
+    printTabs(5); cout<<"                                                                    "<<endl;
+    cout<<endl;
 
     // Find recipes in the specified category
     vector<int> levelIndexes; // Store indexes of recipes in the current category
     int levelCount = 0;
-    for (int i = 0; i < count; ++i) {
-        if (recipes[i].difficulty_level == level) {
+
+    for (int i = 0; i < count; ++i) 
+    {
+        if (recipes[i].difficulty_level == level) 
+        {
             printTabs(6);
-            cout << setw(10) << levelCount + 1; // Recipe number
-            cout << setw(22) << recipes[i].name << endl; // Recipe name
+            cout<<setw(10)<<levelCount + 1; // Recipe number
+            cout<<setw(22)<<recipes[i].name<<endl; // Recipe name
             levelIndexes.push_back(i); // Store index of the recipe
             levelCount++;
         }
     }
 
-    cout << endl;
+    cout<<endl;
 
-    if (levelCount == 0) {
-        printTabs(6); cout << "No recipes found in this difficulty level." << endl;
-        cout << endl;
-        cout << "\033[47m";
-        cout << "\033[30m";
-        printTabs(5); cout << "                                                           " << endl;
-        printTabs(5); cout << "  [1] Choose another Difficulty Level                      " << endl;
-        printTabs(5); cout << "  [2] Back to Homepage                                     " << endl;
-        printTabs(5); cout << "  [3] Exit the Program                                     " << endl;
-        printTabs(5); cout << "                                                           \033[0m" << endl;
-        cout << endl;
-        cout << "  Enter Option: ";
+    if (levelCount == 0) 
+    {
+        printTabs(7); cout<<" No recipes found in this difficulty level."<<endl;
+        cout<< endl;
+        cout<<"\033[47m";
+        cout<<"\033[30m";
+        printTabs(5); cout<<"                                                           "<<endl;
+        printTabs(5); cout<<"  [1] Choose another Difficulty Level                      "<<endl;
+        printTabs(5); cout<<"  [2] Back to Homepage                                     "<<endl;
+        printTabs(5); cout<<"  [3] Exit the Program                                     "<<endl;
+        printTabs(5); cout<<"                                                           \033[0m"<<endl;
+        cout<<endl;
+
+        printTabs(5); cout<<"  Enter Option: ";
         int option;
-        cin >> option;
+        cin>>option;
 
-        switch (option) {
+        switch (option) 
+        {
             case 1:
                 chooseDifficulty();
                 break;
             case 2:
                 return; // Return to the main menu or homepage
             case 3:
-                cout << "  Exiting the program..." << endl;
+                printTabs(5); cout<<"  Exiting the program..."<<endl;
                 exit(0); // Exit the program
             default:
-                cout << endl;
-                cout << "\033[97m";
-                cout << "\033[41m";
-                cout << "                                                           " << endl;
-                cout << "                      Invalid Choice!                      " << endl;
-                cout << "                                                           \033[0m" << endl;
-                cout << endl;
-                cout << "  Exiting the program..." << endl;
+                cout<<endl;
+                cout<<"\033[97m";
+                cout<<"\033[41m";
+                printTabs(5); cout<<"                                                           "<<endl;
+                printTabs(5); cout<<"                      Invalid Choice!                      "<<endl;
+                printTabs(5); cout<<"                                                           \033[0m"<<endl;
+                cout<<endl;
+                printTabs(5); cout<<"  Exiting the program..."<<endl;
                 exit(1);
         }
-    } else {
-        cout << "\033[47m";
-        cout << "\033[30m";
-        printTabs(5); cout << "                                                           " << endl;
-        printTabs(5); cout << "  [1] View Recipe Details                                  " << endl;
-        printTabs(5); cout << "  [2] Choose another Difficulty Level                      " << endl;
-        printTabs(5); cout << "  [3] Back to Homepage                                     " << endl;
-        printTabs(5); cout << "  [4] Exit the Program                                     " << endl;
-        printTabs(5); cout << "                                                           \033[0m" << endl;
-        cout << endl;
-        cout << "  Enter Option: ";
-        int option;
-        cin >> option;
+    } 
+    else 
+    {
+        cout<<"\033[47m";
+        cout<<"\033[30m";
+        printTabs(5); cout<<"                                                           "<<endl;
+        printTabs(5); cout<<"  [1] View Recipe Details                                  "<<endl;
+        printTabs(5); cout<<"  [2] Choose another Difficulty Level                      "<<endl;
+        printTabs(5); cout<<"  [3] Back to Homepage                                     "<<endl;
+        printTabs(5); cout<<"  [4] Exit the Program                                     "<<endl;
+        printTabs(5); cout<<"                                                           \033[0m"<<endl;
+        cout<<endl;
 
-        switch (option) {
-            case 1: {
+        printTabs(5); cout<<"  Enter Option: ";
+        int option;
+        cin>>option;
+
+        switch (option) 
+        {
+            case 1: 
+            {
                 int recipeNumber;
-                cout << "  Enter Recipe Number: ";
-                cin >> recipeNumber;
+
+                printTabs(5); cout<<"  Enter Recipe Number: ";
+                cin>>recipeNumber;
 
                 // Validate the recipe number against the recipes in the category
-                if (recipeNumber >= 1 && recipeNumber <= levelCount) {
+                if (recipeNumber >= 1 && recipeNumber <= levelCount) 
+                {
                     int index = levelIndexes[recipeNumber - 1]; // Get index of the selected recipe
                     viewRecipeDetails(index); // View recipe details
 
                     // After viewing recipe details, show menu again
-                    cout << endl;
-                    cout << "\033[47m";
-                    cout << "\033[30m";
-                    printTabs(5); cout << "                                                           " << endl;
-                    printTabs(5); cout << "  [1] Choose another Difficulty Level                              " << endl;
-                    printTabs(5); cout << "  [2] Back to Homepage                                     " << endl;
-                    printTabs(5); cout << "  [3] Exit the Program                                     " << endl;
-                    printTabs(5); cout << "                                                           \033[0m" << endl;
-                    cout << endl;
-                    cout << "  Enter Option: ";
-                    int option;
-                    cin >> option;
+                    cout<<endl;
+                    cout<<"\033[47m";
+                    cout<<"\033[30m";
+                    printTabs(5); cout<<"                                                           "<<endl;
+                    printTabs(5); cout<<"  [1] Choose another Difficulty Level                      "<<endl;
+                    printTabs(5); cout<<"  [2] Back to Homepage                                     "<<endl;
+                    printTabs(5); cout<<"  [3] Exit the Program                                     "<<endl;
+                    printTabs(5); cout<<"                                                           \033[0m"<<endl;
+                    cout<<endl;
 
-                    switch (option) {
+                    printTabs(5); cout<<"  Enter Option: ";
+                    int option;
+                    cin>>option;
+
+                    switch (option) 
+                    {
                         case 1:
                             chooseDifficulty();
                             break;
                         case 2:
                             return; // Return to the main menu or homepage
                         case 3:
-                            cout << "  Exiting the program..." << endl;
+                            printTabs(5); cout<<"  Exiting the program..."<<endl;
                             exit(0); // Exit the program
                         default:
-                            cout << endl;
-                            cout << "\033[97m";
-                            cout << "\033[41m";
-                            cout << "                                                           " << endl;
-                            cout << "                      Invalid Choice!                      " << endl;
-                            cout << "                                                           \033[0m" << endl;
-                            cout << endl;
-                            cout << "  Exiting the program..." << endl;
+                            cout<<endl;
+                            cout<<"\033[97m";
+                            cout<<"\033[41m";
+                            printTabs(5); cout<<"                                                           "<<endl;
+                            printTabs(5); cout<<"                      Invalid Choice!                      "<<endl;
+                            printTabs(5); cout<<"                                                           \033[0m"<<endl;
+                            cout<<endl;
+                            printTabs(5); cout<<"  Exiting the program..."<<endl;
                             exit(1);
                     }
-                } else {
-                    cout << endl;
-                    cout << "\033[97m";
-                    cout << "\033[41m";
-                    cout << "                                                           " << endl;
-                    cout << "                    Invalid Recipe Number!                 " << endl;
-                    cout << "                                                           \033[0m" << endl;
-                    cout << endl;
-                    printTabs(6); cout << "Press Enter to continue...\a";
+                } 
+                else 
+                {
+                    cout<<endl;
+                    cout<<"\033[97m";
+                    cout<<"\033[41m";
+                    printTabs(5); cout<<"                                                           "<<endl;
+                    printTabs(5); cout<<"                    Invalid Recipe Number!                 "<<endl;
+                    printTabs(5); cout<<"                                                           \033[0m"<<endl;
+                    cout<<endl;
+
+                    printTabs(6); cout<< "        Press Enter to continue...";
                     cin.ignore(); // Clear input buffer
                     cin.get(); // Wait for user to press Enter
+
                     chooseDifficulty();
                 }
                 break;
@@ -2129,17 +2343,17 @@ void displayByDifficulty(DifficultyLevel level) {
             case 3:
                 return; // Return to the main menu or homepage
             case 4:
-                cout << "  Exiting the program..." << endl;
+                printTabs(5); cout<<"  Exiting the program..."<<endl;
                 exit(0); // Exit the program
             default:
-                cout << endl;
-                cout << "\033[97m";
-                cout << "\033[41m";
-                cout << "                                                           " << endl;
-                cout << "                      Invalid Choice!                      " << endl;
-                cout << "                                                           \033[0m" << endl;
-                cout << endl;
-                cout << "  Exiting the program..." << endl;
+                cout<<endl;
+                cout<<"\033[97m";
+                cout<<"\033[41m";
+                printTabs(5); cout<<"                                                           "<<endl;
+                printTabs(5); cout<<"                      Invalid Choice!                      "<<endl;
+                printTabs(5); cout<<"                                                           \033[0m"<<endl;
+                cout<<endl;
+                printTabs(5); cout<<"  Exiting the program..." << endl;
                 exit(1);
         }
     }
@@ -2147,12 +2361,13 @@ void displayByDifficulty(DifficultyLevel level) {
 
 void printTabs(int tabNum) 
 {
-    for (int i = 0; i < tabNum; ++i) {
-        cout << "\t";
+    for (int i = 0; i < tabNum; ++i) 
+    {
+        cout<<"\t";
     }
 }
 
 void clearScreen()
 {
-    cout<< "\033[2J\033[1;1H";
+    cout<<"\033[2J\033[1;1H";
 }
