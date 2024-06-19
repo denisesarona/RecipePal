@@ -1410,7 +1410,7 @@ void checkExistingRecipe()
             cout<<setw(25)<<left<<categoryToString(recipes[i].category);
             cout<<setw(20)<<left<<difficultyLevelToString(recipes[i].difficulty_level)<<endl;
         }
-
+    
         cout<<endl;
         cout<<"\033[47m";
         cout<<"\033[30m";
@@ -1436,7 +1436,7 @@ void checkExistingRecipe()
                 if (recipeNumber >= 1 && recipeNumber <= count) 
                 {
                     viewRecipe(recipeNumber);
-
+                    
                     cout<<endl;
                     printTabs(6); cout<<"  Press Enter to return to the main menu...";
 
@@ -1462,9 +1462,54 @@ void checkExistingRecipe()
                 return;
             }
             case 2:
+            {
+                int recipeNumber;
+                printTabs(5); cout<<"  Enter Recipe Number: ";
+                cin>>recipeNumber;
+
+                // Validate the recipe number
+                if (recipeNumber >= 1 && recipeNumber <= count) 
+                {
+                    if (recipes[recipeNumber].isFavorite == true)
+                    {
+                        cout<<endl;
+                        cout<<"\033[97m";
+                        cout<<"\033[41m";
+                        printTabs(5); cout<<"                                                           "<<endl;
+                        printTabs(5); cout<<"               Recipe already in favorites!                "<<endl;
+                        printTabs(5); cout<<"                                                           \033[0m"<<endl;
+                    } else if (recipes[recipeNumber].isFavorite == false){
+                        addToFavorites(recipeNumber);
+                    }
+                    
+                    cout<<endl;
+                    printTabs(6); cout<<"  Press Enter to return to menu...";
+
+                    cin.ignore();
+                    cin.get();
+                } 
+                else 
+                {
+                    cout<<endl;
+                    cout<<"\033[97m";
+                    cout<<"\033[41m";
+                    printTabs(5); cout<<"                                                           "<<endl;
+                    printTabs(5); cout<<"                    Invalid Recipe Number!                 "<<endl;
+                    printTabs(5); cout<<"                                                           \033[0m"<<endl;
+                    cout<<endl;
+                    printTabs(6); cout<<"  Press Enter to return to the main menu...";
+
+                    cin.ignore();
+                    cin.get();
+                }
+                // After viewing recipe details, stay on existing recipe page
+                checkExistingRecipe();
+                return;
+            }
+            case 3:
                 // Return to the main loop or homepage function
                 return;
-            case 3:
+            case 4:
                 printTabs(5); cout<< "  Exiting the program..."<<endl;
                 exit(0); // Exit the program
             default:
@@ -2075,131 +2120,6 @@ void displayByCategory(Category category)
     }
 }
 
-
-
-void addToFavorites(int index) 
-{
-    if (index < 0 || index >= count) 
-    {
-        cout<<"\033[97m";
-        cout<<"\033[41m";
-        printTabs(5); cout<<"                                                           "<<endl;
-        printTabs(5); cout<<"                  Invalid recipe index!                    "<<endl;
-        printTabs(5); cout<<"                                                           \033[0m"<<endl;
-        cout<<endl;
-        return;
-    }
-
-    string opt;
-
-    printTabs(5); cout<<"  Add this recipe to favorites? [Y/N]: ";
-    cin>>opt;
-
-    if (opt == "Y" || opt == "y") 
-    {
-        recipes[index].isFavorite = true;
-        cout<<endl;
-        cout<<"\033[97m";
-        cout<<"\033[42m";
-        printTabs(5); cout<<"                                                           "<<endl;
-        printTabs(5); cout<<"                Recipe added to Favorites!                 "<<endl;
-        printTabs(5); cout<<"                                                           \033[0m"<<endl;
-    } 
-    else if (opt == "N" || opt == "n") 
-    {
-        recipes[index].isFavorite = false;
-        cout<<endl;
-        cout<<"\033[97m";
-        cout<<"\033[42m";
-        printTabs(5); cout<<"                                                           "<<endl;
-        printTabs(5); cout<<"               Recipe not added to favorites!              "<<endl;
-        printTabs(5); cout<<"                                                           \033[0m"<<endl;
-    } 
-    else 
-    {
-        cout<<endl;
-        cout<<"\033[97m";
-        cout<<"\033[41m";
-        printTabs(5); cout<<"                                                           "<<endl;
-        printTabs(5); cout<<"                     Invalid Input!                        "<<endl;
-        printTabs(5); cout<<"              Recipe not added to Favorites!               "<<endl;
-        printTabs(5); cout<<"                                                           \033[0m"<<endl;
-    }
-
-    // Save favorites to file after modification
-    saveRecipe();
-}
-
-void removeFromFavorites(int index) 
-{
-    // Load recipes from file to update in-memory data
-    loadRecipe();
-
-    // Check if the index is valid
-    if (index < 0 || index >= count) 
-    {
-        cout<<"\033[97m";
-        cout<<"\033[41m";
-        printTabs(5); cout<<"                                                           "<<endl;
-        printTabs(5); cout<<"                  Invalid recipe index!                    "<<endl;
-        printTabs(5); cout<<"                                                           \033[0m"<<endl;
-        cout<<endl;
-        return;
-    }
-
-    string opt;
-
-    printTabs(5); cout<<"  Remove this recipe from favorites? [Y/N]: ";
-    cin>>opt;
-
-    if (opt == "Y" || opt == "y") 
-    {
-        recipes[index].isFavorite = false;
-        cout<<endl;
-        cout<<"\033[97m";
-        cout<<"\033[42m";
-        printTabs(5); cout<<"                                                           "<<endl;
-        printTabs(5); cout<<"              Recipe removed from Favorites!               "<<endl;
-        printTabs(5); cout<<"                                                           \033[0m"<<endl;
-
-        // Save updated favorites to file after modification
-        saveRecipe();
-    } 
-    else if (opt == "N" || opt == "n") 
-    {
-        cout<<endl;
-        cout<<"\033[97m";
-        cout<<"\033[42m";
-        printTabs(5); cout<<"                                                           "<<endl;
-        printTabs(5); cout<<"               Recipe remains in Favorites!                "<<endl;
-        printTabs(5); cout<<"                                                           \033[0m"<<endl;
-    } 
-    else 
-    {
-        cout<<"\033[97m";
-        cout<<"\033[41m";
-        printTabs(5); cout<<"                                                           "<<endl;
-        printTabs(5); cout<<"                     Invalid Input!                        "<<endl;
-        printTabs(5); cout<<"            Recipe not removed from Favorites!             "<<endl;
-        printTabs(5); cout<<"                                                           \033[0m"<<endl;
-        cout<<endl;
-        return;
-    }
-}
-
-void printTabs(int tabNum) 
-{
-    for (int i = 0; i < tabNum; ++i) 
-    {
-        cout<<"\t";
-    }
-}
-
-void clearScreen()
-{
-    cout<<"\033[2J\033[1;1H";
-}
-
 void displayByDifficulty(DifficultyLevel level) 
 {
     clearScreen();
@@ -2372,4 +2292,127 @@ void displayByDifficulty(DifficultyLevel level)
                 exit(1);
         }
     }
+}
+
+void addToFavorites(int index) 
+{
+    if (index < 0 || index >= count) 
+    {
+        cout<<"\033[97m";
+        cout<<"\033[41m";
+        printTabs(5); cout<<"                                                           "<<endl;
+        printTabs(5); cout<<"                  Invalid recipe index!                    "<<endl;
+        printTabs(5); cout<<"                                                           \033[0m"<<endl;
+        cout<<endl;
+        return;
+    }
+
+    string opt;
+
+    printTabs(5); cout<<"  Add this recipe to favorites? [Y/N]: ";
+    cin>>opt;
+
+    if (opt == "Y" || opt == "y") 
+    {
+        recipes[index].isFavorite = true;
+        cout<<endl;
+        cout<<"\033[97m";
+        cout<<"\033[42m";
+        printTabs(5); cout<<"                                                           "<<endl;
+        printTabs(5); cout<<"                Recipe added to Favorites!                 "<<endl;
+        printTabs(5); cout<<"                                                           \033[0m"<<endl;
+    } 
+    else if (opt == "N" || opt == "n") 
+    {
+        recipes[index].isFavorite = false;
+        cout<<endl;
+        cout<<"\033[97m";
+        cout<<"\033[42m";
+        printTabs(5); cout<<"                                                           "<<endl;
+        printTabs(5); cout<<"               Recipe not added to favorites!              "<<endl;
+        printTabs(5); cout<<"                                                           \033[0m"<<endl;
+    } 
+    else 
+    {
+        cout<<endl;
+        cout<<"\033[97m";
+        cout<<"\033[41m";
+        printTabs(5); cout<<"                                                           "<<endl;
+        printTabs(5); cout<<"                     Invalid Input!                        "<<endl;
+        printTabs(5); cout<<"              Recipe not added to Favorites!               "<<endl;
+        printTabs(5); cout<<"                                                           \033[0m"<<endl;
+    }
+
+    // Save favorites to file after modification
+    saveRecipe();
+}
+
+void removeFromFavorites(int index) 
+{
+    // Load recipes from file to update in-memory data
+    loadRecipe();
+
+    // Check if the index is valid
+    if (index < 0 || index >= count) 
+    {
+        cout<<"\033[97m";
+        cout<<"\033[41m";
+        printTabs(5); cout<<"                                                           "<<endl;
+        printTabs(5); cout<<"                  Invalid recipe index!                    "<<endl;
+        printTabs(5); cout<<"                                                           \033[0m"<<endl;
+        cout<<endl;
+        return;
+    }
+
+    string opt;
+
+    printTabs(5); cout<<"  Remove this recipe from favorites? [Y/N]: ";
+    cin>>opt;
+
+    if (opt == "Y" || opt == "y") 
+    {
+        recipes[index].isFavorite = false;
+        cout<<endl;
+        cout<<"\033[97m";
+        cout<<"\033[42m";
+        printTabs(5); cout<<"                                                           "<<endl;
+        printTabs(5); cout<<"              Recipe removed from Favorites!               "<<endl;
+        printTabs(5); cout<<"                                                           \033[0m"<<endl;
+
+        // Save updated favorites to file after modification
+        saveRecipe();
+    } 
+    else if (opt == "N" || opt == "n") 
+    {
+        cout<<endl;
+        cout<<"\033[97m";
+        cout<<"\033[42m";
+        printTabs(5); cout<<"                                                           "<<endl;
+        printTabs(5); cout<<"               Recipe remains in Favorites!                "<<endl;
+        printTabs(5); cout<<"                                                           \033[0m"<<endl;
+    } 
+    else 
+    {
+        cout<<"\033[97m";
+        cout<<"\033[41m";
+        printTabs(5); cout<<"                                                           "<<endl;
+        printTabs(5); cout<<"                     Invalid Input!                        "<<endl;
+        printTabs(5); cout<<"            Recipe not removed from Favorites!             "<<endl;
+        printTabs(5); cout<<"                                                           \033[0m"<<endl;
+        cout<<endl;
+        return;
+    }
+}
+
+void printTabs(int tabNum) 
+{
+    for (int i = 0; i < tabNum; ++i) 
+    {
+        cout<<"\t";
+    }
+}
+
+void clearScreen()
+{
+    cout<<"\033[2J\033[1;1H";
 }
