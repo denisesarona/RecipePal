@@ -1416,8 +1416,9 @@ void checkExistingRecipe()
         cout<<"\033[30m";
         printTabs(5); cout<<"                                                           "<<endl;
         printTabs(5); cout<<"  [1] View Recipe Details                                  "<<endl;
-        printTabs(5); cout<<"  [2] Back to Homepage                                     "<<endl;
-        printTabs(5); cout<<"  [3] Exit the Program                                     "<<endl;
+        printTabs(5); cout<<"  [2] Add a Recipe to Favorites                            "<<endl;
+        printTabs(5); cout<<"  [3] Back to Homepage                                     "<<endl;
+        printTabs(5); cout<<"  [4] Exit the Program                                     "<<endl;
         printTabs(5); cout<<"                                                           \033[0m"<<endl;
         cout<<endl;
         printTabs(5); cout<<"  Enter Option: ";
