@@ -88,9 +88,11 @@ void viewRecipe(int recipeNumber);
 void viewRecipeDetails(int index);
 void chooseCategory();
 void chooseDifficulty();
+void chooseMethod();
 void displayFavoriteRecipes();
 void displayByCategory(Category category);
 void displayByDifficulty(DifficultyLevel level);
+void displayByMethod(Method method);
 void addToFavorites(int index);
 void removeFromFavorites(int index);
 void printTabs(int tabNum);
@@ -214,7 +216,8 @@ int main()
         printTabs(5); cout<<"  [2] Favorite Recipes                                     "<<endl; 
         printTabs(5); cout<<"  [3] View Recipes by Category                             "<<endl; 
         printTabs(5); cout<<"  [4] View Recipes by Difficulty                           "<<endl;
-        printTabs(5); cout<<"  [5] Exit                                                 "<<endl;
+        printTabs(5); cout<<"  [5] View Recipes by Cooking Method                       "<<endl;
+        printTabs(5); cout<<"  [6] Exit                                                 "<<endl;
         printTabs(5); cout<<"                                                           \033[0m"<<endl;
         cout<<endl; 
 
@@ -309,6 +312,9 @@ int main()
                 chooseDifficulty(); // FUNCTION CALL TO VIEW RECIPES BY DIFFICULTY
                 break;
             case 5: 
+                chooseMethod(); // FUNCTION CALL TO VIEW RECIPES BY DIFFICULTY
+                break;
+            case 6: 
                 printTabs(5); cout<<"  Exiting the program..."<<endl;
                 exit(0); 
             default: 
@@ -1618,17 +1624,18 @@ void checkExistingRecipe() // FUNCTION TO ALLOW USER TO CHECK EXISTING RECIPE
     cout<<endl;
 
     // DISPLAY TABLE HEADER FOR RECIPES
-    printTabs(3); cout<<" "<<setw(15)<<left<<"Recipe No."<<setw(25)<<left<<"Recipe Name"<<setw(25)<<left<<"Category"<<setw(20)<<left<<"Difficulty Level"<<endl;
-    printTabs(3); cout<<" -----------------------------------------------------------------------------------"<<endl;
+    printTabs(2); cout<<" "<<setw(15)<<left<<"Recipe No."<<setw(20)<<left<<"Recipe Name"<<setw(20)<<left<<"Category"<<setw(25)<<left<<"Difficulty Level"<<setw(15)<<left<<"Cooking Method"<<endl;
+    printTabs(2); cout<<"--------------------------------------------------------------------------------------------------"<<endl;
 
         // DISPLAY EACH RECIPE WITH ITS DETAILS
     for (int i = 0; i < count; i++) 
     {
-        printTabs(3);
+        printTabs(2);
         cout<<"    "<<setw(15)<<left<< i + 1;
-        cout<<setw(25)<<left<<recipes[i].name;
-        cout<<setw(25)<<left<<categoryToString(recipes[i].category);
-        cout<<setw(20)<<left<<difficultyLevelToString(recipes[i].difficulty_level)<<endl;
+        cout<<setw(15)<<left<<recipes[i].name;
+        cout<<setw(21)<<left<<categoryToString(recipes[i].category);
+        cout<<setw(30)<<left<<difficultyLevelToString(recipes[i].difficulty_level);
+        cout<<setw(20)<<left<<methodToString(recipes[i].method)<<endl;
     }
     
     cout<<endl;
@@ -1883,26 +1890,23 @@ void chooseCategory() // FUNCTION ALLOWS USER TO SELECT A CATEGORY FROM A PREDEF
 {
     clearScreen();
     
-    cout<<"\033[48;2;255;255;255m";
-    cout<<"\033[30m";
-    
     // PRINT HEADER
     printTabs(5); cout<<"                                                           "<<endl; 
     printTabs(5); cout<<"                   Select a Category!                      "<<endl; 
     printTabs(5); cout<<"                                                           "<<endl;
-    printTabs(5); cout<<"  [1] Appetizer                                            "<<endl; 
-    printTabs(5); cout<<"  [2] Main Course                                          "<<endl; 
-    printTabs(5); cout<<"  [3] Dessert                                              "<<endl; 
-    printTabs(5); cout<<"  [4] Soup                                                 "<<endl; 
-    printTabs(5); cout<<"  [5] Snack                                                "<<endl; 
-    printTabs(5); cout<<"  [6] Breakfast                                            "<<endl; 
-    printTabs(5); cout<<"  [7] Side Dish                                            "<<endl;
-    printTabs(5); cout<<"  [8] Other                                                "<<endl; 
-    printTabs(5); cout<<"                                                           \033[0m"<<endl;
+    printTabs(5); cout<<"                   [1] Appetizer                           "<<endl; 
+    printTabs(5); cout<<"                   [2] Main Course                         "<<endl; 
+    printTabs(5); cout<<"                   [3] Dessert                             "<<endl; 
+    printTabs(5); cout<<"                   [4] Soup                                "<<endl; 
+    printTabs(5); cout<<"                   [5] Snack                               "<<endl; 
+    printTabs(5); cout<<"                   [6] Breakfast                           "<<endl; 
+    printTabs(5); cout<<"                   [7] Side Dish                           "<<endl;
+    printTabs(5); cout<<"                   [8] Other                               "<<endl; 
+    printTabs(5); cout<<"                                                           "<<endl;
     cout<<endl;
 
     // PROMPT USER FOR INPUT
-    printTabs(5); cout<<"  Enter your choice: ";
+    printTabs(5); cout<<"                  Enter your choice: ";
     
     int categoryOption;
     cin >> categoryOption;
@@ -1961,20 +1965,18 @@ void chooseCategory() // FUNCTION ALLOWS USER TO SELECT A CATEGORY FROM A PREDEF
 void chooseDifficulty() // FUNCTION ALLOWS USER TO SELECT A DIFFICULTY FROM A PREDEFINED LIST
 {
     clearScreen(); // CLEAR THE SCREEN
-    
-    cout<<"\033[48;2;255;255;255m";
-    cout<<"\033[30m";
+
     printTabs(5); cout<<"                                                           "<<endl; 
     printTabs(5); cout<<"                Select a Cooking Difficulty!               "<<endl; 
     printTabs(5); cout<<"                                                           "<<endl;
-    printTabs(5); cout<<"  [1] Beginner Level                                       "<<endl; 
-    printTabs(5); cout<<"  [2] Intermediate Level                                   "<<endl; 
-    printTabs(5); cout<<"  [3] Advanced Level                                       "<<endl; 
-    printTabs(5); cout<<"                                                           \033[0m"<<endl;
+    printTabs(5); cout<<"                [1] Beginner Level                         "<<endl; 
+    printTabs(5); cout<<"                [2] Intermediate Level                     "<<endl; 
+    printTabs(5); cout<<"                [3] Advanced Level                         "<<endl; 
+    printTabs(5); cout<<"                                                           "<<endl;
     cout<<endl;
 
     // PROMPT USER FOR INPUT
-    printTabs(5); cout<<"  Enter your choice: ";
+    printTabs(5); cout<<"                   Enter your choice: ";
 
     int levelOption;
     cin >> levelOption;
@@ -2012,6 +2014,298 @@ void chooseDifficulty() // FUNCTION ALLOWS USER TO SELECT A DIFFICULTY FROM A PR
 
     // DISPLAY RECIPES BY SELECTED DIFFICULTY LEVEL
     displayByDifficulty(level);
+}
+
+void chooseMethod() // FUNCTION ALLOWS USER TO SELECT A DIFFICULTY FROM A PREDEFINED LIST
+{
+    clearScreen(); // CLEAR THE SCREEN
+    
+    printTabs(5); cout<<"                                                           "<<endl; 
+    printTabs(5); cout<<"                  Select a Cooking Method!                 "<<endl; 
+    printTabs(5); cout<<"                                                           "<<endl;
+    printTabs(5); cout<<"                  [1] Sauteeing                        "<<endl; 
+    printTabs(5); cout<<"                  [2] Boiling                          "<<endl; 
+    printTabs(5); cout<<"                  [3] Blanching                        "<<endl;
+    printTabs(5); cout<<"                  [4] Broiling                         "<<endl; 
+    printTabs(5); cout<<"                  [5] Stewing                          "<<endl; 
+    printTabs(5); cout<<"                  [6] Grilling                         "<<endl; 
+    printTabs(5); cout<<"                  [7] Baking                           "<<endl; 
+    printTabs(5); cout<<"                  [8] Barbeque                         "<<endl; 
+    printTabs(5); cout<<"                  [9] Oven Roasting                    "<<endl; 
+    printTabs(5); cout<<"                  [10] Braising                        "<<endl; 
+    printTabs(5); cout<<"                  [11] Pressure Cooking                "<<endl; 
+    printTabs(5); cout<<"                  [12] Skillet Cooking                 "<<endl; 
+    printTabs(5); cout<<"                  [13] DeepFrying                      "<<endl; 
+    printTabs(5); cout<<"                  [14] Steaming                        "<<endl; 
+    printTabs(5); cout<<"                  [15] StirFrying                      "<<endl; 
+    printTabs(5); cout<<"                  [16] Others                          "<<endl; 
+    printTabs(5); cout<<"                                                           "<<endl;
+    cout<<endl;
+
+    // PROMPT USER FOR INPUT
+    printTabs(5); cout<<"                    Enter your choice: ";
+
+    int methodOption;
+    cin >> methodOption;
+    cin.ignore(); // Consume the newline left by cin
+    
+    Method method;
+
+    // MAP USER INPUT TO DIFFICULTY ENUM
+
+    switch (methodOption) 
+    {
+        case 1:
+            method = Sauteeing;
+            break;
+        case 2:
+            method = Boiling;
+            break;
+        case 3:
+            method = Blanching;
+            break;
+        case 4:
+            method = Broiling;
+            break;
+        case 5:
+            method = Stewing;
+            break;
+        case 6:
+            method = Grilling;
+            break;
+        case 7:
+            method = Baking;
+            break;
+        case 8:
+            method = Barbeque;
+            break;
+        case 9:
+            method = OvenRoasting;
+            break;
+        case 10:
+            method = Braising;
+            break;
+        case 11:
+            method = PressureCooking;
+            break;
+        case 12:
+            method = SkilletCooking;
+            break;
+        case 13:
+            method = DeepFrying;
+            break;
+        case 14:
+            method = Steaming;
+            break;
+        case 15:
+            method = StirFrying;
+            break;
+        case 16:
+            method = Others;
+            break;
+        default:
+            // HANDLE INVALID OPTION
+            cout<<endl;
+            cout<<"\033[97m";
+            cout<<"\033[41m"; 
+            printTabs(5); cout<<"                                                           "<<endl;
+            printTabs(5); cout<<"                      Invalid Option!                      "<<endl;
+            printTabs(5); cout<<"                                                           \033[0m"<<endl;
+            cout<<endl;
+
+            printTabs(6); cout<< "        Press Enter to continue...";
+            cin.ignore(); // Clear input buffer
+            cin.get(); // Wait for user to press Enter
+
+            return;
+    }
+
+    // DISPLAY RECIPES BY SELECTED DIFFICULTY LEVEL
+    displayByMethod(method);
+}
+
+void displayByMethod(Method method) // FUNCTION TO DISPLAY RECIPES BY DIFFICULTY
+{
+    clearScreen();  // CLEAR THE SCREEN BEFORE DISPLAYING THE RECIPES
+
+    printTabs(5); cout<<"                                                                    "<<endl;
+    printTabs(5); cout<<"           Recipes in Cooking Method: " << methodToString(method)<<endl;
+    printTabs(5); cout<<"                                                                    "<<endl;
+    cout<<endl;
+    printTabs(6); cout<<"      "<<setw(20)<<left<<"Recipe No."<<setw(25)<<left<<"Recipe Name"<<endl;
+    printTabs(6); cout<<"-----------------------------------------"<<endl;
+
+    vector<int> methodIndexes; // STORE INDEXES OF CURRENT RECIPE LEVELS
+    int methodCount = 0;
+
+    for (int i = 0; i < count; ++i) 
+    {
+        if (recipes[i].method == method) 
+        {
+            printTabs(7);
+            cout<<setw(21)<<methodCount + 1; // RECIPE NUMBER
+            cout<<setw(25)<<recipes[i].name<<endl; 
+            methodIndexes.push_back(i); 
+            methodCount++;
+        }
+    }
+
+    cout<<endl;
+
+    if (methodCount == 0) 
+    {
+        // IF NO RECIPES FOUND, PROMPT USER WITH OPTIONS
+        printTabs(6); cout<<" No recipes found in this cooking method."<<endl;
+        cout<< endl;
+        cout<<"\033[47m"; 
+        cout<<"\033[30m"; 
+        printTabs(5); cout<<"                                                           "<<endl;
+        printTabs(5); cout<<"  [1] Choose another Cooking Method                        "<<endl;
+        printTabs(5); cout<<"  [2] Back to Homepage                                     "<<endl;
+        printTabs(5); cout<<"  [3] Exit the Program                                     "<<endl;
+        printTabs(5); cout<<"                                                           \033[0m"<<endl;
+        cout<<endl;
+
+        printTabs(5); cout<<"  Enter Option: ";
+        int option;
+        cin>>option;
+
+        switch (option) 
+        {
+            case 1:
+                chooseMethod();
+                break;
+            case 2:
+                return;
+            case 3:
+                printTabs(5); cout<<"  Exiting the program..."<<endl;
+                exit(0);
+            default:
+                // IF INVALID OPTION, NOTIFY USER AND EXIT
+                cout<<endl;
+                cout<<"\033[97m";  
+                cout<<"\033[41m";  
+                printTabs(5); cout<<"                                                           "<<endl;
+                printTabs(5); cout<<"                      Invalid Choice!                      "<<endl;
+                printTabs(5); cout<<"                                                           \033[0m"<<endl;
+                cout<<endl;
+                printTabs(5); cout<<"  Exiting the program..."<<endl;
+                exit(1);
+        }
+    } 
+    else 
+    {
+        // IF RECIPES FOUND, DISPLAY OPTIONS TO USER
+        cout<<"\033[47m";  
+        cout<<"\033[30m";  
+        printTabs(5); cout<<"                                                           "<<endl;
+        printTabs(5); cout<<"  [1] View Recipe Details                                  "<<endl;
+        printTabs(5); cout<<"  [2] Choose another Cooking Method                        "<<endl;
+        printTabs(5); cout<<"  [3] Back to Homepage                                     "<<endl;
+        printTabs(5); cout<<"  [4] Exit the Program                                     "<<endl;
+        printTabs(5); cout<<"                                                           \033[0m"<<endl;
+        cout<<endl;
+
+        printTabs(5); cout<<"  Enter Option: ";
+        int option;
+        cin>>option;
+
+        switch (option) 
+        {
+            case 1: 
+            {
+                // VIEW DETAILS OF SELECTED RECIPE
+                int recipeNumber;
+
+                printTabs(5); cout<<"  Enter Recipe Number: ";
+                cin>>recipeNumber;
+
+                if (recipeNumber >= 1 && recipeNumber <= methodCount) 
+                {
+                    int index = methodIndexes[recipeNumber - 1]; // GET INDEX
+                    viewRecipeDetails(index); 
+
+                    // AFTER VIEWING RECIPE DETAILS, SHOW MENU AGAIN
+                    cout<<endl;
+                    cout<<"\033[47m";  
+                    cout<<"\033[30m"; 
+                    printTabs(5); cout<<"                                                           "<<endl;
+                    printTabs(5); cout<<"  [1] Choose another Cooking Method                        "<<endl;
+                    printTabs(5); cout<<"  [2] Back to Homepage                                     "<<endl;
+                    printTabs(5); cout<<"  [3] Exit the Program                                     "<<endl;
+                    printTabs(5); cout<<"                                                           \033[0m"<<endl;
+                    cout<<endl;
+
+                    printTabs(5); cout<<"  Enter Option: ";
+                    int option;
+                    cin>>option;
+
+                    switch (option) 
+                    {
+                        case 1:
+                            chooseMethod();
+                            break;
+                        case 2:
+                            return; 
+                        case 3:
+                            printTabs(5); cout<<"  Exiting the program..."<<endl;
+                            exit(0); 
+                        default:
+                            // IF INVALID OPTION, NOTIFY USER AND EXIT
+                            cout<<endl;
+                            cout<<"\033[97m";  
+                            cout<<"\033[41m";  
+                            printTabs(5); cout<<"                                                           "<<endl;
+                            printTabs(5); cout<<"                      Invalid Choice!                      "<<endl;
+                            printTabs(5); cout<<"                                                           \033[0m"<<endl;
+                            cout<<endl;
+
+                            printTabs(5); cout<<"  Exiting the program..."<<endl;
+                            cin.ignore();
+                            cin.get();
+                            return;
+                    }
+                } 
+                else 
+                {
+                    // IF INVALID RECIPE NUMBER, NOTIFY USER AND REDIRECT TO CHOOSE DIFFICULTY LEVEL
+                    cout<<endl;
+                    cout<<"\033[97m";  
+                    cout<<"\033[41m";  
+                    printTabs(5); cout<<"                                                           "<<endl;
+                    printTabs(5); cout<<"                    Invalid Recipe Number!                 "<<endl;
+                    printTabs(5); cout<<"                                                           \033[0m"<<endl;
+                    cout<<endl;
+
+                    printTabs(6); cout<< "        Press Enter to continue...";
+                    cin.ignore(); // CLEAR INPUT BUFFER
+                    cin.get(); 
+
+                    chooseMethod();
+                }
+                break;
+            }
+            case 2:
+                chooseMethod();
+                break;
+            case 3:
+                return;
+            case 4:
+                printTabs(5); cout<<"  Exiting the program..."<<endl;
+                exit(0); 
+            default:
+                // IF INVALID OPTION, NOTIFY USER AND EXIT
+                cout<<endl;
+                cout<<"\033[97m";  
+                cout<<"\033[41m"; 
+                printTabs(5); cout<<"                                                           "<<endl;
+                printTabs(5); cout<<"                      Invalid Choice!                      "<<endl;
+                printTabs(5); cout<<"                                                           \033[0m"<<endl;
+                cout<<endl;
+                printTabs(5); cout<<"  Exiting the program..." << endl;
+                exit(1);
+        }
+    }
 }
 
 void displayFavoriteRecipes() // FUNCTION TO DISPLAY RECIPES BY FAVORITES
@@ -2248,14 +2542,8 @@ void displayByCategory(Category category) // FUNCTION TO DISPLAY RECIPES BY CATE
     if (categCount == 0) 
     {
         // IF NO RECIPES FOUND IN THE CATEGORY, DISPLAY ERROR MESSAGE AND OPTIONS
-        cout<<"\033[97m";
-        cout<<"\033[41m";
-        printTabs(5); cout << "                                                           "<<endl;
-        printTabs(5); cout << "            No recipes found in this category!             "<<endl;
-        printTabs(5); cout << "                                                           \033[0m"<<endl;
-        cout<<endl;
-
-        // DISPLAY MENU OPTIONS FOR NO RECIPES FOUND
+        printTabs(6); cout<<" No recipes found in this cooking method."<<endl;
+        cout<< endl;
         cout<<"\033[47m";
         cout<<"\033[30m";
         printTabs(5); cout<<"                                                           "<<endl;
