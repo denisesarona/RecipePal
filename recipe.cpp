@@ -1348,7 +1348,7 @@ void deleteRecipe() // FUNCTION TO ALLOW USER TO DELETE A RECIPE
                 {
                     write<<recipes[i].instruction[j]<<"|";
                 }
-                write<<recipes[i].cooking_time<<"|"<<difficultyLevelToString(recipes[i].difficulty_level)<<"|"<<categoryToString(recipes[i].category)<<endl;
+                write<<recipes[i].cooking_time<<"|"<<static_cast<DifficultyLevel>(recipes[i].difficulty_level)<<"|"<<static_cast<Category>(recipes[i].category)<<endl;
             }
             write.close();
 

@@ -1,8 +1,3 @@
-7
-s|1|df|df|1|df|df|0|10|0
-|1|||1|||0|10|0
-|1|||1|||0|10|0
-Nuggets|1|sd|sd|1|sd|1|0|10|0
-Beef Steak|1|dsf|df|1|df|1|0|10|0
-HAhh|1|ds|sd|1|sd|sd|0|10|0
-Egg|1|sdd|ds|1|xdf\|s|1|3|1
+2
+Hotdog|1|dsfsd|sdf|1|sdf|sdf|1|3
+fsdf|2|sdf|sdf|sdf|sdf|3|dsf|sdf|sdf|3|1|8
