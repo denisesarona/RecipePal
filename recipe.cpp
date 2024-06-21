@@ -185,8 +185,8 @@ int opt = 0, count = 0;
 
 int main() 
 {    
-    header();          // FUNCTION CALL TO DISPLAY HEADER
     loadRecipe();      // FUNCTION CALL TO LOAD RECIPES
+    header();          // FUNCTION CALL TO DISPLAY HEADER
     clearScreen();     // FUNCTION CALL TO CLEAR SCREEN
 
     int option;        // VARIABLE TO STORE USER OPTION
@@ -1451,27 +1451,6 @@ void searchRecipe() // FUNCTION TO ALLOW USER TO SEARCH A RECIPE
 
 void deleteRecipe() // FUNCTION TO ALLOW USER TO DELETE A RECIPE
 {
-    ifstream file("recipes.txt"); // OPEN THE RECIPES FILE FOR READING
-
-    if (!file.is_open()) 
-    {
-        // DISPLAY ERROR MESSAGE IF FILE OPENING FAILED
-        cout<<endl;
-        cout<<"\033[97m";
-        cout<<"\033[41m";
-        printTabs(5); cout<<"                                                           "<<endl;
-        printTabs(5); cout<<"                  Unable to open file!                     "<<endl;
-        printTabs(5); cout<<"                                                           \033[0m"<<endl;
-        cout<<endl;
-
-        // PROMPT USER TO CONTINUE
-        printTabs(6); cout<<"        Press Enter to continue...";
-        cin.ignore();
-        cin.get();
-        file.close();
-        return; // EXIT FUNCTION
-    }
-
     clearScreen(); // CLEAR THE SCREEN
 
     // DISPLAY HEADER FOR DELETE OPERATION
@@ -1482,12 +1461,16 @@ void deleteRecipe() // FUNCTION TO ALLOW USER TO DELETE A RECIPE
     printTabs(5); cout<<"                                                           \033[0m"<<endl;
     cout<<endl;
 
-    printTabs(5); cout<<"  Existing Recipes:"<<endl;
-
-    // DISPLAY LIST OF EXISTING RECIPES
-    for (int i = 0; i < count; i++) 
+    if(count == 0)
     {
-        printTabs(5); cout<<"  "<< i + 1 <<". "<<recipes[i].name<<endl;
+        printTabs(5); cout<<"No recipes to delete."<<endl;
+    } else 
+    {
+        printTabs(5); cout<<"  Existing Recipes:"<<endl;
+        for (int i = 0; i < count; i++) 
+        {
+            printTabs(5); cout<<"  "<< i + 1 <<". "<<recipes[i].name<<endl;
+        }
     }
 
     int num = 0;
@@ -1516,7 +1499,6 @@ void deleteRecipe() // FUNCTION TO ALLOW USER TO DELETE A RECIPE
         cin.ignore();
         cin.get();
 
-        file.close();
         return; // EXIT FUNCTION
     }
 
@@ -1539,54 +1521,15 @@ void deleteRecipe() // FUNCTION TO ALLOW USER TO DELETE A RECIPE
             recipes[i] = recipes[i + 1];
         }
         count--;
-
-        ofstream write("recipes.txt"); // OPEN FILE FOR WRITING
-
-        if (write.is_open()) 
-        {
-            // WRITE UPDATED NUMBER OF RECIPES
-            write<<count<<endl;
-
-            // WRITE EACH RECIPE'S DETAILS TO FILE
-            for (int i = 0; i < count; i++) 
-            {
-                write<<recipes[i].name<<"|"<<recipes[i].ingredients.size()<<"|";
-
-                // WRITE INGREDIENTS DETAILS
-                for (size_t j = 0; j < recipes[i].ingredients.size(); j++) 
-                {
-                    write<<recipes[i].ingredients[j].name<<"|"<<recipes[i].ingredients[j].unit<<"|";
-                }
-                write<<recipes[i].instruction.size()<<"|";
-
-                // WRITE INSTRUCTION STEPS
-                for (size_t j = 0; j < recipes[i].instruction.size(); j++) 
-                {
-                    write<<recipes[i].instruction[j]<<"|";
-                }
-                write<<recipes[i].cooking_time<<"|"<<static_cast<DifficultyLevel>(recipes[i].difficulty_level)<<"|"<<static_cast<Category>(recipes[i].category)<<"|"<<static_cast<Method>(recipes[i].method)<<endl;
-            }
-            write.close();
-
-            // DISPLAY SUCCESS MESSAGE FOR DELETION
-            cout<<endl;
-            cout<<"\033[97m";
-            cout<<"\033[42m";
-            printTabs(5); cout<<"                                                           "<<endl;
-            printTabs(5); cout<<"               Recipe Deleted Successfully!                "<<endl;
-            printTabs(5); cout<<"                                                           \033[0m"<<endl;
-        } 
-        else 
-        {
-            // HANDLE ERROR IF UNABLE TO OPEN FILE FOR WRITING
-            cout<<endl;
-            cout<<"\033[97m";
-            cout<<"\033[41m";
-            printTabs(5); cout<<"                                                           "<<endl;
-            printTabs(5); cout<<"                    Unable to open file!                   "<<endl;
-            printTabs(5); cout<<"                                                           \033[0m"<<endl;
-            cout<<endl;
-        }
+    
+        // DISPLAY SUCCESS MESSAGE FOR DELETION
+        cout<<endl;
+        cout<<"\033[97m";
+        cout<<"\033[42m";
+        printTabs(5); cout<<"                                                           "<<endl;
+        printTabs(5); cout<<"               Recipe Deleted Successfully!                "<<endl;
+        printTabs(5); cout<<"                                                           \033[0m"<<endl;
+        saveRecipe();
     } 
     else 
     {
@@ -1642,6 +1585,7 @@ void checkExistingRecipe() // FUNCTION TO ALLOW USER TO CHECK EXISTING RECIPE
 {
     clearScreen(); // CLEAR THE SCREEN BEFORE DISPLAYING CONTENTS
 
+    loadRecipe(); // LOAD RECIPES INTO MEMORY
     ifstream file("recipes.txt"); // OPEN THE RECIPES FILE FOR READING
 
     if (!file.is_open()) 
@@ -1665,154 +1609,150 @@ void checkExistingRecipe() // FUNCTION TO ALLOW USER TO CHECK EXISTING RECIPE
 
     clearScreen(); // CLEAR THE SCREEN AGAIN BEFORE DISPLAYING RECIPES
 
-    if(file.is_open())
-    {
-        loadRecipe(); // LOAD RECIPES INTO MEMORY
+    // DISPLAY HEADER FOR CHECKING EXISTING RECIPES
+    cout<<"\033[46m";
+    cout<<"\033[97m";
+    printTabs(5); cout<<"                                                           "<<endl;
+    printTabs(5); cout<<"                   Check Existing Recipe                   "<<endl;
+    printTabs(5); cout<<"                                                           \033[0m"<<endl;
+    cout<<endl;
 
-        // DISPLAY HEADER FOR CHECKING EXISTING RECIPES
-        cout<<"\033[46m";
-        cout<<"\033[97m";
-        printTabs(5); cout<<"                                                           "<<endl;
-        printTabs(5); cout<<"                   Check Existing Recipe                   "<<endl;
-        printTabs(5); cout<<"                                                           \033[0m"<<endl;
-        cout<<endl;
-
-        // DISPLAY TABLE HEADER FOR RECIPES
-        printTabs(3); cout<<" "<<setw(15)<<left<<"Recipe No."<<setw(25)<<left<<"Recipe Name"<<setw(25)<<left<<"Category"<<setw(20)<<left<<"Difficulty Level"<<endl;
-        printTabs(3); cout<<" -----------------------------------------------------------------------------------"<<endl;
+    // DISPLAY TABLE HEADER FOR RECIPES
+    printTabs(3); cout<<" "<<setw(15)<<left<<"Recipe No."<<setw(25)<<left<<"Recipe Name"<<setw(25)<<left<<"Category"<<setw(20)<<left<<"Difficulty Level"<<endl;
+    printTabs(3); cout<<" -----------------------------------------------------------------------------------"<<endl;
 
         // DISPLAY EACH RECIPE WITH ITS DETAILS
-        for (int i = 0; i < count; i++) 
-        {
-            printTabs(3);
-            cout<<"    "<<setw(15)<<left<< i + 1;
-            cout<<setw(25)<<left<<recipes[i].name;
-            cout<<setw(25)<<left<<categoryToString(recipes[i].category);
-            cout<<setw(20)<<left<<difficultyLevelToString(recipes[i].difficulty_level)<<endl;
-        }
+    for (int i = 0; i < count; i++) 
+    {
+        printTabs(3);
+        cout<<"    "<<setw(15)<<left<< i + 1;
+        cout<<setw(25)<<left<<recipes[i].name;
+        cout<<setw(25)<<left<<categoryToString(recipes[i].category);
+        cout<<setw(20)<<left<<difficultyLevelToString(recipes[i].difficulty_level)<<endl;
+    }
     
-        cout<<endl;
+    cout<<endl;
 
-        // DISPLAY MENU FOR FURTHER ACTIONS
-        cout<<"\033[47m";
-        cout<<"\033[30m";
-        printTabs(5); cout<<"                                                           "<<endl;
-        printTabs(5); cout<<"  [1] View Recipe Details                                  "<<endl;
-        printTabs(5); cout<<"  [2] Add a Recipe to Favorites                            "<<endl;
-        printTabs(5); cout<<"  [3] Back to Recipe Menu                                  "<<endl;
-        printTabs(5); cout<<"  [4] Exit the Program                                     "<<endl;
-        printTabs(5); cout<<"                                                           \033[0m"<<endl;
-        cout<<endl;
-        printTabs(5); cout<<"  Enter Option: ";
+    // DISPLAY MENU FOR FURTHER ACTIONS
+    cout<<"\033[47m";
+    cout<<"\033[30m";
+    printTabs(5); cout<<"                                                           "<<endl;
+    printTabs(5); cout<<"  [1] View Recipe Details                                  "<<endl;
+    printTabs(5); cout<<"  [2] Add a Recipe to Favorites                            "<<endl;
+    printTabs(5); cout<<"  [3] Back to Recipe Menu                                  "<<endl;
+    printTabs(5); cout<<"  [4] Exit the Program                                     "<<endl;
+    printTabs(5); cout<<"                                                           \033[0m"<<endl;
+    cout<<endl;
+    printTabs(5); cout<<"  Enter Option: ";
 
-        int option;
-        cin>>option;
+    int option;
+    cin>>option;
 
-        switch (option) 
+    switch (option) 
+    {
+        case 1: 
         {
-            case 1: 
+            int recipeNumber;
+            printTabs(5); cout<<"  Enter Recipe Number: ";
+            cin>>recipeNumber;
+
+            // VALIDATE THE RECIPE NUMBER
+            if (recipeNumber >= 1 && recipeNumber <= count) 
             {
-                int recipeNumber;
-                printTabs(5); cout<<"  Enter Recipe Number: ";
-                cin>>recipeNumber;
-
-                // VALIDATE THE RECIPE NUMBER
-                if (recipeNumber >= 1 && recipeNumber <= count) 
-                {
-                    viewRecipe(recipeNumber); // DISPLAY DETAILS OF THE SELECTED RECIPE
+                viewRecipe(recipeNumber); // DISPLAY DETAILS OF THE SELECTED RECIPE
                     
-                    cout<<endl;
-                    printTabs(6); cout<<"  Press Enter to return to the main menu...";
+                cout<<endl;
+                printTabs(6); cout<<"  Press Enter to return to the main menu...";
 
-                    cin.ignore();
-                    cin.get();
-                } 
-                else 
-                {
-                    // HANDLE INVALID RECIPE NUMBER
-                    cout<<endl;
-                    cout<<"\033[97m";
-                    cout<<"\033[41m";
-                    printTabs(5); cout<<"                                                           "<<endl;
-                    printTabs(5); cout<<"                    Invalid Recipe Number!                 "<<endl;
-                    printTabs(5); cout<<"                                                           \033[0m"<<endl;
-                    cout<<endl;
-                    printTabs(6); cout<<"  Press Enter to return to the main menu...";
-
-                    cin.ignore();
-                    cin.get();
-                }
-                // STAY ON EXISTING RECIPE PAGE AFTER VIEWING DETAILS
-                checkExistingRecipe();
-                return;
-            }
-            case 2:
+                cin.ignore();
+                cin.get();
+            } 
+            else 
             {
-                int recipeNumber;
-                printTabs(5); cout<<"  Enter Recipe Number: ";
-                cin>>recipeNumber;
-
-                // VALIDATE THE RECIPE NUMBER
-                if (recipeNumber >= 1 && recipeNumber <= count) 
-                {
-                    if (recipes[recipeNumber - 1].isFavorite)
-                    {
-                        // DISPLAY MESSAGE IF RECIPE ALREADY IN FAVORITES
-                        cout<<endl;
-                        cout<<"\033[97m";
-                        cout<<"\033[41m";
-                        printTabs(5); cout<<"                                                           "<<endl;
-                        printTabs(5); cout<<"               Recipe already in favorites!                "<<endl;
-                        printTabs(5); cout<<"                                                           \033[0m"<<endl;
-                    } 
-                    else 
-                    {
-                        addToFavorites(recipeNumber - 1); // ADD RECIPE TO FAVORITES
-                    }
-                    
-                    cout<<endl;
-                    printTabs(6); cout<<"  Press Enter to return to menu...";
-
-                    cin.ignore();
-                    cin.get();
-                } 
-                else 
-                {
-                    // HANDLE INVALID RECIPE NUMBER
-                    cout<<endl;
-                    cout<<"\033[97m";
-                    cout<<"\033[41m";
-                    printTabs(5); cout<<"                                                           "<<endl;
-                    printTabs(5); cout<<"                    Invalid Recipe Number!                 "<<endl;
-                    printTabs(5); cout<<"                                                           \033[0m"<<endl;
-                    cout<<endl;
-                    printTabs(6); cout<<"  Press Enter to return to the main menu...";
-
-                    cin.ignore();
-                    cin.get();
-                }
-                // STAY ON EXISTING RECIPE PAGE AFTER ADDING TO FAVORITES
-                checkExistingRecipe();
-                return;
-            }
-            case 3:
-                return; // RETURN TO THE MAIN LOOP OR HOMEPAGE FUNCTION
-            case 4:
-                printTabs(5); cout<< "  Exiting the program..."<<endl;
-                exit(0); // EXIT THE PROGRAM
-            default:
-                // HANDLE INVALID OPTION AND EXIT
+                // HANDLE INVALID RECIPE NUMBER
                 cout<<endl;
                 cout<<"\033[97m";
                 cout<<"\033[41m";
                 printTabs(5); cout<<"                                                           "<<endl;
-                printTabs(5); cout<<"                      Invalid Choice!                      "<<endl;
+                printTabs(5); cout<<"                    Invalid Recipe Number!                 "<<endl;
                 printTabs(5); cout<<"                                                           \033[0m"<<endl;
                 cout<<endl;
-                printTabs(5); cout<<"  Exiting the program..."<<endl;
-                exit(1);
+                printTabs(6); cout<<"  Press Enter to return to the main menu...";
+
+                cin.ignore();
+                cin.get();
+            }
+            // STAY ON EXISTING RECIPE PAGE AFTER VIEWING DETAILS
+            checkExistingRecipe();
+            return;
         }
+        case 2:
+        {
+            int recipeNumber;
+            printTabs(5); cout<<"  Enter Recipe Number: ";
+            cin>>recipeNumber;
+
+            // VALIDATE THE RECIPE NUMBER
+            if (recipeNumber >= 1 && recipeNumber <= count) 
+            {
+                if (recipes[recipeNumber - 1].isFavorite)
+                {
+                    // DISPLAY MESSAGE IF RECIPE ALREADY IN FAVORITES
+                    cout<<endl;
+                    cout<<"\033[97m";
+                    cout<<"\033[41m";
+                    printTabs(5); cout<<"                                                           "<<endl;
+                    printTabs(5); cout<<"               Recipe already in favorites!                "<<endl;
+                    printTabs(5); cout<<"                                                           \033[0m"<<endl;
+                } 
+                else 
+                {
+                    addToFavorites(recipeNumber - 1); // ADD RECIPE TO FAVORITES
+                }
+                    
+                cout<<endl;
+                printTabs(6); cout<<"  Press Enter to return to menu...";
+
+                cin.ignore();
+                cin.get();
+            } 
+            else 
+            {
+                // HANDLE INVALID RECIPE NUMBER
+                cout<<endl;
+                cout<<"\033[97m";
+                cout<<"\033[41m";
+                printTabs(5); cout<<"                                                           "<<endl;
+                printTabs(5); cout<<"                    Invalid Recipe Number!                 "<<endl;
+                printTabs(5); cout<<"                                                           \033[0m"<<endl;
+                cout<<endl;
+                printTabs(6); cout<<"  Press Enter to return to the main menu...";
+
+                cin.ignore();
+                cin.get();
+            }
+            // STAY ON EXISTING RECIPE PAGE AFTER ADDING TO FAVORITES
+            checkExistingRecipe();
+            return;
+        }
+        case 3:
+            return; // RETURN TO THE MAIN LOOP OR HOMEPAGE FUNCTION
+        case 4:
+            printTabs(5); cout<< "  Exiting the program..."<<endl;
+            exit(0); // EXIT THE PROGRAM
+        default:
+            // HANDLE INVALID OPTION AND EXIT
+            cout<<endl;
+            cout<<"\033[97m";
+            cout<<"\033[41m";
+            printTabs(5); cout<<"                                                           "<<endl;
+            printTabs(5); cout<<"                      Invalid Choice!                      "<<endl;
+            printTabs(5); cout<<"                                                           \033[0m"<<endl;
+            cout<<endl;
+            printTabs(5); cout<<"  Exiting the program..."<<endl;
+            exit(1);
     }
+    file.close();
 }
 
 void viewRecipe(int recipeNumber) // FUNCTION DESIGNED TO DISPLAY INFORMATION ON RECENTLY ADDED/UPDATED RECIPE
