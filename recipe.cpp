@@ -13,7 +13,8 @@ enum DifficultyLevel
 {
     Beginner,        
     Intermediate,    
-    Advanced         
+    Advanced,
+    None    
 };
 
 // ENUMERATION FOR RECIPE CATEGORIES
@@ -108,7 +109,9 @@ string difficultyLevelToString(DifficultyLevel level) // FUNCTION TO CONVERT DIF
         case Intermediate:
             return "Intermediate Level"; 
         case Advanced:
-            return "Advanced Level";    
+            return "Advanced Level"; 
+        case None:
+            return "None";   
         default:
             return "Unknown";         
     }
@@ -2710,21 +2713,19 @@ void displayByDifficulty(DifficultyLevel level) // FUNCTION TO DISPLAY RECIPES B
     printTabs(6); cout<<"      "<<setw(20)<<left<<"Recipe No."<<setw(25)<<left<<"Recipe Name"<<endl;
     printTabs(6); cout<<"-----------------------------------------"<<endl;
 
-    vector<int> levelIndexes; // STORE INDEXES OF CURRENT RECIPE LEVELS
     int levelCount = 0;
+    vector<int> levelIndexes;
 
-    for (int i = 0; i < count; ++i) 
-    {
-        if (recipes[i].difficulty_level == level) 
-        {
-            printTabs(7);
-            cout<<setw(21)<<levelCount + 1; // RECIPE NUMBER
-            cout<<setw(25)<<recipes[i].name<<endl; 
-            levelIndexes.push_back(i); 
+    for (int i = 0; i < count; ++i) {
+        if (recipes[i].difficulty_level == level) {
+            printTabs(6);
+            cout << setw(3) << (levelCount + 1) << ". ";
+            cout << setw(25) << left << recipes[i].name << endl;
+            levelIndexes.push_back(i); // Store index of recipes matching the level
             levelCount++;
         }
     }
-
+    
     cout<<endl;
 
     if (levelCount == 0) 
@@ -2736,8 +2737,9 @@ void displayByDifficulty(DifficultyLevel level) // FUNCTION TO DISPLAY RECIPES B
         cout<<"\033[30m"; 
         printTabs(5); cout<<"                                                           "<<endl;
         printTabs(5); cout<<"  [1] Choose another Difficulty Level                      "<<endl;
-        printTabs(5); cout<<"  [2] Back to Homepage                                     "<<endl;
-        printTabs(5); cout<<"  [3] Exit the Program                                     "<<endl;
+        printTabs(5); cout<<"  [2] Remove Recipe Difficulty Level                       "<<endl;
+        printTabs(5); cout<<"  [3] Back to Homepage                                     "<<endl;
+        printTabs(5); cout<<"  [4] Exit the Program                                     "<<endl;
         printTabs(5); cout<<"                                                           \033[0m"<<endl;
         cout<<endl;
 
@@ -2751,8 +2753,37 @@ void displayByDifficulty(DifficultyLevel level) // FUNCTION TO DISPLAY RECIPES B
                 chooseDifficulty();
                 break;
             case 2:
-                return;
+                {
+                if (levelCount > 0) {
+                    printTabs(5); cout << "  Enter Recipe Number to Remove: ";
+                    int recipeNumber;
+                    cin >> recipeNumber;
+
+                    if (recipeNumber >= 1 && recipeNumber <= levelCount) {
+                        int index = levelIndexes[recipeNumber - 1];
+                        recipes[index].difficulty_level = None;
+                        printTabs(5); cout << "Removed difficulty level for recipe: " << recipes[index].name << endl;
+                        saveRecipe();
+                    } else {
+                        cout<<endl;
+                        cout<<"\033[97m";
+                        cout<<"\033[41m";
+                        printTabs(5); cout<<"                                                           "<<endl;
+                        printTabs(5); cout<<"                    Invalid Recipe Number!                 "<<endl;
+                        printTabs(5); cout<<"                                                           \033[0m"<<endl;
+                        cout<<endl;
+
+                        printTabs(6); cout<< "        Press Enter to continue...";
+                        cin.ignore();
+                        cin.get();
+                        cout << "Invalid Recipe Number!" << endl;
+                    }
+                }
+                break;
+                }
             case 3:
+                return;
+            case 4:
                 printTabs(5); cout<<"  Exiting the program..."<<endl;
                 exit(0);
             default:
@@ -2775,9 +2806,10 @@ void displayByDifficulty(DifficultyLevel level) // FUNCTION TO DISPLAY RECIPES B
         cout<<"\033[30m";  
         printTabs(5); cout<<"                                                           "<<endl;
         printTabs(5); cout<<"  [1] View Recipe Details                                  "<<endl;
-        printTabs(5); cout<<"  [2] Choose another Difficulty Level                      "<<endl;
-        printTabs(5); cout<<"  [3] Back to Homepage                                     "<<endl;
-        printTabs(5); cout<<"  [4] Exit the Program                                     "<<endl;
+        printTabs(5); cout<<"  [2] Remove Recipe from Difficulty Level                  "<<endl;
+        printTabs(5); cout<<"  [3] Choose another Difficulty Level                      "<<endl;
+        printTabs(5); cout<<"  [4] Back to Homepage                                     "<<endl;
+        printTabs(5); cout<<"  [5] Exit the Program                                     "<<endl;
         printTabs(5); cout<<"                                                           \033[0m"<<endl;
         cout<<endl;
 
@@ -2861,11 +2893,41 @@ void displayByDifficulty(DifficultyLevel level) // FUNCTION TO DISPLAY RECIPES B
                 break;
             }
             case 2:
+                {
+                if (levelCount > 0) {
+                    printTabs(5); cout << "  Enter Recipe Number to Remove: ";
+                    int recipeNumber;
+                    cin >> recipeNumber;
+
+                    if (recipeNumber >= 1 && recipeNumber <= levelCount) {
+                        int index = levelIndexes[recipeNumber - 1];
+                        recipes[index].difficulty_level = None;
+                        printTabs(5); cout << "Removed difficulty level for recipe: " << recipes[index].name << endl;
+
+                        saveRecipe();
+                    } else {
+                        cout<<endl;
+                        cout<<"\033[97m";
+                        cout<<"\033[41m";
+                        printTabs(5); cout<<"                                                           "<<endl;
+                        printTabs(5); cout<<"                    Invalid Recipe Number!                 "<<endl;
+                        printTabs(5); cout<<"                                                           \033[0m"<<endl;
+                        cout<<endl;
+
+                        printTabs(6); cout<< "        Press Enter to continue...";
+                        cin.ignore();
+                        cin.get();
+                        cout << "Invalid Recipe Number!" << endl;
+                    }
+                }
+                break;
+                }
+            case 3:
                 chooseDifficulty();
                 break;
-            case 3:
-                return;
             case 4:
+                return;
+            case 5:
                 printTabs(5); cout<<"  Exiting the program..."<<endl;
                 exit(0); 
             default:
@@ -2882,6 +2944,7 @@ void displayByDifficulty(DifficultyLevel level) // FUNCTION TO DISPLAY RECIPES B
         }
     }
 }
+
 
 void addToFavorites(int index) // FUNCTION TO LET USER ADD RECIPE TO FAVORITES
 {

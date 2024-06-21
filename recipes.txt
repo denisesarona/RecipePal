@@ -1,4 +1,4 @@
 3
 dfdf|1|dfd|df|1|df|df|1|1|1|0
 sdfsdfs|1|sds|sd|1|sd|sd|2|2|2|1
-Candy|1|Candy|1 pcs|1|Eat candy|1 min|0|2|1|0
+Candy|1|Candy|1 pcs|1|Eat candy|1 min|3|2|1|0
