@@ -33,7 +33,6 @@ enum Category
 enum Method
 {
     Sauteeing,
-    Basting,
     Boiling,
     Blanching,
     Broiling,
@@ -47,7 +46,8 @@ enum Method
     SkilletCooking,
     DeepFrying,
     Steaming,
-    StirFrying
+    StirFrying,
+    Others
 };
 
 // STRUCTURE TO DEFINE INGREDIENT DETAILS
@@ -137,6 +137,46 @@ string categoryToString(Category category) // FUNCTION TO CONVERT CATEGORY ENUM 
             return "Other";      
         default:
             return "Unknown";  
+    }
+}
+
+string methodToString(Method method) // FUNCTION TO CONVERT COOKING METHODS ENUM TO STRING
+{
+    // SWITCH STATEMENT TO HANDLE COOKING METHODS
+    switch (method) 
+    {
+        case Sauteeing:
+            return "Sauteeing";   
+        case Boiling:
+            return "Boiling";    
+        case Blanching:
+            return "Blanching"; 
+        case Broiling:
+            return "Broiling"; 
+        case Grilling:
+            return "Grilling"; 
+        case Baking:
+            return "Baking"; 
+        case Barbeque:
+            return "Barbeque"; 
+        case OvenRoasting:
+            return "Oven Roasting"; 
+        case Braising:
+            return "Braising"; 
+        case PressureCooking:
+            return "Pressure Cooking"; 
+        case SkilletCooking:
+            return "Skillet Cooking"; 
+        case DeepFrying:
+            return "Deep Frying"; 
+        case Steaming:
+            return "Steaming"; 
+        case StirFrying:
+            return "Stir Frying"; 
+        case Others:
+            return "Other"; 
+        default:
+            return "Unknown";         
     }
 }
 
@@ -375,6 +415,7 @@ void saveRecipe()
         write<<recipes[i].cooking_time<<"|";
         write<<static_cast<int>(recipes[i].difficulty_level)<<"|";
         write<<static_cast<int>(recipes[i].category)<<"|";
+        write<<static_cast<int>(recipes[i].method)<<"|";
         write<<(recipes[i].isFavorite ? 1 : 0)<<endl;
     }
 
@@ -449,6 +490,12 @@ void loadRecipe()
         read.ignore(); // Ignore the '|' character
 
         recipes[i].category = static_cast<Category>(category);
+
+        int method;
+        read >> method; // Read the category as integer
+        read.ignore(); // Ignore the '|' character
+
+        recipes[i].method = static_cast<Method>(method);
 
         int isFavoriteInt;
         read >> isFavoriteInt;
@@ -634,9 +681,7 @@ void addRecipeItems() // FUNCTION GUIDES THE USER THROUGH ENTERING DETAILS FOR N
 
     cout<<endl;
     printTabs(5); cout<<"  Select Cooking Difficulty Level:"<<endl;
-    printTabs(5); cout<<"     [1] Beginner Level"<<endl;
-    printTabs(5); cout<<"     [2] Intermediate Level"<<endl;
-    printTabs(5); cout<<"     [3] Advanced Level"<<endl;
+    printTabs(5); cout<<"     [1] Beginner Level   [2] Intermediate Level   [3] Advanced Level"<<endl;
     printTabs(5); cout<<"  Enter Option: ";
 
     int difficultyOption;
@@ -672,10 +717,8 @@ void addRecipeItems() // FUNCTION GUIDES THE USER THROUGH ENTERING DETAILS FOR N
     // PROMPT FOR RECIPE CATEGORY
     cout<<endl;
     printTabs(5); cout<<"  Select Category:"<<endl;
-    printTabs(5); cout<<"     [1] Appetizer     [5] Snack"<<endl;
-    printTabs(5); cout<<"     [2] Main Course   [6] Breakfast"<<endl;
-    printTabs(5); cout<<"     [3] Dessert       [7] SideDish"<<endl;
-    printTabs(5); cout<<"     [4] Soup          [8] Other"<<endl;
+    printTabs(5); cout<<"     [1] Appetizer     [3] Dessert   [5] Snack       [7] SideDish"<<endl;
+    printTabs(5); cout<<"     [2] Main Course   [4] Soup      [6] Breakfast   [8] Other"<<endl;
     printTabs(5); cout<<"  Enter Option: ";
 
     int categoryOption;
@@ -720,6 +763,84 @@ void addRecipeItems() // FUNCTION GUIDES THE USER THROUGH ENTERING DETAILS FOR N
             cout<<endl;
 
             recipes[count].category = Other; // SET DEFAULT TO OTHER CATEGORY
+            break;
+    }
+
+    // PROMPT FOR RECIPE COOKING METHOD
+    cout<<endl;
+    printTabs(5); cout<<"  Select Cooking Method:"<<endl;
+    printTabs(5); cout<<"     [1] Sauteeing   [5] Stewing    [9] Oven Roasting       [13] Deep Frying"<<endl;
+    printTabs(5); cout<<"     [2] Boiling     [6] Grilling   [10] Braising           [14] Steaming"<<endl;
+    printTabs(5); cout<<"     [3] Blanching   [7] Baking     [11] Pressure Cooking   [15] Stir Frying"<<endl;
+    printTabs(5); cout<<"     [4] Broiling    [8] Barbeque   [12] Skillet Cooking    [16] Other"<<endl;
+    printTabs(5); cout<<"  Enter Option: ";
+
+    int methodOption;
+    cin>>methodOption;
+    cin.ignore(); // CONSUME NEWLINE LEFT BY cin
+
+    // ASSIGN RECIPE CATEGORY BASED ON USER INPUT
+    switch (methodOption) 
+    {
+        case 1:
+            recipes[count].method = Sauteeing;
+            break;
+        case 2:
+            recipes[count].method = Boiling;
+            break;
+        case 3:
+            recipes[count].method = Blanching;
+            break;
+        case 4:
+            recipes[count].method = Broiling;
+            break;
+        case 5:
+            recipes[count].method = Stewing;
+            break;
+        case 6:
+            recipes[count].method = Grilling;
+            break;
+        case 7:
+            recipes[count].method = Baking;
+            break;
+        case 8:
+            recipes[count].method = Barbeque;
+            break;
+        case 9:
+            recipes[count].method = OvenRoasting;
+            break;
+        case 10:
+            recipes[count].method = Braising;
+            break;
+        case 11:
+            recipes[count].method = PressureCooking;
+            break;
+        case 12:
+            recipes[count].method = SkilletCooking;
+            break;
+        case 13:
+            recipes[count].method = DeepFrying;
+            break;
+        case 14:
+            recipes[count].method = Steaming;
+            break;
+        case 15:
+            recipes[count].method = StirFrying;
+            break;
+        case 16:
+            recipes[count].method = Others;
+            break;
+        default:
+            cout<<endl;
+            cout<<"\033[97m";
+            cout<<"\033[41m";
+            printTabs(5); cout<<"                                                           "<<endl;
+            printTabs(5); cout<<"                      Invalid Option!                      "<<endl;
+            printTabs(5); cout<<"        Setting cooking method to Other by default.        "<<endl;
+            printTabs(5); cout<<"                                                           \033[0m"<<endl;
+            cout<<endl;
+
+            recipes[count].method = Others; // SET DEFAULT TO OTHER CATEGORY
             break;
     }
 
@@ -920,9 +1041,7 @@ void updateRecipeItems(int index, int num) // FUNCTION GUIDES THE USER THROUGH E
         // PROMPT FOR DIFFICULTY LEVEL
         cout<<endl;
         printTabs(5); cout<<"  Select Cooking Difficulty Level:"<<endl;
-        printTabs(5); cout<<"     [1] Beginner Level"<<endl;
-        printTabs(5); cout<<"     [2] Intermediate Level"<<endl;
-        printTabs(5); cout<<"     [3] Advanced Level"<<endl;
+        printTabs(5); cout<<"     [1] Beginner Level   [2] Intermediate Level   [3] Advanced Level"<<endl;
         printTabs(5); cout<<"  Enter Option: ";
 
         int difficultyOption;
@@ -959,10 +1078,8 @@ void updateRecipeItems(int index, int num) // FUNCTION GUIDES THE USER THROUGH E
         // PROMPT FOR CATEGORY
         cout<<endl;
         printTabs(5); cout<<"  Select Category:"<<endl;
-        printTabs(5); cout<<"     [1] Appetizer     [5] Snack"<<endl;
-        printTabs(5); cout<<"     [2] Main Course   [6] Breakfast"<<endl;
-        printTabs(5); cout<<"     [3] Dessert       [7] SideDish"<<endl;
-        printTabs(5); cout<<"     [4] Soup          [8] Other"<<endl;
+        printTabs(5); cout<<"     [1] Appetizer     [3] Dessert   [5] Snack       [7] SideDish"<<endl;
+        printTabs(5); cout<<"     [2] Main Course   [4] Soup      [6] Breakfast   [8] Other"<<endl;
         printTabs(5); cout<<"  Enter Option: ";
             
         int categoryOption;
@@ -1008,6 +1125,84 @@ void updateRecipeItems(int index, int num) // FUNCTION GUIDES THE USER THROUGH E
                 cout<<endl;
                     
                 recipes[index].category = Other;
+                break;
+        }
+
+        // PROMPT FOR RECIPE COOKING METHOD
+        cout<<endl;
+        printTabs(5); cout<<"  Select Cooking Method:"<<endl;
+        printTabs(5); cout<<"     [1] Sauteeing   [5] Stewing    [9] Oven Roasting       [13] Deep Frying"<<endl;
+        printTabs(5); cout<<"     [2] Boiling     [6] Grilling   [10] Braising           [14] Steaming"<<endl;
+        printTabs(5); cout<<"     [3] Blanching   [7] Baking     [11] Pressure Cooking   [15] Stir Frying"<<endl;
+        printTabs(5); cout<<"     [4] Broiling    [8] Barbeque   [12] Skillet Cooking    [16] Other"<<endl;
+        printTabs(5); cout<<"  Enter Option: ";
+
+        int methodOption;
+        cin>>methodOption;
+        cin.ignore(); // CONSUME NEWLINE LEFT BY cin
+
+        // ASSIGN RECIPE CATEGORY BASED ON USER INPUT
+        switch (methodOption) 
+        {
+            case 1:
+                recipes[index].method = Sauteeing;
+                break;
+            case 2:
+                recipes[index].method = Boiling;
+                break;
+            case 3:
+                recipes[index].method = Blanching;
+                break;
+            case 4:
+                recipes[index].method = Broiling;
+                break;
+            case 5:
+                recipes[index].method = Stewing;
+                break;
+            case 6:
+                recipes[index].method = Grilling;
+                break;
+            case 7:
+                recipes[index].method = Baking;
+                break;
+            case 8:
+                recipes[index].method = Barbeque;
+                break;
+            case 9:
+                recipes[index].method = OvenRoasting;
+                break;
+            case 10:
+                recipes[index].method = Braising;
+                break;
+            case 11:
+                recipes[index].method = PressureCooking;
+                break;
+            case 12:
+                recipes[index].method = SkilletCooking;
+                break;
+            case 13:
+                recipes[index].method = DeepFrying;
+                break;
+            case 14:
+                recipes[index].method = Steaming;
+                break;
+            case 15:
+                recipes[index].method = StirFrying;
+                break;
+            case 16:
+                recipes[index].method = Others;
+                break;
+            default:
+                cout<<endl;
+                cout<<"\033[97m";
+                cout<<"\033[41m";
+                printTabs(5); cout<<"                                                           "<<endl;
+                printTabs(5); cout<<"                      Invalid Option!                      "<<endl;
+                printTabs(5); cout<<"        Setting cooking method to Other by default.        "<<endl;
+                printTabs(5); cout<<"                                                           \033[0m"<<endl;
+                cout<<endl;
+
+                recipes[index].method = Others; // SET DEFAULT TO OTHER CATEGORY
                 break;
         }
 
@@ -1153,6 +1348,10 @@ void searchRecipe() // FUNCTION TO ALLOW USER TO SEARCH A RECIPE
         read>>category;
         read.ignore();
 
+        int method;
+        read>>method;
+        read.ignore();
+
         int isFavoriteInt;
         read>>isFavoriteInt;
         read.ignore();
@@ -1160,6 +1359,7 @@ void searchRecipe() // FUNCTION TO ALLOW USER TO SEARCH A RECIPE
         // ASSIGN DIFFICULTY, CATEGORY, AND FAVORITE STATUS
         recipes[i].difficulty_level = static_cast<DifficultyLevel>(difficultyLevel);
         recipes[i].category = static_cast<Category>(category);
+        recipes[i].method = static_cast<Method>(method);
         recipes[i].isFavorite = (isFavoriteInt == 1);
 
         // CHECK IF CURRENT RECIPE MATCHES SEARCH NAME
@@ -1195,6 +1395,7 @@ void searchRecipe() // FUNCTION TO ALLOW USER TO SEARCH A RECIPE
             printTabs(5); cout<<"  Cooking Time: "<<recipes[i].cooking_time<<endl;
             printTabs(5); cout<<"  Difficulty Level: "<<difficultyLevelToString(recipes[i].difficulty_level)<<endl;
             printTabs(5); cout<<"  Category: "<<categoryToString(recipes[i].category)<<endl;
+            printTabs(5); cout<<"  Cooking Method: "<<methodToString(recipes[i].method)<<endl;
             cout << endl;
 
             break; // EXIT LOOP SINCE RECIPE IS FOUND
@@ -1206,6 +1407,7 @@ void searchRecipe() // FUNCTION TO ALLOW USER TO SEARCH A RECIPE
     if (!found) 
     {
         // DISPLAY MESSAGE IF RECIPE IS NOT FOUND
+        cout<<endl;
         cout<<"\033[97m";
         cout<<"\033[41m";
         printTabs(5); cout<<"                                                           "<<endl;
@@ -1362,7 +1564,7 @@ void deleteRecipe() // FUNCTION TO ALLOW USER TO DELETE A RECIPE
                 {
                     write<<recipes[i].instruction[j]<<"|";
                 }
-                write<<recipes[i].cooking_time<<"|"<<static_cast<DifficultyLevel>(recipes[i].difficulty_level)<<"|"<<static_cast<Category>(recipes[i].category)<<endl;
+                write<<recipes[i].cooking_time<<"|"<<static_cast<DifficultyLevel>(recipes[i].difficulty_level)<<"|"<<static_cast<Category>(recipes[i].category)<<"|"<<static_cast<Method>(recipes[i].method)<<endl;
             }
             write.close();
 
@@ -1666,6 +1868,7 @@ void viewRecipe(int recipeNumber) // FUNCTION DESIGNED TO DISPLAY INFORMATION ON
             printTabs(5); cout << "  Cooking Time: " << recipes[index].cooking_time << endl;
             printTabs(5); cout << "  Difficulty Level: " << difficultyLevelToString(recipes[index].difficulty_level) << endl;
             printTabs(5); cout << "  Category: " << categoryToString(recipes[index].category) << endl;
+            printTabs(5); cout << "  Cooking Method: " << methodToString(recipes[index].method) << endl;
             cout << endl;
         }
         else 
@@ -1733,6 +1936,7 @@ void viewRecipeDetails(int index) // FUNCTION DESIGNED TO DISPLAY DETAILS INFORM
 
     // DISPLAY RECIPE CATEGORY
     printTabs(5); cout<<"  Category: "<<categoryToString(recipes[index].category)<<endl;
+    printTabs(5); cout<<"  Cooking Method: "<<methodToString(recipes[index].method)<<endl;
 }
 
 void chooseCategory() // FUNCTION ALLOWS USER TO SELECT A CATEGORY FROM A PREDEFINED LIST
