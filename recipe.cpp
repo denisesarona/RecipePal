@@ -21,14 +21,33 @@ enum Category
 {
     Appetizer,    
     MainCourse,  
-    Dessert,      
-    Drink,       
+    Dessert,           
     Soup,         
     Salad,        
     Snack,       
     Breakfast,   
     SideDish,     
     Other         
+};
+
+enum Method
+{
+    Sauteeing,
+    Basting,
+    Boiling,
+    Blanching,
+    Broiling,
+    Stewing,
+    Grilling,
+    Baking,
+    Barbeque,
+    OvenRoasting,
+    Braising,
+    PressureCooking,
+    SkilletCooking,
+    DeepFrying,
+    Steaming,
+    StirFrying
 };
 
 // STRUCTURE TO DEFINE INGREDIENT DETAILS
@@ -48,6 +67,7 @@ struct Recipe
     bool isFavorite;              
     DifficultyLevel difficulty_level; 
     Category category;       
+    Method method;
 };
 
 
@@ -102,9 +122,7 @@ string categoryToString(Category category) // FUNCTION TO CONVERT CATEGORY ENUM 
         case MainCourse:
             return "Main Course"; 
         case Dessert:
-            return "Dessert";     
-        case Drink:
-            return "Drink";   
+            return "Dessert";       
         case Soup:
             return "Soup";      
         case Salad:
@@ -654,9 +672,10 @@ void addRecipeItems() // FUNCTION GUIDES THE USER THROUGH ENTERING DETAILS FOR N
     // PROMPT FOR RECIPE CATEGORY
     cout<<endl;
     printTabs(5); cout<<"  Select Category:"<<endl;
-    printTabs(5); cout<<"     [1] Appetizer     [4] Drink    [7] Breakfast"<<endl;
-    printTabs(5); cout<<"     [2] Main Course   [5] Soup     [8] Side Dish"<<endl;
-    printTabs(5); cout<<"     [3] Dessert       [6] Snack    [9] Other"<<endl;
+    printTabs(5); cout<<"     [1] Appetizer     [5] Snack"<<endl;
+    printTabs(5); cout<<"     [2] Main Course   [6] Breakfast"<<endl;
+    printTabs(5); cout<<"     [3] Dessert       [7] SideDish"<<endl;
+    printTabs(5); cout<<"     [4] Soup          [8] Other"<<endl;
     printTabs(5); cout<<"  Enter Option: ";
 
     int categoryOption;
@@ -676,21 +695,18 @@ void addRecipeItems() // FUNCTION GUIDES THE USER THROUGH ENTERING DETAILS FOR N
             recipes[count].category = Dessert;
             break;
         case 4:
-            recipes[count].category = Drink;
-            break;
-        case 5:
             recipes[count].category = Soup;
             break;
-        case 6:
+        case 5:
             recipes[count].category = Snack;
             break;
-        case 7:
+        case 6:
             recipes[count].category = Breakfast;
             break;
-        case 8:
+        case 7:
             recipes[count].category = SideDish;
             break;
-        case 9:
+        case 8:
             recipes[count].category = Other;
             break;
         default:
@@ -943,9 +959,10 @@ void updateRecipeItems(int index, int num) // FUNCTION GUIDES THE USER THROUGH E
         // PROMPT FOR CATEGORY
         cout<<endl;
         printTabs(5); cout<<"  Select Category:"<<endl;
-        printTabs(5); cout<<"     [1] Appetizer     [4] Drink    [7] Breakfast"<<endl;
-        printTabs(5); cout<<"     [2] Main Course   [5] Soup     [8] Side Dish"<<endl;
-        printTabs(5); cout<<"     [3] Dessert       [6] Snack    [9] Other"<<endl;
+        printTabs(5); cout<<"     [1] Appetizer     [5] Snack"<<endl;
+        printTabs(5); cout<<"     [2] Main Course   [6] Breakfast"<<endl;
+        printTabs(5); cout<<"     [3] Dessert       [7] SideDish"<<endl;
+        printTabs(5); cout<<"     [4] Soup          [8] Other"<<endl;
         printTabs(5); cout<<"  Enter Option: ";
             
         int categoryOption;
@@ -965,21 +982,18 @@ void updateRecipeItems(int index, int num) // FUNCTION GUIDES THE USER THROUGH E
                 recipes[index].category = Dessert;
                 break;
             case 4:
-                recipes[index].category = Drink;
-                break;
-            case 5:
                 recipes[index].category = Soup;
                 break;
-            case 6:
+            case 5:
                 recipes[index].category = Snack;
                 break;
-            case 7:
+            case 6:
                 recipes[index].category = Breakfast;
                 break;
-            case 8:
+            case 7:
                 recipes[index].category = SideDish;
                 break;
-            case 9:
+            case 8:
                 recipes[index].category = Other;
                 break;
             default:
@@ -1735,12 +1749,11 @@ void chooseCategory() // FUNCTION ALLOWS USER TO SELECT A CATEGORY FROM A PREDEF
     printTabs(5); cout<<"  [1] Appetizer                                            "<<endl; 
     printTabs(5); cout<<"  [2] Main Course                                          "<<endl; 
     printTabs(5); cout<<"  [3] Dessert                                              "<<endl; 
-    printTabs(5); cout<<"  [4] Drink                                                "<<endl; 
-    printTabs(5); cout<<"  [5] Soup                                                 "<<endl; 
-    printTabs(5); cout<<"  [6] Snack                                                "<<endl; 
-    printTabs(5); cout<<"  [7] Breakfast                                            "<<endl; 
-    printTabs(5); cout<<"  [8] Side Dish                                            "<<endl;
-    printTabs(5); cout<<"  [9] Other                                                "<<endl; 
+    printTabs(5); cout<<"  [4] Soup                                                 "<<endl; 
+    printTabs(5); cout<<"  [5] Snack                                                "<<endl; 
+    printTabs(5); cout<<"  [6] Breakfast                                            "<<endl; 
+    printTabs(5); cout<<"  [7] Side Dish                                            "<<endl;
+    printTabs(5); cout<<"  [8] Other                                                "<<endl; 
     printTabs(5); cout<<"                                                           \033[0m"<<endl;
     cout<<endl;
 
@@ -1766,21 +1779,18 @@ void chooseCategory() // FUNCTION ALLOWS USER TO SELECT A CATEGORY FROM A PREDEF
             category = Dessert;
             break;
         case 4:
-            category = Drink;
-            break;
-        case 5:
             category = Soup;
             break;
-        case 6:
+        case 5:
             category = Snack;
             break;
-        case 7:
+        case 6:
             category = Breakfast;
             break;
-        case 8:
+        case 7:
             category = SideDish;
             break;
-        case 9:
+        case 8:
             category = Other;
             break;
         default:
